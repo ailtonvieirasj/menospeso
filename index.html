@@ -5,340 +5,256 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>menospeso. — Telemedicina de Emagrecimento</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <style>
-:root {
-  --charcoal: #111111;
-  --forest: #1E5B3F;
-  --sage: #7FA48A;
-  --mint: #E6F2EC;
-  --warm-gray: #F2F2EF;
-  --off-white: #FAFAF8;
-  --text-muted: #9CA3AF;
-  --text-mid: #374151;
-  --border: #E5E5E0;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', sans-serif; background: var(--off-white); color: var(--charcoal); line-height: 1.5; -webkit-font-smoothing: antialiased; }
-.page { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
-
-.logo { display: inline-flex; align-items: baseline; font-size: 1.35rem; line-height: 1; margin-bottom: 3rem; text-decoration: none; color: var(--charcoal); }
-.logo b { font-weight: 800; }
-.logo span { font-weight: 400; }
-.logo-dot { color: var(--forest); font-weight: 800; margin-left: 1px; }
-
-.div { height: 1px; background: var(--border); margin: 3rem 0; }
-
-.lbl { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--forest); margin-bottom: 0.6rem; }
-
-.hero-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--mint); color: var(--forest); font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 99px; letter-spacing: 0.03em; margin-bottom: 2rem; border: 1px solid rgba(30,91,63,0.15); }
-
-.hero-h1 { font-size: clamp(36px, 6vw, 48px); font-weight: 900; line-height: 1.08; letter-spacing: -0.03em; color: var(--charcoal); margin-bottom: 1.5rem; }
-.hero-h1 .green { color: var(--forest); }
-.hero-h1 .light { font-weight: 400; color: #9CA3AF; font-size: 0.72em; display: block; margin-top: 6px; letter-spacing: -0.02em; }
-
-.hero-sub { font-size: 15px; color: var(--text-mid); line-height: 1.8; max-width: 500px; margin-bottom: 2rem; }
-.hero-sub strong { color: var(--charcoal); font-weight: 600; }
-
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; border-radius: 10px; border: none; cursor: pointer; transition: all 0.15s; text-decoration: none; }
-.btn-green { background: var(--forest); color: #fff; }
-.btn-green:hover { background: #174d35; }
-.btn-outline { background: transparent; color: var(--charcoal); border: 1.5px solid var(--border); }
-.btn-outline:hover { background: var(--warm-gray); }
-.btn-full { width: 100%; justify-content: center; }
-
-.hero-trust { font-size: 12px; color: #9CA3AF; margin-top: 10px; }
-
-.hero-stats { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid var(--border); margin-top: 2.5rem; padding-top: 2rem; gap: 1rem; }
-.stat-n { font-size: 28px; font-weight: 900; letter-spacing: -0.04em; color: var(--charcoal); line-height: 1; }
-.stat-n em { font-style: normal; color: var(--forest); }
-.stat-l { font-size: 12px; color: #9CA3AF; margin-top: 5px; line-height: 1.4; }
-
-.h2 { font-size: clamp(28px, 5vw, 36px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.5rem; }
-.h2 em { font-style: normal; color: var(--forest); }
-.sub { font-size: 14px; color: #9CA3AF; margin-bottom: 1.75rem; line-height: 1.6; }
-
-.pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.pain-card { border-radius: 14px; padding: 1.25rem; border: 1px solid; }
-.pain-card.bad { background: #FFFBFB; border-color: #FECDD3; }
-.pain-card.good { background: var(--mint); border-color: rgba(30,91,63,0.2); }
-.pain-q { font-size: 13px; font-weight: 700; line-height: 1.35; margin-bottom: 6px; margin-top: 8px; }
-.pain-q.r { color: #9F1239; }
-.pain-q.g { color: #0D3D28; }
-.pain-p { font-size: 12px; line-height: 1.7; color: #64748B; }
-.pain-p strong { font-weight: 600; color: #475569; }
-
-.card-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
-.card-row { display: flex; align-items: flex-start; gap: 14px; padding: 1.125rem 1.25rem; background: var(--off-white); }
-.card-ico { width: 38px; height: 38px; border-radius: 10px; background: var(--mint); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.card-body h4 { font-size: 14px; font-weight: 600; color: var(--charcoal); margin-bottom: 3px; }
-.card-body p { font-size: 13px; color: #6B7280; line-height: 1.6; }
-
-.steps-wrap { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
-.step-row { display: flex; gap: 16px; padding: 1.25rem; background: var(--off-white); }
-.step-n { width: 32px; height: 32px; border-radius: 50%; background: var(--mint); color: var(--forest); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; border: 1.5px solid rgba(30,91,63,0.2); }
-.step-body h4 { font-size: 14px; font-weight: 600; color: var(--charcoal); margin-bottom: 3px; }
-.step-body p { font-size: 13px; color: #6B7280; line-height: 1.6; }
-.step-pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; background: var(--mint); color: var(--forest); border: 1px solid rgba(30,91,63,0.15); margin-top: 6px; }
-
-.plans { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.plan { background: var(--off-white); border: 1.5px solid var(--border); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; }
-.plan.feat { border-color: var(--forest); }
-.plan-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 99px; background: var(--mint); color: var(--forest); border: 1px solid rgba(30,91,63,0.2); margin-bottom: 1rem; align-self: flex-start; }
-.plan-name { font-size: 22px; font-weight: 900; letter-spacing: -0.02em; color: var(--charcoal); margin-bottom: 5px; }
-.plan-desc { font-size: 12px; color: #9CA3AF; margin-bottom: 1.25rem; line-height: 1.5; flex: 1; }
-.plan-price { font-size: 32px; font-weight: 900; letter-spacing: -0.04em; color: var(--charcoal); line-height: 1; }
-.plan-price sub { font-size: 13px; font-weight: 400; color: #9CA3AF; vertical-align: baseline; letter-spacing: 0; }
-.plan-install { font-size: 12px; color: #9CA3AF; margin-top: 4px; margin-bottom: 1.25rem; }
-.plan-feats { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
-.plan-feats li { font-size: 12px; color: var(--text-mid); display: flex; align-items: flex-start; gap: 7px; line-height: 1.45; }
-.plan-note { font-size: 11px; color: #9CA3AF; line-height: 1.65; margin-top: 12px; }
-
-.faq-wrap { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
-.faq-item { background: var(--off-white); padding: 1.125rem 1.25rem; }
-.faq-q { font-size: 13px; font-weight: 700; color: var(--charcoal); margin-bottom: 5px; display: flex; align-items: flex-start; gap: 8px; }
-.faq-a { font-size: 12px; color: #6B7280; line-height: 1.7; padding-left: 24px; }
-
-.cta { text-align: center; padding-top: 3rem; border-top: 1px solid var(--border); margin-top: 3rem; }
-.cta-h2 { font-size: clamp(30px, 5vw, 38px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.75rem; }
-.cta-h2 em { font-style: normal; color: var(--forest); display: block; }
-.cta-sub { font-size: 14px; color: #9CA3AF; margin-bottom: 2rem; line-height: 1.6; }
-.cta-sub strong { color: var(--forest); font-weight: 600; }
-
-.rt { display: flex; align-items: flex-start; gap: 10px; padding: 1rem 1.125rem; background: var(--warm-gray); border: 1px solid var(--border); border-radius: 12px; font-size: 11px; color: #9CA3AF; line-height: 1.7; margin-top: 2.5rem; }
-.rt strong { color: #6B7280; font-weight: 500; }
-.linkedin { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--forest); text-decoration: none; margin-top: 1rem; }
-.linkedin:hover { color: var(--charcoal); }
-
-/* SVG icon helpers */
-svg.ico { display: block; flex-shrink: 0; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:#0F172A;-webkit-font-smoothing:antialiased}
+.lp{max-width:680px;margin:0 auto;padding:3rem 1.5rem 4rem}
+.label{font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#059669;margin-bottom:0.75rem;display:block}
+.divider{height:1px;background:#F1F5F9;margin:3rem 0}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:#F0FDF4;border:1px solid #BBF7D0;color:#059669;font-size:11px;font-weight:500;padding:5px 14px;border-radius:99px;margin-bottom:2rem;letter-spacing:0.04em}
+.hero h1{font-family:'DM Serif Display',serif;font-size:56px;line-height:1.05;letter-spacing:-0.01em;color:#0F172A;margin-bottom:0.25rem}
+.hero h1 em{font-style:italic;color:#059669}
+.hero-sub-head{font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;font-style:italic;color:#94A3B8;line-height:1.1;margin-bottom:1.5rem}
+.hero-p{font-size:15px;color:#64748B;line-height:1.85;max-width:480px;margin-bottom:2rem;font-weight:300}
+.hero-p strong{color:#334155;font-weight:500}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:#059669;color:#fff;font-size:14px;font-weight:500;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.01em}
+.hero-trust{font-size:12px;color:#CBD5E1;margin-top:10px;letter-spacing:0.02em}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #F1F5F9;margin-top:2.75rem;padding-top:2rem;gap:1rem}
+.stat-val{font-family:'DM Serif Display',serif;font-size:36px;color:#0F172A;line-height:1}
+.stat-val em{font-style:normal;color:#059669}
+.stat-lbl{font-size:12px;color:#94A3B8;margin-top:5px;line-height:1.45;font-weight:300}
+.section-h{font-family:'DM Serif Display',serif;font-size:40px;line-height:1.05;margin-bottom:0.5rem;letter-spacing:-0.01em}
+.section-h em{font-style:italic;color:#059669}
+.section-sub{font-size:14px;color:#94A3B8;margin-bottom:1.75rem;line-height:1.65;font-weight:300}
+.pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pain-card.bad{background:#FFFBFB;border:1px solid #FECDD3;border-radius:18px;padding:1.5rem;display:flex;flex-direction:column;gap:10px}
+.pain-card.bad .pain-hook{font-family:'DM Serif Display',serif;font-size:18px;font-style:italic;line-height:1.25;color:#9F1239}
+.pain-card.bad .pain-support{font-size:12px;line-height:1.75;color:#64748B;font-weight:300}
+.pain-card.bad .pain-support strong{font-weight:500;color:#9F1239}
+.pain-ico-wrap{width:30px;height:30px;background:#FFF1F2;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.pain-ico-wrap i{color:#E11D48;font-size:16px}
+.pain-card.good{background:#F9FFFE;border:1px solid #A7F3D0;border-radius:18px;padding:1.5rem;display:flex;flex-direction:column;gap:10px}
+.pain-card.good .pain-hook{font-family:'DM Serif Display',serif;font-size:18px;line-height:1.25;color:#065F46}
+.pain-card.good .pain-support{font-size:12px;line-height:1.75;color:#64748B;font-weight:300}
+.pain-card.good .pain-support strong{font-weight:500;color:#065F46}
+.pain-ico-wrap.g{background:#F0FDF4}
+.pain-ico-wrap.g i{color:#059669}
+.diff-list{display:flex;flex-direction:column;border:1px solid #F1F5F9;border-radius:18px;overflow:hidden}
+.diff-item{display:flex;align-items:flex-start;gap:16px;padding:1.25rem 1.35rem;background:#fff;border-bottom:1px solid #F1F5F9}
+.diff-item:last-child{border-bottom:none}
+.diff-ico{width:36px;height:36px;border-radius:9px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.diff-ico i{font-size:18px;color:#059669}
+.diff-body h4{font-size:14px;font-weight:500;color:#0F172A;margin-bottom:3px}
+.diff-body p{font-size:13px;color:#64748B;line-height:1.65;font-weight:300}
+.steps-wrap{display:flex;flex-direction:column;border:1px solid #F1F5F9;border-radius:18px;overflow:hidden}
+.step-item{display:flex;gap:16px;padding:1.25rem 1.35rem;background:#fff;border-bottom:1px solid #F1F5F9}
+.step-item:last-child{border-bottom:none}
+.step-num{width:30px;height:30px;border-radius:50%;background:#F0FDF4;color:#059669;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;border:1px solid #A7F3D0;font-family:'DM Serif Display',serif}
+.step-body h4{font-size:14px;font-weight:500;color:#0F172A;margin-bottom:3px}
+.step-body p{font-size:13px;color:#64748B;line-height:1.65;font-weight:300}
+.step-pill{display:inline-block;font-size:11px;font-weight:400;padding:3px 10px;border-radius:99px;background:#F0FDF4;color:#059669;border:1px solid #A7F3D0;margin-top:6px;letter-spacing:0.02em}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.plan-card{background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:1.5rem;display:flex;flex-direction:column}
+.plan-card.feat{border-color:#059669;border-width:1.5px}
+.plan-badge{font-size:11px;font-weight:500;padding:4px 12px;border-radius:99px;background:#F0FDF4;color:#059669;border:1px solid #A7F3D0;display:inline-block;margin-bottom:1.1rem;align-self:flex-start;letter-spacing:0.04em}
+.plan-name{font-family:'DM Serif Display',serif;font-size:26px;color:#0F172A;margin-bottom:5px}
+.plan-desc{font-size:12px;color:#94A3B8;margin-bottom:1.25rem;line-height:1.55;font-weight:300}
+.plan-price{font-family:'DM Serif Display',serif;font-size:34px;color:#0F172A;line-height:1}
+.plan-price sub{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#94A3B8;vertical-align:baseline}
+.plan-install{font-size:12px;color:#94A3B8;margin-top:4px;margin-bottom:1.25rem;font-weight:300}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;flex:1}
+.plan-features li{font-size:12px;color:#475569;display:flex;align-items:flex-start;gap:7px;line-height:1.5;font-weight:300}
+.plan-features li i{color:#059669;font-size:14px;flex-shrink:0;margin-top:1px}
+.plan-btn{width:100%;padding:12px;font-size:14px;font-weight:500;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.01em}
+.plan-btn.outline{background:#fff;color:#0F172A;border:1px solid #E2E8F0}
+.plan-btn.solid{background:#059669;color:#fff;border:none}
+.plan-note{font-size:11px;color:#94A3B8;line-height:1.7;margin-top:12px;font-weight:300}
+.faq-list{display:flex;flex-direction:column;border:1px solid #F1F5F9;border-radius:18px;overflow:hidden}
+.faq-item{background:#fff;padding:1.25rem 1.35rem;border-bottom:1px solid #F1F5F9}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:13px;font-weight:500;color:#0F172A;margin-bottom:5px;display:flex;align-items:flex-start;gap:8px}
+.faq-q i{color:#059669;font-size:15px;margin-top:1px;flex-shrink:0}
+.faq-a{font-size:12px;color:#64748B;line-height:1.75;padding-left:23px;font-weight:300}
+.cta-final{text-align:center;padding-top:2.5rem;border-top:1px solid #F1F5F9}
+.cta-final h2{font-family:'DM Serif Display',serif;font-size:46px;line-height:1.05;margin-bottom:0.75rem}
+.cta-final h2 em{font-style:italic;color:#059669}
+.cta-final p{font-size:14px;color:#94A3B8;margin-bottom:2rem;font-weight:300}
+.cta-final p strong{color:#059669;font-weight:500}
+.rt{display:flex;align-items:flex-start;gap:10px;padding:1rem 1.125rem;background:#F8FAFC;border:1px solid #F1F5F9;border-radius:12px;font-size:11px;color:#94A3B8;line-height:1.75;margin-top:2.75rem;font-weight:300}
+.rt i{font-size:16px;color:#CBD5E1;flex-shrink:0;margin-top:1px}
 </style>
 </head>
 <body>
-<div class="page">
-
-<!-- LOGO -->
-<a href="#" class="logo"><b>menos</b><span>peso</span><span class="logo-dot">.</span></a>
+<div class="lp">
 
 <!-- HERO -->
-<div>
-  <div class="hero-badge">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-    Telemedicina regulamentada · CFM 2.314/2022
+<div style="padding-bottom:2.5rem">
+  <div class="hero-badge"><i class="ti ti-shield-check" aria-hidden="true"></i> Telemedicina regulamentada · CFM 2.314/2022</div>
+  <div class="hero">
+    <h1>A caneta emagrecedora<br><em>do jeito certo.</em></h1>
+    <p class="hero-sub-head">Sem pagar uma fortuna.</p>
   </div>
-  <h1 class="hero-h1">
-    O tratamento com a caneta emagrecedora.
-    <em class="green">Do jeito certo.</em>
-    <span class="light">Pelo preço que você pode pagar.</span>
-  </h1>
-  <p class="hero-sub">Exames com código TUSS, receita digital oficial e acompanhamento com <strong>médico especialista</strong> — por um preço que democratiza o acesso à medicina de verdade.</p>
-  <button class="btn btn-green" onclick="alert('Iniciando triagem...')">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    Ver se tenho indicação — grátis
-  </button>
-  <p class="hero-trust">Triagem sem compromisso · Resultado em minutos</p>
+  <p class="hero-p">Pedido de exames digitais aceitos pelo seu convênio, receita oficial da farmácia e acompanhamento com <strong>médico especialista</strong> por um preço que democratiza o acesso à medicina de verdade.</p>
+  <button class="btn-primary"><i class="ti ti-arrow-right" aria-hidden="true"></i> Ver se tenho indicação - grátis</button>
+  <p class="hero-trust" style="margin-top:10px">Triagem sem compromisso · Resultado em minutos</p>
   <div class="hero-stats">
-    <div><div class="stat-n"><em>100</em>%</div><div class="stat-l">Digital, sem sair de casa</div></div>
-    <div><div class="stat-n">R$<em>247</em></div><div class="stat-l">A partir de — 3 meses</div></div>
-    <div><div class="stat-n"><em>60</em>d</div><div class="stat-l">Retornos programados de ajuste</div></div>
+    <div>
+      <div class="stat-val"><em>60</em>dias</div>
+      <div class="stat-lbl">Acompanhamento contínuo entre consultas</div>
+    </div>
+    <div>
+      <div class="stat-val">R$<em>247</em></div>
+      <div class="stat-lbl">3 meses de acompanhamento</div>
+    </div>
+    <div>
+      <div class="stat-val"><em>100</em>%</div>
+      <div class="stat-lbl">Digital, sem sair de casa</div>
+    </div>
   </div>
 </div>
 
-<div class="div"></div>
+<div class="divider"></div>
 
 <!-- PROBLEMA -->
 <div>
-  <span class="lbl">Você se identificou?</span>
-  <h2 class="h2">Duas saídas erradas.<br><em>Uma certa.</em></h2>
-  <p class="sub">O mercado te empurra para os extremos. Nós existimos no meio.</p>
+  <span class="label">Você se identificou?</span>
+  <h2 class="section-h">Duas saídas erradas.<br><em>Uma certa.</em></h2>
+  <p class="section-sub">O mercado te empurra para os extremos. Nós existimos no meio.</p>
   <div class="pain-grid">
     <div class="pain-card bad">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <p class="pain-q r">"Vou tomar igual todo mundo toma…"</p>
-      <p class="pain-p">Sem exame, sem receita, sem saber se tem contraindicação. <strong>Se algo der errado, você está completamente sozinho.</strong></p>
+      <div class="pain-ico-wrap"><i class="ti ti-alert-triangle" aria-hidden="true"></i></div>
+      <p class="pain-hook">"Tô tomando porque todo mundo tá tomando..."</p>
+      <p class="pain-support">Sem exame, sem receita oficial e sem saber o que isso está fazendo no seu fígado. <strong>Se algo acontecer, você vai estar completamente sozinho.</strong> Existe um caminho seguro.</p>
     </div>
     <div class="pain-card bad">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-      <p class="pain-q r">"Especialista sempre foi coisa de quem pode gastar muito."</p>
-      <p class="pain-p">R$ 1.000 em uma única consulta parece fora da realidade. <strong>Acesso a especialista sempre pareceu privilégio.</strong> Isso mudou.</p>
+      <div class="pain-ico-wrap"><i class="ti ti-mood-sad" aria-hidden="true"></i></div>
+      <p class="pain-hook">"Acompanhamento médico virou artigo de luxo?"</p>
+      <p class="pain-support">Você quer fazer o tratamento do jeito certo, mas gastar R$ 1.000 em uma única consulta parece fora da realidade. <strong>Cuidar da saúde não deveria ser privilégio.</strong> Isso mudou.</p>
     </div>
     <div class="pain-card good">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-      <p class="pain-q g">Existe um meio-termo — e ele é real.</p>
-      <p class="pain-p">Exames que protegem de verdade, receita oficial e médico especialista <strong>sem pagar consultório de alto padrão.</strong></p>
+      <div class="pain-ico-wrap g"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+      <p class="pain-hook">O equilíbrio que faltava entre o seu bolso e a sua segurança.</p>
+      <p class="pain-support">Exames essenciais, receita digital e <strong>médico especialista</strong>. Tudo direto, sem a burocracia e o custo do consultório tradicional.</p>
     </div>
     <div class="pain-card good">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-      <p class="pain-q g">Emagrecer sem destruir o que você já tem.</p>
-      <p class="pain-p">Sem orientação, <strong>você perde músculo junto com gordura</strong> e engorda tudo de volta. Existe um jeito de evitar isso.</p>
+      <div class="pain-ico-wrap g"><i class="ti ti-muscle" aria-hidden="true"></i></div>
+      <p class="pain-hook">Você quer queimar gordura ou destruir seus músculos?</p>
+      <p class="pain-support">Sem orientação, metade do peso perdido é massa muscular. Seu metabolismo despenca e você engorda o dobro depois. <strong>Nós desenhamos o protocolo para você emagrecer salvando seus músculos.</strong></p>
     </div>
   </div>
 </div>
 
-<div class="div"></div>
+<div class="divider"></div>
 
 <!-- DIFERENCIAIS -->
 <div>
-  <span class="lbl">Por que somos diferentes</span>
-  <h2 class="h2">Medicina de verdade.<br><em>Preço justo.</em></h2>
-  <p class="sub">Sem fórmulas manipuladas, sem exames desnecessários, sem plantonista que não sabe seu nome.</p>
-  <div class="card-list">
-    <div class="card-row">
-      <div class="card-ico">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>
-      </div>
-      <div class="card-body"><h4>Especialista, não clínico geral</h4><p>Atendimento com médico especialista em Medicina de Família, com formação em Nutrologia e Medicina Esportiva — não um plantonista genérico que não vai lembrar seu nome.</p></div>
+  <span class="label">Por que somos diferentes</span>
+  <h2 class="section-h">Medicina de verdade.<br><em>Preço justo.</em></h2>
+  <p class="section-sub">Sem exames desnecessários, sem plantonista que não sabe seu nome.</p>
+  <div class="diff-list">
+    <div class="diff-item">
+      <div class="diff-ico"><i class="ti ti-stethoscope" aria-hidden="true"></i></div>
+      <div class="diff-body"><h4>Especialista, não clínico geral</h4><p>Atendimento com médico especialista com formação em Nutrologia, não um plantonista de plataforma genérica que nunca vai lembrar o seu nome.</p></div>
     </div>
-    <div class="card-row">
-      <div class="card-ico">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0H5a2 2 0 0 1-2-2V9m6 5h10a2 2 0 0 0 2-2V9m0 0H3"/></svg>
-      </div>
-      <div class="card-body"><h4>Só os exames necessários — com código TUSS</h4><p>Painel metabólico completo, aceito em convênio ou laboratório popular. Zero exames desnecessários para inflar o preço.</p></div>
+    <div class="diff-item">
+      <div class="diff-ico"><i class="ti ti-flask" aria-hidden="true"></i></div>
+      <div class="diff-body"><h4>Só os exames necessários - com pedido digital</h4><p>Painel metabólico completo, aceito em convênio ou laboratório popular. Zero exames desnecessários para inflar o preço.</p></div>
     </div>
-    <div class="card-row">
-      <div class="card-ico">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
-      </div>
-      <div class="card-body"><h4>Caneta original — comprada na sua farmácia</h4><p>A receita dá acesso à medicação de laboratório, não fórmula manipulada. Você compra onde preferir, aproveitando os melhores preços do mercado.</p></div>
+    <div class="diff-item">
+      <div class="diff-ico"><i class="ti ti-pill" aria-hidden="true"></i></div>
+      <div class="diff-body"><h4>Caneta oficial - comprada na sua farmácia</h4><p>A receita dá acesso à medicação original de laboratório. Você compra direto na drogaria, aproveitando os preços atuais do mercado.</p></div>
     </div>
-    <div class="card-row">
-      <div class="card-ico">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-      </div>
-      <div class="card-body"><h4>Você não perde músculo no caminho</h4><p>Orientações de proteína, fibra e atividade física integradas. O remédio é a ferramenta — entregamos o mapa completo.</p></div>
-    </div>
-    <div class="card-row">
-      <div class="card-ico">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a8 8 0 1 0 0 16A8 8 0 0 0 12 2z"/><path d="M12 6v6l4 2"/></svg>
-      </div>
-      <div class="card-body"><h4>Olhar integral — sono, mente e corpo</h4><p>Avaliação do seu histórico, sono e saúde mental integrada ao protocolo. Emagrecimento inteligente vai além da caneta.</p></div>
+    <div class="diff-item">
+      <div class="diff-ico"><i class="ti ti-muscle" aria-hidden="true"></i></div>
+      <div class="diff-body"><h4>Você não perde músculo no caminho</h4><p>Orientações de proteína, fibra e musculação integradas ao tratamento. O remédio é a ferramenta, entregamos o mapa completo.</p></div>
     </div>
   </div>
 </div>
 
-<div class="div"></div>
+<div class="divider"></div>
 
 <!-- COMO FUNCIONA -->
 <div>
-  <span class="lbl">Como funciona</span>
-  <h2 class="h2">Simples, rápido.<br><em>Sem burocracia.</em></h2>
-  <p class="sub">Da triagem à receita na farmácia — tudo pelo celular.</p>
+  <span class="label">Como funciona</span>
+  <h2 class="section-h">Simples, rápido.<br><em>Sem burocracia.</em></h2>
+  <p class="section-sub">Do Instagram à receita na farmácia, tudo pelo celular.</p>
   <div class="steps-wrap">
-    <div class="step-row"><div class="step-n">1</div><div class="step-body"><h4>Triagem gratuita</h4><p>Responda perguntas sobre saúde, peso e histórico. Se houver contraindicação, o fluxo é interrompido antes de qualquer cobrança.</p><span class="step-pill">Automático · 5 minutos</span></div></div>
-    <div class="step-row"><div class="step-n">2</div><div class="step-body"><h4>Pedido de exames com TUSS</h4><p>Se elegível, você recebe o pedido médico assinado digitalmente, pronto para usar no convênio ou laboratório popular.</p><span class="step-pill">Automático após pagamento</span></div></div>
-    <div class="step-row"><div class="step-n">3</div><div class="step-body"><h4>Consulta médica por videochamada</h4><p>Anexe os resultados e agende. O médico valida, tira dúvidas e emite a receita digital oficial na hora.</p><span class="step-pill">Direto ao ponto</span></div></div>
-    <div class="step-row"><div class="step-n">4</div><div class="step-body"><h4>Acompanhamento a cada 60 dias</h4><p>Renovação de receita, ajuste de dose e monitoramento da sua evolução. Você nunca fica solto após a primeira consulta.</p><span class="step-pill">Incluído no plano</span></div></div>
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><h4>Triagem gratuita</h4><p>Responda perguntas sobre saúde, peso e histórico. O sistema verifica se você tem indicação, sem compromisso.</p><span class="step-pill">Automático · 5 minutos</span></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><h4>Pedido de exames no WhatsApp</h4><p>Se elegível, você recebe o pedido médico assinado digitalmente com os códigos TUSS, pronto para usar no convênio ou laboratório popular.</p><span class="step-pill">Automático após pagamento</span></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><h4>Consulta médica por vídeo</h4><p>Anexe os resultados e agende. O médico analisa seu caso com atenção, tira dúvidas e emite a receita digital na hora.</p><span class="step-pill">Dedicado ao seu caso</span></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-body"><h4>Acompanhamento a cada 60 dias</h4><p>Renovação da receita, ajuste de dose e monitoramento da sua evolução. Você nunca fica solto depois da primeira consulta.</p><span class="step-pill">Incluído no plano</span></div></div>
   </div>
 </div>
 
-<div class="div"></div>
+<div class="divider"></div>
 
 <!-- PLANOS -->
 <div>
-  <span class="lbl">Escolha seu plano</span>
-  <h2 class="h2">Menos que uma<br><em>caixa do remédio.</em></h2>
-  <p class="sub">Acompanhamento com especialista por menos do que você gasta em um mês de medicação.</p>
+  <span class="label">Escolha seu plano</span>
+  <h2 class="section-h">Menos que uma<br><em>caixa do remédio.</em></h2>
+  <p class="section-sub">Acompanhamento com especialista por menos do que você gasta em um mês de medicação.</p>
   <div class="plans">
-    <div class="plan">
-      <p class="plan-name">Essencial</p>
-      <p class="plan-desc">3 meses de acompanhamento — ideal para começar com total segurança médica.</p>
+    <div class="plan-card feat">
+      <span class="plan-badge">Mais popular</span>
+      <p class="plan-name">Start</p>
+      <p class="plan-desc">3 meses de acompanhamento médico completo.</p>
       <p class="plan-price">R$ 247<sub> à vista</sub></p>
-      <p class="plan-install">ou em até 12x no cartão</p>
-      <ul class="plan-feats">
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Triagem + pedido de exames TUSS</li>
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 2 consultas (0 e 60 dias)</li>
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Receita digital oficial</li>
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Manual de Uso Seguro + suporte</li>
+      <p class="plan-install">ou 3× de R$ 89</p>
+      <ul class="plan-features">
+        <li><i class="ti ti-check" aria-hidden="true"></i> Triagem + pedido de exames TUSS</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> 2 consultas (0 e 60 dias)</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Receita digital oficial</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Guia de uso + suporte WhatsApp</li>
       </ul>
-      <button class="btn btn-outline btn-full" onclick="alert('Plano Essencial')">Começar agora</button>
+      <button class="plan-btn solid">Começar agora</button>
     </div>
-    <div class="plan feat">
-      <p class="plan-badge">Mais recomendado</p>
-      <p class="plan-name">Avançado</p>
-      <p class="plan-desc">6 meses completos para resultado duradouro, blindando os músculos.</p>
+    <div class="plan-card">
+      <p class="plan-name">Evolution</p>
+      <p class="plan-desc">6 meses completos para resultado real e duradouro.</p>
       <p class="plan-price">R$ 397<sub> à vista</sub></p>
-      <p class="plan-install">ou em até 12x no cartão</p>
-      <ul class="plan-feats">
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Tudo do plano Essencial</li>
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 3 consultas (0, 60 e 120 dias)</li>
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Triagem de sono e saúde mental</li>
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Check-ins automáticos mensais</li>
-        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Pedido de ultrassom no retorno</li>
+      <p class="plan-install">ou 6× de R$ 74</p>
+      <ul class="plan-features">
+        <li><i class="ti ti-check" aria-hidden="true"></i> Tudo do plano Start</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> 3 consultas (0, 60 e 120 dias)</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Avaliação de composição corporal</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Check-ins automáticos mensais</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Pedido de ultrassom na 1ª consulta</li>
       </ul>
-      <button class="btn btn-green btn-full" onclick="alert('Plano Avançado')">Escolher Avançado</button>
+      <button class="plan-btn outline">Escolher Evolution</button>
     </div>
   </div>
-  <p class="plan-note">O pagamento é pelo serviço de avaliação médica e acompanhamento, não pela garantia de receita. Em caso de contraindicação identificada, o médico indica o caminho mais seguro para o seu caso.</p>
+  <p class="plan-note">O pagamento é pelo serviço de avaliação médica, não pela garantia de receita. Em caso de contraindicação identificada, o médico indica o caminho mais seguro para o seu caso.</p>
 </div>
 
-<div class="div"></div>
+<div class="divider"></div>
 
 <!-- FAQ -->
 <div>
-  <span class="lbl">Dúvidas frequentes</span>
-  <h2 class="h2">Sem letra<br><em>miúda.</em></h2>
-  <p class="sub">Perguntas reais, respostas diretas.</p>
-  <div class="faq-wrap">
-    <div class="faq-item">
-      <p class="faq-q">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        Preciso ir a algum lugar?
-      </p>
-      <p class="faq-a">Só ao laboratório para os exames de sangue. Triagem, consulta e receita são 100% digitais — você faz tudo pelo celular.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        Os medicamentos estão inclusos no plano?
-      </p>
-      <p class="faq-a">Não, e isso é para a sua segurança. Não vendemos remédios nem fórmulas manipuladas. Emitimos a receita digital oficial para você comprar na farmácia de sua confiança.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        E se a triagem apontar que não posso fazer o tratamento?
-      </p>
-      <p class="faq-a">Você só paga se for elegível. A triagem analisa seus dados gratuitamente antes de qualquer cobrança. Se houver contraindicação, o fluxo é interrompido sem nenhum custo.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        Posso usar meu convênio para os exames?
-      </p>
-      <p class="faq-a">Sim. O pedido já sai com os códigos TUSS para cada exame, aceito por qualquer convênio. Se preferir laboratório popular, funciona perfeitamente.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1E5B3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        Como funciona o suporte entre consultas?
-      </p>
-      <p class="faq-a">Nosso canal serve para guiar nas etapas burocráticas e no uso do Manual de Uso Seguro. Em caso de reação grave, procure o pronto-atendimento mais próximo imediatamente.</p>
-    </div>
+  <span class="label">Dúvidas frequentes</span>
+  <h2 class="section-h">Sem letra<br><em>miúda.</em></h2>
+  <p class="section-sub">Perguntas reais, respostas diretas.</p>
+  <div class="faq-list">
+    <div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>Preciso ir a algum lugar?</p><p class="faq-a">Só ao laboratório para os exames de sangue. Triagem, consulta e receita são 100% digitais, você faz tudo pelo celular.</p></div>
+    <div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>O remédio já está incluso no plano?</p><p class="faq-a">Não. Você compra a medicação oficial na farmácia de sua escolha com a receita que emitimos. Com os preços atuais do mercado, ficou muito mais acessível.</p></div>
+    <div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>E se eu não tiver indicação?</p><p class="faq-a">A triagem gratuita já filtra isso antes de qualquer cobrança. Se a contraindicação aparecer nos exames, o médico indica o caminho mais seguro para o seu caso.</p></div>
+    <div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>Posso usar meu convênio para os exames?</p><p class="faq-a">Sim. O pedido já sai com os códigos TUSS para cada exame, aceito por qualquer convênio. Se preferir laboratório popular, também funciona perfeitamente.</p></div>
+    <div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>Esse programa cobre urgências?</p><p class="faq-a">Não. Este é um programa de acompanhamento eletivo. Em caso de reação grave, procure o pronto-atendimento mais próximo imediatamente.</p></div>
   </div>
 </div>
 
 <!-- CTA FINAL -->
-<div class="cta">
-  <h2 class="cta-h2">Pronto para fazer<br><em>do jeito certo?</em></h2>
-  <p class="cta-sub">Triagem gratuita, sem compromisso. <strong>Resultado em minutos.</strong></p>
-  <button class="btn btn-green" onclick="alert('Iniciando triagem...')">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    Iniciar triagem gratuita
-  </button>
+<div class="cta-final" style="margin-top:3rem">
+  <h2>Pronto para fazer<br><em>do jeito certo?</em></h2>
+  <p>Triagem gratuita, sem compromisso. <strong>Resultado em minutos.</strong></p>
+  <button class="btn-primary"><i class="ti ti-arrow-right" aria-hidden="true"></i> Iniciar triagem gratuita</button>
 </div>
 
 <!-- RT -->
 <div class="rt">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-  <span>Direção técnica médica: <strong>Dr. Ailton Vieira de Souza Júnior</strong> — CRM-MG 52628 / RQE 121870 · Especialista em Medicina de Família e Comunidade · Formação complementar em Nutrologia e Medicina Esportiva · Atendimento em conformidade com a Resolução CFM nº 2.314/2022 · LGPD aplicada a todos os dados coletados.</span>
-</div>
-<div style="margin-top:1rem">
-  <a href="https://linkedin.com" target="_blank" class="linkedin">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-    Ver perfil profissional no LinkedIn
-  </a>
+  <i class="ti ti-license" aria-hidden="true"></i>
+  <span>Direção técnica médica: Dr. Ailton Vieira de Souza Júnior - CRM-MG 52628 / RQE 121870 · Especialista em Medicina de Família e Comunidade · Pós-graduação em Nutrologia · Atendimento em conformidade com a Resolução CFM nº 2.314/2022 · LGPD aplicada a todos os dados coletados.</span>
 </div>
 
 </div>
