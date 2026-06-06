@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>menospeso. — Telemedicina de Emagrecimento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:#0F172A;-webkit-font-smoothing:antialiased}
+.lp{max-width:680px;margin:0 auto;padding:3rem 1.5rem 4rem}
+.label{font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#059669;margin-bottom:0.75rem;display:block}
+.divider{height:1px;background:#F1F5F9;margin:3rem 0}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:#F0FDF4;border:1px solid #BBF7D0;color:#059669;font-size:11px;font-weight:500;padding:5px 14px;border-radius:99px;margin-bottom:2rem;letter-spacing:0.04em}
+.hero h1{font-family:'DM Serif Display',serif;font-size:56px;line-height:1.05;letter-spacing:-0.01em;color:#0F172A;margin-bottom:0.25rem}
+.hero h1 em{font-style:italic;color:#059669}
+.hero-sub-head{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;font-style:italic;color:#94A3B8;line-height:1.3;margin-bottom:1.5rem}
+.hero-p{font-size:15px;color:#64748B;line-height:1.85;max-width:480px;margin-bottom:2rem;font-weight:300}
+.hero-p strong{color:#334155;font-weight:500}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:#059669;color:#fff;font-size:14px;font-weight:500;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.01em}
+.hero-trust{font-size:12px;color:#CBD5E1;margin-top:10px;letter-spacing:0.02em}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #F1F5F9;margin-top:2.75rem;padding-top:2rem;gap:1rem}
+.stat-val{font-family:'DM Serif Display',serif;font-size:36px;color:#0F172A;line-height:1}
+.stat-val em{font-style:normal;color:#059669}
+.stat-lbl{font-size:12px;color:#94A3B8;margin-top:5px;line-height:1.45;font-weight:300}
+.section-h{font-family:'DM Serif Display',serif;font-size:40px;line-height:1.05;margin-bottom:0.5rem;letter-spacing:-0.01em}
+.section-h em{font-style:italic;color:#059669}
+.section-sub{font-size:14px;color:#94A3B8;margin-bottom:1.75rem;line-height:1.65;font-weight:300}
+.pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
+.pain-card.bad{background:#FFFBFB;border:1px solid #FECDD3;border-radius:18px;padding:1.5rem;display:flex;flex-direction:column;gap:10px;height:100%}
+.pain-card.bad .pain-hook{font-family:'DM Serif Display',serif;font-size:18px;font-style:italic;line-height:1.25;color:#9F1239}
+.pain-card.bad .pain-support{font-size:12px;line-height:1.75;color:#64748B;font-weight:300}
+.pain-card.bad .pain-support strong{font-weight:500;color:#9F1239}
+.pain-ico-wrap{width:30px;height:30px;background:#FFF1F2;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.pain-ico-wrap i{color:#E11D48;font-size:16px}
+.pain-card.good{background:#F9FFFE;border:1px solid #A7F3D0;border-radius:18px;padding:1.5rem;display:flex;flex-direction:column;gap:10px;height:100%}
+.pain-card.good .pain-hook{font-family:'DM Serif Display',serif;font-size:18px;line-height:1.25;color:#065F46}
+.pain-card.good .pain-support{font-size:12px;line-height:1.75;color:#64748B;font-weight:300}
+.pain-card.good .pain-support strong{font-weight:500;color:#065F46}
+.pain-ico-wrap.g{background:#F0FDF4}
+.pain-ico-wrap.g i{color:#059669}
+.diff-list{display:flex;flex-direction:column;border:1px solid #F1F5F9;border-radius:18px;overflow:hidden}
+.diff-item{display:flex;align-items:flex-start;gap:16px;padding:1.25rem 1.35rem;background:#fff;border-bottom:1px solid #F1F5F9}
+.diff-item:last-child{border-bottom:none}
+.diff-ico{width:36px;height:36px;border-radius:9px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.diff-ico i{font-size:18px;color:#059669}
+.diff-body h4{font-size:14px;font-weight:500;color:#0F172A;margin-bottom:3px}
+.diff-body p{font-size:13px;color:#64748B;line-height:1.65;font-weight:300}
+.steps-wrap{display:flex;flex-direction:column;border:1px solid #F1F5F9;border-radius:18px;overflow:hidden}
+.step-item{display:flex;gap:16px;padding:1.25rem 1.35rem;background:#fff;border-bottom:1px solid #F1F5F9}
+.step-item:last-child{border-bottom:none}
+.step-num{width:30px;height:30px;border-radius:50%;background:#F0FDF4;color:#059669;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;border:1px solid #A7F3D0;font-family:'DM Serif Display',serif}
+.step-body h4{font-size:14px;font-weight:500;color:#0F172A;margin-bottom:3px}
+.step-body p{font-size:13px;color:#64748B;line-height:1.65;font-weight:300}
+.step-pill{display:inline-block;font-size:11px;font-weight:400;padding:3px 10px;border-radius:99px;background:#F0FDF4;color:#059669;border:1px solid #A7F3D0;margin-top:6px;letter-spacing:0.02em}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+.plan-card{background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:1.5rem;display:flex;flex-direction:column;height:100%}
+.plan-card.feat{border-color:#059669;border-width:1.5px}
+.plan-badge{font-size:11px;font-weight:500;padding:4px 12px;border-radius:99px;background:#F0FDF4;color:#059669;border:1px solid #A7F3D0;display:inline-block;margin-bottom:1.1rem;align-self:flex-start;letter-spacing:0.04em}
+.plan-name{font-family:'DM Serif Display',serif;font-size:26px;color:#0F172A;margin-bottom:5px}
+.plan-desc{font-size:12px;color:#94A3B8;margin-bottom:1.25rem;line-height:1.55;font-weight:300}
+.plan-price{font-family:'DM Serif Display',serif;font-size:34px;color:#0F172A;line-height:1}
+.plan-price sub{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#94A3B8;vertical-align:baseline}
+.plan-install{font-size:12px;color:#94A3B8;margin-top:4px;margin-bottom:1.25rem;font-weight:300}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;flex:1}
+.plan-features li{font-size:12px;color:#475569;display:flex;align-items:flex-start;gap:7px;line-height:1.5;font-weight:300}
+.plan-features li i{color:#059669;font-size:14px;flex-shrink:0;margin-top:1px}
+.plan-btn{width:100%;padding:12px;font-size:14px;font-weight:500;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.01em}
+.plan-btn.outline{background:#fff;color:#0F172A;border:1px solid #E2E8F0}
+.plan-btn.solid{background:#059669;color:#fff;border:none}
+.plan-note{font-size:11px;color:#94A3B8;line-height:1.7;margin-top:12px;font-weight:300}
+.faq-list{display:flex;flex-direction:column;border:1px solid #F1F5F9;border-radius:18px;overflow:hidden}
+.faq-item{background:#fff;padding:1.25rem 1.35rem;border-bottom:1px solid #F1F5F9}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:13px;font-weight:500;color:#0F172A;margin-bottom:5px;display:flex;align-items:flex-start;gap:8px}
+.faq-q i{color:#059669;font-size:15px;margin-top:1px;flex-shrink:0}
+.faq-a{font-size:12px;color:#64748B;line-height:1.75;padding-left:23px;font-weight:300}
+.cta-final{text-align:center;padding-top:2.5rem;border-top:1px solid #F1F5F9}
+.cta-final h2{font-family:'DM Serif Display',serif;font-size:46px;line-height:1.05;margin-bottom:0.75rem}
+.cta-final h2 em{font-style:italic;color:#059669}
+.cta-final p{font-size:14px;color:#94A3B8;margin-bottom:2rem;font-weight:300}
+.cta-final p strong{color:#059669;font-weight:500}
+.rt{display:flex;align-items:flex-start;gap:10px;padding:1rem 1.125rem;background:#F8FAFC;border:1px solid #F1F5F9;border-radius:12px;font-size:11px;color:#94A3B8;line-height:1.75;margin-top:2.75rem;font-weight:300}
+.rt i{font-size:16px;color:#CBD5E1;flex-shrink:0;margin-top:1px}
+a.btn-primary{text-decoration:none;display:inline-flex}
+a.plan-btn{text-decoration:none;display:block;-webkit-tap-highlight-color:transparent}
+.doctor-block{display:flex;align-items:center;gap:1.5rem;padding:1.5rem;background:#F8FAFC;border:1px solid #F1F5F9;border-radius:18px}
+.doctor-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;object-position:top center;border:2px solid #A7F3D0;flex-shrink:0}
+.doctor-name{font-family:'DM Serif Display',serif;font-size:18px;color:#0F172A;line-height:1.2;margin-bottom:4px}
+.doctor-title{font-size:12px;color:#059669;font-weight:500;margin-bottom:6px;line-height:1.4}
+.doctor-bio{font-size:12px;color:#64748B;line-height:1.7;font-weight:300}
+.doctor-crm{font-size:11px;color:#94A3B8;margin-top:6px;letter-spacing:0.02em}
+@media(max-width:480px){.hero h1{font-size:38px}.hero-sub-head{font-size:20px}.cta-final h2{font-size:32px}.section-h{font-size:30px}.pain-grid{grid-template-columns:1fr}.plans{grid-template-columns:1fr}.stat-val{font-size:28px}.hero-stats{grid-template-columns:repeat(3,1fr);gap:0.5rem}.doctor-block{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<div class="lp">
+<div style="padding-bottom:2.5rem">
+<div class="hero-badge"><i class="ti ti-shield-check" aria-hidden="true"></i> Telemedicina regulamentada · CFM 2.314/2022</div>
+<div class="hero"><h1>A caneta emagrecedora<br><em>do jeito certo.</em></h1></div>
+<p class="hero-sub-head">Acompanhamento médico especializado, por um preço justo.</p>
+<p class="hero-p">Exames digitais, receita oficial e acompanhamento real — tudo que um bom tratamento exige, <strong>sem burocracia e sem custo excessivo.</strong></p>
+<a href="https://wa.me/5538998643977?text=Quero%20fazer%20minha%20triagem%20para%20o%20Programa%20Menos%20Peso" target="_blank" class="btn-primary"><i class="ti ti-arrow-right" aria-hidden="true"></i> Iniciar minha triagem gratuita</a>
+<p class="hero-trust" style="margin-top:10px">Sem compromisso · Resultado em minutos · Triagem 100% digital</p>
+<div class="hero-stats">
+<div><div class="stat-val"><em>60</em>dias</div><div class="stat-lbl">Acompanhamento contínuo entre consultas</div></div>
+<div><div class="stat-val">R$<em>247</em></div><div class="stat-lbl">3 meses de acompanhamento</div></div>
+<div><div class="stat-val"><em>100</em>%</div><div class="stat-lbl">Digital, sem sair de casa</div></div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="doctor-block">
+<img class="doctor-photo" src="https://raw.githubusercontent.com/ailtonvieirasj/menospeso/main/doctor.jpg" alt="Dr. Ailton Vieira de Souza Junior" />
+<div>
+<p class="doctor-name">Dr. Ailton Vieira de Souza Júnior</p>
+<p class="doctor-title">Medicina de Família · Nutrologia · Medicina do Esporte</p>
+<p class="doctor-bio">Mais de 15 anos de trajetória clínica. Passou pelo Hospital Israelita Albert Einstein, Dasa e UnitedHealth Group. Foi professor de Saúde Coletiva na Santa Casa de São Paulo e preceptor de residência médica. Hoje lidera o Menos Peso com o mesmo rigor das grandes instituições — e um preço que faz sentido.</p>
+<p class="doctor-crm">CRM-SP 149608 · CRM-MG 52628 · RQE 121870</p>
+</div>
+</div>
+<div class="divider"></div>
+<div>
+<span class="label">Você se identificou?</span>
+<h2 class="section-h">Duas saídas erradas.<br><em>Uma certa.</em></h2>
+<p class="section-sub">O mercado te empurra para os extremos. Nós existimos no meio.</p>
+<div class="pain-grid">
+<div class="pain-card bad"><div class="pain-ico-wrap"><i class="ti ti-alert-triangle" aria-hidden="true"></i></div><p class="pain-hook">"Tô tomando porque todo mundo tá tomando..."</p><p class="pain-support">Sem exame, sem receita oficial e sem saber o que isso está fazendo no seu fígado. <strong>Se algo acontecer, você vai estar completamente sozinho.</strong> Existe um caminho seguro.</p></div>
+<div class="pain-card bad"><div class="pain-ico-wrap"><i class="ti ti-mood-sad" aria-hidden="true"></i></div><p class="pain-hook">"Acompanhamento médico virou artigo de luxo?"</p><p class="pain-support">Você quer fazer o tratamento do jeito certo, mas gastar R$ 1.000 em uma única consulta parece fora da realidade. <strong>Cuidar da saúde não deveria ser privilégio.</strong> Isso mudou.</p></div>
+<div class="pain-card good"><div class="pain-ico-wrap g"><i class="ti ti-shield-check" aria-hidden="true"></i></div><p class="pain-hook">O equilíbrio que faltava entre o seu bolso e a sua segurança.</p><p class="pain-support">Exames essenciais, receita digital e <strong>médico especialista</strong>. Tudo direto, sem a burocracia e o custo do consultório tradicional.</p></div>
+<div class="pain-card good"><div class="pain-ico-wrap g"><i class="ti ti-muscle" aria-hidden="true"></i></div><p class="pain-hook">Você quer queimar gordura ou destruir seus músculos?</p><p class="pain-support">Sem acompanhamento, parte do peso perdido pode ser massa muscular. Seu metabolismo paga o preço. <strong>Com monitoramento especializado, você sabe o que está perdendo — e age antes que vire problema.</strong></p></div>
+</div>
+</div>
+<div class="divider"></div>
+<div>
+<span class="label">Por que somos diferentes</span>
+<h2 class="section-h">Medicina de verdade.<br><em>Preço justo.</em></h2>
+<p class="section-sub">Sem exames desnecessários, sem plantonista que não sabe seu nome.</p>
+<div class="diff-list">
+<div class="diff-item"><div class="diff-ico"><i class="ti ti-stethoscope" aria-hidden="true"></i></div><div class="diff-body"><h4>Acompanhamento com especialista</h4><p>Médico especialista em Medicina de Família com formação em Nutrologia e Medicina Esportiva — não um plantonista de plataforma genérica que nunca vai lembrar o seu nome.</p></div></div>
+<div class="diff-item"><div class="diff-ico"><i class="ti ti-flask" aria-hidden="true"></i></div><div class="diff-body"><h4>Só os exames necessários — com pedido digital</h4><p>Painel metabólico completo, aceito em convênio ou laboratório popular. Zero exames desnecessários para inflar o preço.</p></div></div>
+<div class="diff-item"><div class="diff-ico"><i class="ti ti-pill" aria-hidden="true"></i></div><div class="diff-body"><h4>Caneta oficial — comprada na sua farmácia</h4><p>A receita dá acesso à medicação original de laboratório. Você compra direto na drogaria, aproveitando os preços atuais do mercado.</p></div></div>
+<div class="diff-item"><div class="diff-ico"><i class="ti ti-muscle" aria-hidden="true"></i></div><div class="diff-body"><h4>Emagreça sem sacrificar seus músculos</h4><p>A perda de massa magra com medicação é real — mas com acompanhamento médico especializado, ela é monitorada e minimizada. É a diferença entre emagrecer com saúde e emagrecer e enfraquecer.</p></div></div>
+</div>
+</div>
+<div class="divider"></div>
+<div>
+<span class="label">Como funciona</span>
+<h2 class="section-h">Simples, rápido.<br><em>Sem burocracia.</em></h2>
+<p class="section-sub">Do primeiro contato à receita na farmácia, tudo pelo celular.</p>
+<div class="steps-wrap">
+<div class="step-item"><div class="step-num">1</div><div class="step-body"><h4>Triagem gratuita</h4><p>Responda perguntas sobre saúde, peso e histórico. O sistema verifica se você tem indicação, sem compromisso.</p><span class="step-pill">Automático · 5 minutos</span></div></div>
+<div class="step-item"><div class="step-num">2</div><div class="step-body"><h4>Pedido de exames no WhatsApp</h4><p>Se elegível, você recebe o pedido médico assinado digitalmente com os códigos TUSS, pronto para usar no convênio ou laboratório popular.</p><span class="step-pill">Automático após pagamento</span></div></div>
+<div class="step-item"><div class="step-num">3</div><div class="step-body"><h4>Consulta médica por vídeo</h4><p>Anexe os resultados e agende. O médico analisa seu caso com atenção, tira dúvidas e emite a receita digital na hora.</p><span class="step-pill">Dedicado ao seu caso</span></div></div>
+<div class="step-item"><div class="step-num">4</div><div class="step-body"><h4>Acompanhamento a cada 60 dias</h4><p>Renovação da receita, ajuste de dose e monitoramento da sua evolução. Você nunca fica solto depois da primeira consulta.</p><span class="step-pill">Incluído no plano</span></div></div>
+</div>
+</div>
+<div class="divider"></div>
+<div>
+<span class="label">Escolha seu plano</span>
+<h2 class="section-h">Menos que uma caixa do remédio.<br><em>Muito mais que uma consulta avulsa.</em></h2>
+<p class="section-sub">Um valor único cobre todo o ciclo de acompanhamento. Sem mensalidade, sem cobrança recorrente, sem letra miúda.</p>
+<div class="plans">
+<div class="plan-card">
+<p class="plan-name">Início Seguro</p>
+<p class="plan-desc"><strong>3 meses de acompanhamento médico completo</strong> — valor único, não é mensalidade.</p>
+<p class="plan-price">R$ 247<sub> à vista</sub></p>
+<p class="plan-install">ou em até 12x no cartão</p>
+<ul class="plan-features">
+<li><i class="ti ti-check" aria-hidden="true"></i> Triagem + pedido de exames TUSS</li>
+<li><i class="ti ti-check" aria-hidden="true"></i> 2 consultas (0 e 60 dias)</li>
+<li><i class="ti ti-check" aria-hidden="true"></i> Receita digital oficial</li>
+<li><i class="ti ti-check" aria-hidden="true"></i> Guia de uso + suporte WhatsApp</li>
+</ul>
+<a href="https://wa.me/5538998643977?text=Quero%20fazer%20minha%20triagem%20para%20o%20Programa%20Menos%20Peso" target="_blank" class="plan-btn outline" style="text-align:center;text-decoration:none;display:block;padding:12px;">Escolher Início Seguro</a>
+</div>
+<div class="plan-card feat">
+<span class="plan-badge">Mais recomendado</span>
+<p class="plan-name">Acompanhamento Estendido</p>
+<p class="plan-desc"><strong>6 meses de acompanhamento completo</strong> — valor único, não é mensalidade.</p>
+<p class="plan-price">R$ 397<sub> à vista</sub></p>
+<p class="plan-install">ou em até 12x no cartão</p>
+<ul class="plan-features">
+<li><i class="ti ti-check" aria-hidden="true"></i> Tudo do Início Seguro</li>
+<li><i class="ti ti-check" aria-hidden="true"></i> 3 consultas (0, 60 e 120 dias)</li>
+<li><i class="ti ti-check" aria-hidden="true"></i> Avaliação de composição corporal</li>
+</ul>
+<a href="https://wa.me/5538998643977?text=Quero%20fazer%20minha%20triagem%20para%20o%20Programa%20Menos%20Peso" target="_blank" class="plan-btn solid" style="text-align:center;text-decoration:none;display:block;padding:12px;">Começar agora</a>
+</div>
+</div>
+<p class="plan-note">Pagamento único pelo acompanhamento completo do período — não é mensalidade, não tem cobrança recorrente. O valor cobre o serviço de avaliação médica, não garante receita: em caso de contraindicação, o médico indica o caminho mais seguro para o seu caso.</p>
+</div>
+<div class="divider"></div>
+<div>
+<span class="label">Dúvidas frequentes</span>
+<h2 class="section-h">Sem letra<br><em>miúda.</em></h2>
+<p class="section-sub">Perguntas reais, respostas diretas.</p>
+<div class="faq-list">
+<div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>Preciso ir a algum lugar?</p><p class="faq-a">Só ao laboratório para os exames de sangue. Triagem, consulta e receita são 100% digitais, você faz tudo pelo celular.</p></div>
+<div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>O remédio já está incluso no plano?</p><p class="faq-a">Não. Você compra a medicação oficial na farmácia de sua escolha com a receita que emitimos. Com os preços atuais do mercado, ficou muito mais acessível.</p></div>
+<div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>E se eu não tiver indicação?</p><p class="faq-a">A triagem gratuita já filtra isso antes de qualquer cobrança. Se a contraindicação aparecer nos exames, o médico indica o caminho mais seguro para o seu caso.</p></div>
+<div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>Posso usar meu convênio para os exames?</p><p class="faq-a">Sim. O pedido já sai com os códigos TUSS para cada exame, aceito por qualquer convênio. Se preferir laboratório popular, também funciona perfeitamente.</p></div>
+<div class="faq-item"><p class="faq-q"><i class="ti ti-circle-check" aria-hidden="true"></i>Esse programa cobre urgências?</p><p class="faq-a">Não. Este é um programa de acompanhamento eletivo. Em caso de reação grave, procure o pronto-atendimento mais próximo imediatamente.</p></div>
+</div>
+</div>
+<div class="cta-final" style="margin-top:3rem">
+<h2>Pronto para fazer<br><em>do jeito certo?</em></h2>
+<p>Triagem gratuita, sem compromisso. <strong>Resultado em minutos.</strong></p>
+<a href="https://wa.me/5538998643977?text=Quero%20fazer%20minha%20triagem%20para%20o%20Programa%20Menos%20Peso" target="_blank" class="btn-primary"><i class="ti ti-arrow-right" aria-hidden="true"></i> Iniciar minha triagem gratuita</a>
+</div>
+<div class="rt">
+<i class="ti ti-license" aria-hidden="true"></i>
+<span>Dr. Ailton Vieira de Souza Júnior · CRM-SP 149608 · CRM-MG 52628 · RQE 121870<br>Especialista em Medicina de Família e Comunidade · Pós-graduação em Nutrologia<br>Atendimento em conformidade com a Resolução CFM nº 2.314/2022 · Dados tratados conforme a LGPD</span>
+</div>
+</div>
+</body>
+</html>
