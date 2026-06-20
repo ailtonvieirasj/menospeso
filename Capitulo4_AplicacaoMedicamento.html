@@ -30,11 +30,13 @@
     background:var(--white);border-bottom:1px solid var(--border);
     display:flex;align-items:center;gap:10px;
   }
+  .back-btn{display:flex;align-items:center;gap:4px;color:var(--muted);font-size:12px;font-weight:600;text-decoration:none;padding:5px 8px;border-radius:8px;background:var(--bg);border:1px solid var(--border);white-space:nowrap;flex-shrink:0}
+  .back-btn:hover{background:var(--green-light);color:var(--green-dark);border-color:var(--green)}
   .cap-badge{
     background:var(--green);color:#fff;font-size:10px;font-weight:700;
     padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap;
   }
-  .cap-title{font-size:13px;font-weight:600;color:var(--slate);flex:1;line-height:1.2}
+  .cap-title{font-size:12px;font-weight:600;color:var(--slate);flex:1;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .progress-pill{
     font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;
   }
@@ -235,6 +237,7 @@
 
   <!-- HEADER -->
   <header>
+    <a class="back-btn" href="GuiadoPaciente_INICIO.html">&lt;- Índice</a>
     <span class="cap-badge">CAP. 4</span>
     <span class="cap-title">Aplicando o medicamento</span>
     <span class="progress-pill" id="prog-text">1 / 9</span>

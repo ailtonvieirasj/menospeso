@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Capítulo 2 — Conhecendo o Medicamento · Menos Peso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;--green-light:#d1fae5;--green-dark:#047857;
+    --slate:#0f172a;--slate-mid:#1e293b;--slate-light:#334155;
+    --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;
+    --yellow:#f59e0b;--yellow-light:#fef3c7;
+    --red:#ef4444;--red-light:#fee2e2;
+    --blue:#3b82f6;--blue-light:#dbeafe;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;background:var(--white);position:relative;box-shadow:0 0 40px rgba(0,0,0,.12)}
+  header{flex-shrink:0;padding:10px 16px 8px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .back-btn{display:flex;align-items:center;gap:4px;color:var(--muted);font-size:12px;font-weight:600;text-decoration:none;padding:5px 8px;border-radius:8px;background:var(--bg);border:1px solid var(--border);white-space:nowrap;flex-shrink:0}
+  .back-btn:hover{background:var(--green-light);color:var(--green-dark);border-color:var(--green)}
+  .cap-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+  .cap-title{font-size:12px;font-weight:600;color:var(--slate);flex:1;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .progress-pill{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .prog-bar{flex-shrink:0;height:3px;background:var(--border)}
+  .prog-fill{height:100%;background:var(--green);transition:width .35s ease}
+  .slides{flex:1;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;overflow-y:auto;padding:20px 20px 100px;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .3s ease,transform .3s ease}
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+  .slide.exit{opacity:0;transform:translateX(-30px)}
+  nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--white);border-top:1px solid var(--border);position:relative;z-index:10}
+  .nav-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+  .btn-prev{background:var(--border);color:var(--muted)}
+  .btn-prev:hover{background:#cbd5e1}
+  .btn-next{background:var(--green);color:#fff}
+  .btn-next:hover{background:var(--green-dark)}
+  .btn-next:disabled{opacity:.4;cursor:default}
+  .nav-dots{display:flex;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--green);width:18px;border-radius:3px}
+  .label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  h1{font-size:26px;font-weight:900;line-height:1.15;color:var(--slate)}
+  h2{font-size:20px;font-weight:800;line-height:1.2;color:var(--slate)}
+  h3{font-size:15px;font-weight:700;color:var(--slate)}
+  p{font-size:14px;line-height:1.65;color:var(--slate-light)}
+  .caption{font-size:12px;color:var(--muted);line-height:1.5}
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card-green{background:var(--green-light);border:1px solid #a7f3d0}
+  .card-yellow{background:var(--yellow-light);border:1px solid #fcd34d}
+  .card-red{background:var(--red-light);border:1px solid #fca5a5}
+  .card-dark{background:var(--slate);border:none;color:#fff}
+  .card-blue{background:var(--blue-light);border:1px solid #93c5fd}
+  .gap{margin-top:12px}
+
+  .cover-slide{background:linear-gradient(160deg,#064e3b 0%,#065f46 60%,#059669 100%);border-radius:20px;padding:28px 24px;margin-bottom:16px;position:relative;overflow:hidden}
+  .cover-slide::after{content:'';position:absolute;bottom:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+  .cover-num{font-size:11px;font-weight:700;color:#6ee7b7;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+  .cover-title{font-size:26px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:8px}
+  .cover-sub{font-size:13px;color:#a7f3d0;line-height:1.55}
+
+  .index-list{display:flex;flex-direction:column;gap:8px}
+  .index-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s}
+  .index-item:hover{border-color:var(--green);background:var(--green-light)}
+  .index-num{font-size:11px;font-weight:800;color:var(--green);width:20px;flex-shrink:0}
+  .index-text{font-size:13px;font-weight:600;color:var(--slate)}
+  .index-arrow{color:var(--muted);font-size:16px;margin-left:auto}
+
+  .step-flow{display:flex;flex-direction:column;gap:0}
+  .step-item{display:flex;gap:14px;padding-bottom:18px;position:relative}
+  .step-item:last-child{padding-bottom:0}
+  .step-item:not(:last-child)::before{content:'';position:absolute;left:16px;top:34px;bottom:0;width:2px;background:var(--border)}
+  .step-num{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;z-index:1}
+  .step-body{flex:1;padding-top:4px}
+
+  .mechanism-card{display:flex;gap:14px;padding:14px;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;margin-bottom:10px;align-items:flex-start}
+  .mech-ico{font-size:26px;flex-shrink:0}
+  .mech-body{}
+  .mech-title{font-size:14px;font-weight:700;color:var(--slate);margin-bottom:3px}
+  .mech-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+  .timeline{display:flex;flex-direction:column;gap:10px}
+  .timeline-item{display:flex;gap:12px;align-items:flex-start}
+  .tl-week{flex-shrink:0;width:56px;background:var(--green);color:#fff;font-size:10px;font-weight:800;padding:4px 6px;border-radius:8px;text-align:center;line-height:1.3}
+  .tl-body{flex:1;padding-top:2px}
+  .tl-title{font-size:13px;font-weight:700;color:var(--slate);margin-bottom:2px}
+  .tl-desc{font-size:12px;color:var(--muted);line-height:1.4}
+
+  /* ACCORDION */
+  .accord{border:1.5px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden}
+  .accord-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;background:var(--white)}
+  .accord-head:hover{background:var(--bg)}
+  .accord-q{font-size:13px;font-weight:700;color:var(--slate);flex:1;padding-right:12px}
+  .accord-ico{font-size:16px;color:var(--muted);transition:transform .25s;flex-shrink:0}
+  .accord.open .accord-ico{transform:rotate(45deg)}
+  .accord-body{display:none;padding:0 16px 14px;font-size:13px;color:var(--slate-light);line-height:1.6}
+  .accord.open .accord-body{display:block}
+
+  .myth-card{border-radius:16px;padding:16px;margin-bottom:10px;border:1.5px solid var(--border)}
+  .myth-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .myth-icon{font-size:20px;flex-shrink:0}
+  .myth-label{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:8px}
+  .myth-label.falso{background:#fee2e2;color:#b91c1c}
+  .myth-label.verdade{background:#d1fae5;color:#065f46}
+  .myth-statement{font-size:14px;font-weight:700;color:var(--slate);margin-bottom:6px}
+  .myth-explain{font-size:13px;color:var(--slate-light);line-height:1.55}
+
+  .summary-list{display:flex;flex-direction:column;gap:8px}
+  .summary-item{display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--green-light);border-radius:12px;border:1px solid #a7f3d0}
+  .summary-check{color:var(--green);font-size:16px;flex-shrink:0;margin-top:1px}
+  .summary-text{font-size:13px;color:var(--slate-mid);font-weight:500;line-height:1.45}
+
+  .dose-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;margin-bottom:8px;background:var(--bg);border:1.5px solid var(--border)}
+  .dose-phase{font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;width:60px;flex-shrink:0}
+  .dose-value{font-size:18px;font-weight:900;color:var(--slate);width:60px;flex-shrink:0}
+  .dose-desc{font-size:12px;color:var(--muted);flex:1;line-height:1.35}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back-btn" href="GuiadoPaciente_INICIO.html">← Índice</a>
+    <span class="cap-badge">Cap. 2</span>
+    <span class="cap-title">Conhecendo o Medicamento</span>
+    <span class="progress-pill" id="prog-label">1 / 9</span>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:11%"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- SLIDE 1: CAPA -->
+    <div class="slide active" id="s0">
+      <div class="cover-slide">
+        <div class="cover-num">Capítulo 2 · Menos Peso</div>
+        <div class="cover-title">Conhecendo seu Medicamento</div>
+        <div class="cover-sub">Como o GLP-1 age no seu corpo e o que esperar ao longo do tratamento.</div>
+      </div>
+      <div class="label">Neste capítulo</div>
+      <div class="index-list">
+        <div class="index-item" onclick="goTo(1)"><span class="index-num">01</span><span class="index-text">O que é o GLP-1</span><span class="index-arrow">›</span></div>
+        <div class="index-item" onclick="goTo(2)"><span class="index-num">02</span><span class="index-text">Como age no corpo</span><span class="index-arrow">›</span></div>
+        <div class="index-item" onclick="goTo(3)"><span class="index-num">03</span><span class="index-text">O que esperar semana a semana</span><span class="index-arrow">›</span></div>
+        <div class="index-item" onclick="goTo(4)"><span class="index-num">04</span><span class="index-text">Escalonamento de doses</span><span class="index-arrow">›</span></div>
+        <div class="index-item" onclick="goTo(5)"><span class="index-num">05</span><span class="index-text">Como guardar o medicamento</span><span class="index-arrow">›</span></div>
+        <div class="index-item" onclick="goTo(6)"><span class="index-num">06</span><span class="index-text">Perguntas frequentes</span><span class="index-arrow">›</span></div>
+        <div class="index-item" onclick="goTo(7)"><span class="index-num">07</span><span class="index-text">Mitos sobre o medicamento</span><span class="index-arrow">›</span></div>
+        <div class="index-item" onclick="goTo(8)"><span class="index-num">08</span><span class="index-text">Resumo do capítulo</span><span class="index-arrow">›</span></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: O QUE É GLP-1 -->
+    <div class="slide" id="s1">
+      <div class="label">O medicamento</div>
+      <h2 style="margin-bottom:10px">O que é o GLP-1?</h2>
+      <p style="margin-bottom:14px">GLP-1 é uma classe de medicamentos que imita um hormônio natural do seu intestino — o "glucagon-like peptide 1". Esse hormônio é liberado após as refeições e envia sinais de saciedade ao cérebro.</p>
+      <div class="card card-blue" style="margin-bottom:12px">
+        <div style="font-size:13px;font-weight:700;color:#1d4ed8;margin-bottom:8px">💊 Medicamentos desta classe</div>
+        <div class="step-flow">
+          <div class="step-item">
+            <div class="step-num" style="background:#3b82f6">S</div>
+            <div class="step-body"><h3>Semaglutida</h3><p class="caption" style="margin-top:3px">Ozempic®, Wegovy® — aplicação semanal</p></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num" style="background:#3b82f6">L</div>
+            <div class="step-body"><h3>Liraglutida</h3><p class="caption" style="margin-top:3px">Saxenda® — aplicação diária</p></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num" style="background:#3b82f6">T</div>
+            <div class="step-body"><h3>Tirzepatida</h3><p class="caption" style="margin-top:3px">Mounjaro® — dupla ação GLP-1 + GIP, aplicação semanal</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-green">
+        <p class="caption"><strong style="color:var(--green-dark)">Importante:</strong> o seu médico escolheu o medicamento mais indicado para o seu caso. Cada um tem características e perfil de resultados diferentes.</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: COMO AGE -->
+    <div class="slide" id="s2">
+      <div class="label">Mecanismo de ação</div>
+      <h2 style="margin-bottom:12px">Como age no seu corpo</h2>
+      <p style="margin-bottom:14px">O GLP-1 age em quatro frentes simultaneamente, o que explica seus resultados superiores às dietas convencionais.</p>
+      <div class="mechanism-card" style="border-color:#a7f3d0;background:var(--green-light)">
+        <div class="mech-ico">🧠</div>
+        <div class="mech-body">
+          <div class="mech-title">1. Reduz a fome no cérebro</div>
+          <div class="mech-desc">Age no hipotálamo diminuindo a sensação de fome — você simplesmente pensa menos em comida.</div>
+        </div>
+      </div>
+      <div class="mechanism-card" style="border-color:#bfdbfe;background:var(--blue-light)">
+        <div class="mech-ico">🍽️</div>
+        <div class="mech-body">
+          <div class="mech-title">2. Aumenta a saciedade</div>
+          <div class="mech-desc">Retarda o esvaziamento gástrico — o estômago demora mais para esvaziar, você fica satisfeito por mais tempo.</div>
+        </div>
+      </div>
+      <div class="mechanism-card" style="border-color:#fde68a;background:var(--yellow-light)">
+        <div class="mech-ico">🩸</div>
+        <div class="mech-body">
+          <div class="mech-title">3. Regula a glicose</div>
+          <div class="mech-desc">Estimula insulina quando necessário e reduz o glucagon após as refeições, estabilizando o açúcar no sangue.</div>
+        </div>
+      </div>
+      <div class="mechanism-card" style="border-color:#c4b5fd;background:#ede9fe">
+        <div class="mech-ico">❤️</div>
+        <div class="mech-body">
+          <div class="mech-title">4. Benefícios cardiovasculares</div>
+          <div class="mech-desc">Estudos mostram redução de eventos cardiovasculares em pessoas com risco elevado.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: O QUE ESPERAR -->
+    <div class="slide" id="s3">
+      <div class="label">Linha do tempo</div>
+      <h2 style="margin-bottom:12px">O que esperar semana a semana</h2>
+      <p style="margin-bottom:14px">Os resultados aparecem de forma gradual. Conheça o que é normal em cada fase.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-week">Sem. 1–2</div>
+          <div class="tl-body">
+            <div class="tl-title">Adaptação inicial</div>
+            <div class="tl-desc">Pode haver náusea leve, diminuição do apetite. Peso pode não mudar muito ainda.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">Sem. 3–4</div>
+          <div class="tl-body">
+            <div class="tl-title">Primeiros resultados</div>
+            <div class="tl-desc">Redução clara do apetite, primeiros quilos a menos. Efeitos colaterais tendem a diminuir.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">Mês 2–3</div>
+          <div class="tl-body">
+            <div class="tl-title">Emagrecimento consistente</div>
+            <div class="tl-desc">Perda de peso mais regular, melhora na relação com a comida. Dose pode ser ajustada.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">Mês 4–6</div>
+          <div class="tl-body">
+            <div class="tl-title">Consolidação</div>
+            <div class="tl-desc">Resultados se acumulam. Pode haver platôs — são normais e passageiros.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">Mês 6+</div>
+          <div class="tl-body">
+            <div class="tl-title">Fase de manutenção</div>
+            <div class="tl-desc">Foco em consolidar hábitos. Discussão sobre continuidade do tratamento com o médico.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: DOSES -->
+    <div class="slide" id="s4">
+      <div class="label">Escalonamento</div>
+      <h2 style="margin-bottom:10px">Por que a dose começa baixa?</h2>
+      <p style="margin-bottom:14px">O medicamento é introduzido em doses baixas e aumentado gradualmente. Isso reduz os efeitos colaterais e permite que o corpo se adapte.</p>
+      <div class="card card-green" style="margin-bottom:14px">
+        <p class="caption"><strong style="color:var(--green-dark)">🎯 Princípio do escalonamento:</strong> começar devagar não significa que o medicamento está "fraco". É a estratégia correta para ter mais resultado com menos desconforto.</p>
+      </div>
+      <div class="label" style="margin-top:4px">Exemplo — Semaglutida</div>
+      <div class="dose-row">
+        <div class="dose-phase">Início</div>
+        <div class="dose-value">0,25 mg</div>
+        <div class="dose-desc">4 semanas de adaptação. Objetivo: tolerância, não resultado.</div>
+      </div>
+      <div class="dose-row">
+        <div class="dose-phase">Fase 2</div>
+        <div class="dose-value">0,5 mg</div>
+        <div class="dose-desc">Efeito terapêutico começa. Resultados mais visíveis.</div>
+      </div>
+      <div class="dose-row">
+        <div class="dose-phase">Fase 3</div>
+        <div class="dose-value">1,0 mg</div>
+        <div class="dose-desc">Dose de manutenção comum. Pode ser a dose final para muitos.</div>
+      </div>
+      <div class="dose-row" style="border-color:var(--green);background:var(--green-light)">
+        <div class="dose-phase" style="color:var(--green-dark)">Máxima</div>
+        <div class="dose-value" style="color:var(--green-dark)">2,4 mg</div>
+        <div class="dose-desc">Conforme indicação médica. Sempre sob avaliação.</div>
+      </div>
+      <p class="caption" style="margin-top:10px;font-style:italic">* As doses variam conforme o medicamento e o protocolo do seu médico. Siga sempre a prescrição.</p>
+    </div>
+
+    <!-- SLIDE 6: ARMAZENAMENTO -->
+    <div class="slide" id="s5">
+      <div class="label">Cuidados essenciais</div>
+      <h2 style="margin-bottom:12px">Como guardar o medicamento</h2>
+      <p style="margin-bottom:14px">O armazenamento correto garante que o medicamento mantenha sua eficácia.</p>
+      <div class="step-flow">
+        <div class="step-item">
+          <div class="step-num">❄️</div>
+          <div class="step-body">
+            <h3>Na geladeira (antes de abrir)</h3>
+            <p class="caption" style="margin-top:4px">Entre 2°C e 8°C. Nunca no congelador. Não deixe perto do motor ou das paredes.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">🌡️</div>
+          <div class="step-body">
+            <h3>Em uso</h3>
+            <p class="caption" style="margin-top:4px">Após a primeira aplicação, pode ficar fora da geladeira em temperatura ambiente (até 30°C) por até 4 semanas.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">☀️</div>
+          <div class="step-body">
+            <h3>Evitar</h3>
+            <p class="caption" style="margin-top:4px">Luz solar direta, calor excessivo, locais úmidos. Não deixar no carro.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">👁️</div>
+          <div class="step-body">
+            <h3>Antes de usar</h3>
+            <p class="caption" style="margin-top:4px">Verifique sempre a validade e o aspecto do líquido. Deve ser transparente e incolor.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card card-red" style="margin-top:8px">
+        <p class="caption"><strong style="color:#b91c1c">⚠️ Se o medicamento congelou ou mudou de cor/aparência, não use.</strong> Entre em contato com nossa equipe.</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: FAQ -->
+    <div class="slide" id="s6">
+      <div class="label">Dúvidas frequentes</div>
+      <h2 style="margin-bottom:14px">Perguntas frequentes</h2>
+      <div class="accord" id="a1">
+        <div class="accord-head" onclick="toggleAccord('a1')">
+          <span class="accord-q">E se eu esquecer de aplicar no dia certo?</span>
+          <span class="accord-ico">+</span>
+        </div>
+        <div class="accord-body">Para a semaglutida (semanal): aplique assim que lembrar, se faltarem mais de 2 dias para a próxima dose. Se restar menos de 2 dias, pule e retome na data normal. Não aplique duas doses juntas.</div>
+      </div>
+      <div class="accord" id="a2">
+        <div class="accord-head" onclick="toggleAccord('a2')">
+          <span class="accord-q">Posso beber álcool durante o tratamento?</span>
+          <span class="accord-ico">+</span>
+        </div>
+        <div class="accord-body">O álcool não tem interação direta com o medicamento, mas pode piorar náuseas e atrapalhar a perda de peso. Use com moderação e sempre informe ao médico seu consumo.</div>
+      </div>
+      <div class="accord" id="a3">
+        <div class="accord-head" onclick="toggleAccord('a3')">
+          <span class="accord-q">O medicamento pode ser usado com outros remédios?</span>
+          <span class="accord-ico">+</span>
+        </div>
+        <div class="accord-body">Na maioria dos casos sim, mas sempre informe ao médico todos os medicamentos que você usa. Atenção especial se usar medicamentos para diabetes ou anticoagulantes.</div>
+      </div>
+      <div class="accord" id="a4">
+        <div class="accord-head" onclick="toggleAccord('a4')">
+          <span class="accord-q">E se eu parar o medicamento, o peso volta?</span>
+          <span class="accord-ico">+</span>
+        </div>
+        <div class="accord-body">Parte do peso pode retornar, especialmente sem os hábitos de alimentação e exercício consolidados. Por isso o tratamento foca em criar novos hábitos durante o uso do medicamento.</div>
+      </div>
+      <div class="accord" id="a5">
+        <div class="accord-head" onclick="toggleAccord('a5')">
+          <span class="accord-q">Por quanto tempo vou usar?</span>
+          <span class="accord-ico">+</span>
+        </div>
+        <div class="accord-body">Varia de pessoa para pessoa. O médico avalia periodicamente o progresso e decide sobre continuidade, redução de dose ou encerramento. Não interrompa sozinho.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: MITOS -->
+    <div class="slide" id="s7">
+      <div class="label">Mitos e verdades</div>
+      <h2 style="margin-bottom:14px">O que você pode ter ouvido</h2>
+      <div class="myth-card" style="background:#fee2e2;border-color:#fca5a5">
+        <div class="myth-header"><span class="myth-icon">❌</span><span class="myth-label falso">Mito</span></div>
+        <div class="myth-statement">"GLP-1 é só para diabéticos"</div>
+        <div class="myth-explain">Originalmente desenvolvido para diabetes, hoje é aprovado e amplamente usado para tratamento da obesidade em pessoas sem diabetes.</div>
+      </div>
+      <div class="myth-card" style="background:#fee2e2;border-color:#fca5a5">
+        <div class="myth-header"><span class="myth-icon">❌</span><span class="myth-label falso">Mito</span></div>
+        <div class="myth-statement">"O medicamento faz o trabalho sozinho"</div>
+        <div class="myth-explain">O GLP-1 cria condições favoráveis para emagrecer. Alimentação adequada, sono e movimento são fundamentais para maximizar os resultados.</div>
+      </div>
+      <div class="myth-card" style="background:#d1fae5;border-color:#6ee7b7">
+        <div class="myth-header"><span class="myth-icon">✅</span><span class="myth-label verdade">Verdade</span></div>
+        <div class="myth-statement">"É um dos tratamentos com mais evidência científica"</div>
+        <div class="myth-explain">Ensaios clínicos com milhares de pacientes demonstram eficácia e segurança superiores às intervenções convencionais no longo prazo.</div>
+      </div>
+      <div class="myth-card" style="background:#d1fae5;border-color:#6ee7b7">
+        <div class="myth-header"><span class="myth-icon">✅</span><span class="myth-label verdade">Verdade</span></div>
+        <div class="myth-statement">"Resultados aparecem gradualmente"</div>
+        <div class="myth-explain">A perda de peso ocorre ao longo de meses. Resultados rápidos demais podem ser sinal de desidratação — não de emagrecimento real.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: RESUMO -->
+    <div class="slide" id="s8">
+      <div class="label">Resumo</div>
+      <h2 style="margin-bottom:14px">O que você aprendeu neste capítulo</h2>
+      <div class="summary-list">
+        <div class="summary-item"><span class="summary-check">✓</span><span class="summary-text">GLP-1 é um hormônio natural que o medicamento imita e potencializa</span></div>
+        <div class="summary-item"><span class="summary-check">✓</span><span class="summary-text">Age em 4 frentes: fome, saciedade, glicose e saúde cardiovascular</span></div>
+        <div class="summary-item"><span class="summary-check">✓</span><span class="summary-text">Resultados aparecem de forma gradual ao longo de semanas e meses</span></div>
+        <div class="summary-item"><span class="summary-check">✓</span><span class="summary-text">A dose começa baixa e sobe progressivamente — isso é correto e planejado</span></div>
+        <div class="summary-item"><span class="summary-check">✓</span><span class="summary-text">Armazenar corretamente garante a eficácia do medicamento</span></div>
+        <div class="summary-item"><span class="summary-check">✓</span><span class="summary-text">Não é medicamento para diabético, não faz o trabalho sozinho e tem sólida base científica</span></div>
+      </div>
+      <div class="card card-dark" style="margin-top:16px;text-align:center;padding:20px">
+        <div style="font-size:28px;margin-bottom:8px">📦</div>
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Próximo capítulo</div>
+        <div style="font-size:13px;color:#94a3b8">Veja como se preparar para a primeira dose — materiais, rotina e organização.</div>
+        <a href="Capitulo3_PreparandoParaComecar.html" style="display:inline-block;margin-top:14px;background:var(--green);color:#fff;font-size:13px;font-weight:700;padding:10px 20px;border-radius:12px;text-decoration:none">Ir para o Cap. 3 →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <nav>
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="navigate(-1)" disabled>← Anterior</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn btn-next" id="btn-next" onclick="navigate(1)">Próximo →</button>
+  </nav>
+</div>
+
+<script>
+const TOTAL=9; let cur=0;
+function buildDots(){const c=document.getElementById('dots');c.innerHTML='';for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===cur?' active':'');d.onclick=()=>goTo(i);c.appendChild(d)}}
+function goTo(n){if(n<0||n>=TOTAL)return;const s=document.querySelectorAll('.slide');s[cur].classList.remove('active');s[cur].classList.add('exit');setTimeout(()=>s[cur].classList.remove('exit'),350);cur=n;s[cur].classList.add('active');s[cur].scrollTop=0;document.getElementById('prog-label').textContent=(cur+1)+' / '+TOTAL;document.getElementById('prog-fill').style.width=((cur+1)/TOTAL*100)+'%';document.getElementById('btn-prev').disabled=cur===0;document.getElementById('btn-next').disabled=cur===TOTAL-1;buildDots()}
+function navigate(dir){goTo(cur+dir)}
+function toggleAccord(id){const el=document.getElementById(id);el.classList.toggle('open')}
+buildDots();document.getElementById('btn-prev').disabled=true;
+</script>
+</body>
+</html>
