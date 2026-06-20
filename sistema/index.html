@@ -1291,6 +1291,30 @@ function setExStatus(cpf, exId, patch){
   }
 }
 
+function checkIdentidade(text, p){
+  if(!text || !p) return {ok:true};
+  const norm = text.replace(/\r/g,'');
+  let cpfOk = null, cpfTxt = null;
+  const mCpf = norm.match(/CPF[:\s]*([\d.\-]{11,14})/i);
+  if(mCpf){
+    cpfTxt = mCpf[1].replace(/\D/g,'');
+    if(cpfTxt.length===11 && p.cpf){
+      cpfOk = (cpfTxt === String(p.cpf).replace(/\D/g,''));
+    }
+  }
+  let dobOk = null, dobTxt = null;
+  const mDob = norm.match(/(?:Dt\.?\s*Nasc|Data\s*de\s*Nascimento)[.:\s]*(\d{2}\/\d{2}\/\d{4})/i);
+  if(mDob){
+    const partes = mDob[1].split('/');
+    dobTxt = partes[2]+'-'+partes[1]+'-'+partes[0];
+    if(p.dataNascimento){
+      dobOk = (dobTxt === p.dataNascimento);
+    }
+  }
+  const ok = (cpfOk!==false) && (dobOk!==false);
+  return {ok, cpfOk, dobOk, cpfTxt, dobTxt};
+}
+
 async function processExameOCR(cpf, exId, file){
   setExStatus(cpf, exId, {ocrStatus:'processando'});
   try {
@@ -1303,19 +1327,37 @@ async function processExameOCR(cpf, exId, file){
       setExStatus(cpf, exId, {ocrStatus:'ignorado'});
       return;
     }
-    const valores = parseLabText(text);
     const p = DB.get(cpf);
     if(!p) return;
     const ex = (p.exames||[]).find(e=>e.id===exId);
     if(!ex) return;
+    const ident = checkIdentidade(text, p);
+    if(!ident.ok){
+      ex.ocrStatus = 'paciente-divergente';
+      ex.ocrTexto = text.slice(0,5000);
+      let msg = 'O laudo não confere com o cadastro: ';
+      if(ident.cpfOk===false) msg += `CPF do laudo ${ident.cpfTxt} ≠ cadastro ${fmtCPF(p.cpf)}. `;
+      if(ident.dobOk===false) msg += `Nascimento do laudo ${ident.dobTxt.split('-').reverse().join('/')} ≠ cadastro ${(p.dataNascimento||'').split('-').reverse().join('/')}. `;
+      msg += 'Verifique antes de usar os valores.';
+      ex.ocrAlerta = msg;
+      DB.put(p);
+      if(typeof P!=='undefined' && P && P.cpf===p.cpf){
+        P = p;
+        if(V==='exames') vExames(document.getElementById('content'));
+        if(V==='dashboard') vDash(document.getElementById('content'));
+      }
+      toast('⚠ Atenção: dados do exame não conferem com o paciente');
+      return;
+    }
+    const valores = parseLabText(text);
     ex.ocrStatus = valores.length ? 'concluido' : 'sem-parametros';
-    ex.ocrText = text.slice(0,5000);
+    ex.ocrTexto = text.slice(0,5000);
     if(!p.examesResultados) p.examesResultados=[];
     valores.forEach(v=>{
       p.examesResultados.push({
         id: Date.now()+Math.random().toString(36).slice(2),
-        exameId: exId, param:v.param, nome:v.nome, valor:v.valor,
-        unidade:v.unidade, faixaRef:v.faixaRef, alterado:v.alterado,
+        exameId: exId, param:v.param, nome:v.nome, valor:v.valor, unidade:v.unidade,
+        faixaRef:v.faixaRef, alterado:v.alterado,
         data: ex.data, origem:'ocr'
       });
     });
@@ -1328,15 +1370,14 @@ async function processExameOCR(cpf, exId, file){
     toast(valores.length ? `Exame lido: ${valores.length} valor(es) extraído(s)` : 'Exame lido, mas nenhum parâmetro reconhecido');
   } catch(e){
     console.warn('[OCR] Falha ao processar exame:', e);
-    setExStatus(cpf, exId, {ocrStatus:'erro', ocrText:String(e&&e.message||e)});
+    setExStatus(cpf, exId, {ocrStatus:'erro', ocrTexto:String(e&&e.message||e)});
     toast('Não foi possível ler o exame automaticamente');
   }
-}
-
-function ocrBadge(s){
-  const m={pendente:['bg-gray','Aguardando'],processando:['bg-yellow','Lendo...'],concluido:['bg-green','Lido'],'sem-parametros':['bg-yellow','Lido (sem valores)'],erro:['bg-red','Erro na leitura']};
+}function ocrBadge(s, alerta){
+  const m={pendente:['bg-gray','Aguardando'],processando:['bg-yellow','Lendo...'],concluido:['bg-green','Lido'],'sem-parametros':['bg-yellow','Lido (sem valores)'],erro:['bg-red','Erro na leitura'],'paciente-divergente':['bg-red','⚠ Paciente divergente']};
   if(!s||!m[s]) return '';
-  return `<span class="badge ${m[s][0]}" style="margin-left:6px">${m[s][1]}</span>`;
+  const tip = alerta ? ` title="${String(alerta).replace(/"/g,'&quot;')}"` : '';
+  return `<span class="badge ${m[s][0]}" style="margin-left:6px"${tip}>${m[s][1]}</span>`;
 }
 
 function tabelaResultados(resultados){
@@ -1477,7 +1518,7 @@ function vExames(ct){
       ${list.map(e=>`
         <div class="fi">
           <span style="font-size:18px">${c.ico}</span>
-          <div class="fi-name">${e.nome}${ocrBadge(e.ocrStatus)}</div>
+          <div class="fi-name">${e.nome}${ocrBadge(e.ocrStatus, e.ocrAlerta)}</div>
           <div class="fi-meta">${e.tam||''} · ${fmtD(e.data)}</div>
           ${e.ocrText?`<button class="btn bs bsm" onclick="verTextoOCR('${e.id}')">🔍 Texto lido</button>`:''}
           <button class="btn bs bsm" onclick="rmExame('${e.id}')">✕</button>
