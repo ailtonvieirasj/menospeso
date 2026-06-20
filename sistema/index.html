@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>menospeso. â Sistema ClÃ­nico</title>
+<title>menospeso. — Sistema Clínico</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -129,7 +129,7 @@ input:disabled{background:#f9fafb;color:var(--muted)}
 .qi{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:7px;margin-bottom:7px;background:var(--card)}
 .qi-name{font-size:13px;font-weight:500;flex:1}
 
-/* EVOLUÃÃO */
+/* EVOLUÇÃO */
 .ev-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px}
 .ev-head{padding:12px 16px;background:#f9fafb;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
 .ev-body{padding:16px;border-top:1px solid var(--border)}
@@ -148,15 +148,15 @@ input:disabled{background:#f9fafb;color:var(--muted)}
 .sr-name{font-weight:600;font-size:14px}
 .sr-info{font-size:12px;color:var(--muted);margin-top:2px}
 
-/* RESUMO CLÃNICO */
+/* RESUMO CLÍNICO */
 .resumo-box{background:#f0f5ff;border:1px solid #bfdbfe;border-radius:7px;padding:14px;font-size:13px;line-height:1.7}
 
-/* PENDÃNCIAS */
+/* PENDÊNCIAS */
 .pend-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
 .pend-item:last-child{border:none}
 .pend-dot{width:7px;height:7px;border-radius:50%;background:var(--warn);flex-shrink:0}
 
-/* ADESÃO */
+/* ADESÃO */
 .ad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .ad-item{background:#f9fafb;border:1px solid var(--border);border-radius:7px;padding:12px}
 .ad-l{font-size:11px;color:var(--muted);margin-bottom:6px}
@@ -210,35 +210,35 @@ code{background:#f3f4f6;padding:2px 6px;border-radius:4px;font-family:monospace;
 <aside id="sidebar">
   <div class="sb-logo">
     <div class="logo-mark"><span class="logo-menos">menos</span><span class="logo-peso">peso</span><span class="logo-dot">.</span></div>
-    <span class="logo-sub">Sistema ClÃ­nico</span>
+    <span class="logo-sub">Sistema Clínico</span>
   </div>
   <div id="sb-patient" class="sb-patient hidden"></div>
   <nav class="sb-nav">
     <div class="nav-sec">Sistema</div>
-    <div class="nav-item" id="ni-search" onclick="go('search')"><span class="ic">ð</span>Buscar Paciente</div>
+    <div class="nav-item" id="ni-search" onclick="go('search')"><span class="ic">🔍</span>Buscar Paciente</div>
     <div id="patient-nav" class="hidden">
       <div class="nav-sec">Paciente</div>
-      <div class="nav-item" id="ni-dashboard" onclick="go('dashboard')"><span class="ic">ð</span>Dashboard</div>
-      <div class="nav-item" id="ni-cadastro" onclick="go('cadastro')"><span class="ic">ð¤</span>Cadastro</div>
-      <div class="nav-item" id="ni-questionarios" onclick="go('questionarios')"><span class="ic">ð</span>QuestionÃ¡rios</div>
-      <div class="nav-item" id="ni-exames" onclick="go('exames')"><span class="ic">ð§ª</span>Exames</div>
-      <div class="nav-item" id="ni-timeline" onclick="go('timeline')"><span class="ic">ð</span>Timeline</div>
-      <div class="nav-item" id="ni-evolucoes" onclick="go('evolucoes')"><span class="ic">ð</span>EvoluÃ§Ãµes</div>
-      <div class="nav-sec">ClÃ­nico</div>
-      <div class="nav-item" id="ni-adesao" onclick="go('adesao')"><span class="ic">ð¯</span>Score de AdesÃ£o</div>
-      <div class="nav-item" id="ni-relatorios" onclick="go('relatorios')"><span class="ic">ð</span>RelatÃ³rios</div>
-      <div class="nav-item" id="ni-mensagens" onclick="go('mensagens')"><span class="ic">ð¬</span>Mensagens WA</div>
+      <div class="nav-item" id="ni-dashboard" onclick="go('dashboard')"><span class="ic">📊</span>Dashboard</div>
+      <div class="nav-item" id="ni-cadastro" onclick="go('cadastro')"><span class="ic">👤</span>Cadastro</div>
+      <div class="nav-item" id="ni-questionarios" onclick="go('questionarios')"><span class="ic">📋</span>Questionários</div>
+      <div class="nav-item" id="ni-exames" onclick="go('exames')"><span class="ic">🧪</span>Exames</div>
+      <div class="nav-item" id="ni-timeline" onclick="go('timeline')"><span class="ic">📅</span>Timeline</div>
+      <div class="nav-item" id="ni-evolucoes" onclick="go('evolucoes')"><span class="ic">📝</span>Evoluções</div>
+      <div class="nav-sec">Clínico</div>
+      <div class="nav-item" id="ni-adesao" onclick="go('adesao')"><span class="ic">🎯</span>Score de Adesão</div>
+      <div class="nav-item" id="ni-relatorios" onclick="go('relatorios')"><span class="ic">📄</span>Relatórios</div>
+      <div class="nav-item" id="ni-mensagens" onclick="go('mensagens')"><span class="ic">💬</span>Mensagens WA</div>
     </div>
     <div class="nav-sec">Sistema</div>
-    <div class="nav-item" id="ni-config" onclick="go('config')"><span class="ic">âï¸</span>ConfiguraÃ§Ãµes</div>
+    <div class="nav-item" id="ni-config" onclick="go('config')"><span class="ic">⚙️</span>Configurações</div>
   </nav>
   <div class="sb-foot">
     <div style="font-size:10px;margin-bottom:4px;letter-spacing:-0.3px"><span style="font-weight:700;color:#94a3b8">menos</span><span style="color:#94a3b8">peso</span><span style="color:#059669">.</span><span style="color:#475569"> v1.1</span></div>
     <div class="sync-bar">
       <span class="sync-dot sync-off" id="sync-dot"></span>
-      <span id="sync-label">Sheets nÃ£o configurado</span>
+      <span id="sync-label">Sheets não configurado</span>
     </div>
-    <button onclick="SYNC.pullAll()" style="margin-top:8px;width:100%;background:#1f2937;border:1px solid #374151;color:#9ca3af;padding:5px;border-radius:5px;font-size:11px;cursor:pointer">â Sincronizar agora</button>
+    <button onclick="SYNC.pullAll()" style="margin-top:8px;width:100%;background:#1f2937;border:1px solid #374151;color:#9ca3af;padding:5px;border-radius:5px;font-size:11px;cursor:pointer">↓ Sincronizar agora</button>
   </div>
 </aside>
 
@@ -247,8 +247,8 @@ code{background:#f3f4f6;padding:2px 6px;border-radius:4px;font-family:monospace;
   <div id="topbar" class="topbar hidden">
     <div class="topbar-title" id="topbar-title"></div>
     <div style="display:flex;gap:8px">
-      <button class="btn bs bsm" onclick="go('search')">â Trocar paciente</button>
-      <button class="btn bp bsm" onclick="go('evolucoes-new')">+ Nova evoluÃ§Ã£o</button>
+      <button class="btn bs bsm" onclick="go('search')">← Trocar paciente</button>
+      <button class="btn bp bsm" onclick="go('evolucoes-new')">+ Nova evolução</button>
     </div>
   </div>
   <div id="content"></div>
@@ -258,12 +258,12 @@ code{background:#f3f4f6;padding:2px 6px;border-radius:4px;font-family:monospace;
 <div id="toast"></div>
 
 <script>
-// âââââââââââââââââââââââââââââââââââââââââââââââ
-// MENOSYSTEM  â  MVP v1.0
-// Dados em localStorage, CPF como chave Ãºnica
-// âââââââââââââââââââââââââââââââââââââââââââââââ
+// ═══════════════════════════════════════════════
+// MENOSYSTEM  —  MVP v1.0
+// Dados em localStorage, CPF como chave única
+// ═══════════════════════════════════════════════
 
-// ââ DATA ââââââââââââââââââââââââââââââââââââââ
+// ── DATA ──────────────────────────────────────
 const DB = {
   KEY: 'menosys_v1',
   all(){ try{return JSON.parse(localStorage.getItem(this.KEY)||'{}')}catch{return{}} },
@@ -274,7 +274,7 @@ const DB = {
     const d=this.all();
     d[this.norm(p.cpf)]=p;
     this.save(d);
-    // Sincroniza com Sheets de forma assÃ­ncrona (nÃ£o bloqueia a UI)
+    // Sincroniza com Sheets de forma assíncrona (não bloqueia a UI)
     if(typeof SYNC!=='undefined') SYNC.push(p);
   },
   search(q){
@@ -298,12 +298,12 @@ const DB = {
       questionarios:[
         {id:'roda',nome:'Roda da Vida',status:'nao-enviado'},
         {id:'comp-ali',nome:'Comportamento Alimentar',status:'nao-enviado'},
-        {id:'atv-fis',nome:'Atividade FÃ­sica',status:'nao-enviado'},
-        {id:'phq9',nome:'PHQ-9 (DepressÃ£o)',status:'nao-enviado'},
+        {id:'atv-fis',nome:'Atividade Física',status:'nao-enviado'},
+        {id:'phq9',nome:'PHQ-9 (Depressão)',status:'nao-enviado'},
         {id:'gad7',nome:'GAD-7 (Ansiedade)',status:'nao-enviado'},
         {id:'sono',nome:'Sono',status:'nao-enviado'},
-        {id:'comp-ali2',nome:'CompetÃªncia Alimentar',status:'nao-enviado'},
-        {id:'culin',nome:'Habilidades CulinÃ¡rias',status:'nao-enviado'},
+        {id:'comp-ali2',nome:'Competência Alimentar',status:'nao-enviado'},
+        {id:'culin',nome:'Habilidades Culinárias',status:'nao-enviado'},
       ],
       exames:[],evolucoes:[],timeline:[],
       adesao:{medicamentosa:'',comparecimento:''},
@@ -312,7 +312,7 @@ const DB = {
   }
 };
 
-// ââ IBGE â AUTOCOMPLETE DE CIDADES ââââââââââââ
+// ── IBGE — AUTOCOMPLETE DE CIDADES ────────────
 const IBGE = {
   _data: null,
   _loading: false,
@@ -342,10 +342,10 @@ const IBGE = {
 
   search(q, max=8){
     if(!this._data||!q) return [];
-    const ql = q.toLowerCase().normalize('NFD').replace(/[Ì-Í¯]/g,'');
+    const ql = q.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
     return this._data
       .filter(m=>{
-        const mn = m.nome.toLowerCase().normalize('NFD').replace(/[Ì-Í¯]/g,'');
+        const mn = m.nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
         return mn.startsWith(ql) || mn.includes(ql);
       })
       .slice(0,max);
@@ -418,8 +418,8 @@ const IBGE = {
   }
 };
 
-// ââ SYNC (Google Sheets) ââââââââââââââââââââââ
-// ConfiguraÃ§Ã£o: cole a URL do Apps Script apÃ³s implantar
+// ── SYNC (Google Sheets) ──────────────────────
+// Configuração: cole a URL do Apps Script após implantar
 const SYNC = {
   get url(){ return localStorage.getItem('menosys_sheets_url')||'https://script.google.com/macros/s/AKfycbzfDUlL_-nXkFtY1ty7Bu8-8VG06IPWdGyaNm88S2_Fg7QtNBAeqQnBY1_UyKT5Y5Hi/exec' },
   set url(v){ localStorage.setItem('menosys_sheets_url',v) },
@@ -432,10 +432,10 @@ const SYNC = {
     const lbl=document.getElementById('sync-label');
     if(!dot) return;
     dot.className='sync-dot sync-'+s;
-    lbl.textContent=msg||{ok:'Sincronizado',syncing:'Sincronizandoâ¦',err:'Erro de sync',off:'Sheets nÃ£o configurado'}[s]||s;
+    lbl.textContent=msg||{ok:'Sincronizado',syncing:'Sincronizando…',err:'Erro de sync',off:'Sheets não configurado'}[s]||s;
   },
 
-  // Verifica se estÃ¡ configurado
+  // Verifica se está configurado
   isConfigured(){ return !!this.url },
 
   // Envia um paciente para o Sheets (fire-and-forget)
@@ -457,7 +457,7 @@ const SYNC = {
       }
     } catch(e){
       console.error('[Sync] push failed:', e);
-      this.setStatus('err', 'Falha na conexÃ£o');
+      this.setStatus('err', 'Falha na conexão');
     }
   },
 
@@ -479,16 +479,16 @@ const SYNC = {
   // Importa todos os pacientes do Sheets
   async pullAll(){
     if(!this.isConfigured()){
-      toast('Configure a URL do Google Sheets primeiro (âï¸ ConfiguraÃ§Ãµes)');
+      toast('Configure a URL do Google Sheets primeiro (⚙️ Configurações)');
       return;
     }
-    this.setStatus('syncing','Importandoâ¦');
+    this.setStatus('syncing','Importando…');
     try {
       const url=`${this.url}?action=all&key=${encodeURIComponent(this.key)}`;
       const r = await fetch(url, {redirect:'follow'});
       const data = await r.json();
       if(data.ok && data.patients){
-        // Deduplica por CPF: mantÃ©m o registro mais completo (com questionÃ¡rio > com nome > mais recente)
+        // Deduplica por CPF: mantém o registro mais completo (com questionário > com nome > mais recente)
         const map={};
         data.patients.forEach(p=>{
           const cpf=String(p.cpf||'').replace(/\D/g,'').padStart(11,'0');
@@ -503,7 +503,7 @@ const SYNC = {
         const uniq=Object.values(map);
         uniq.forEach(p=>DB.put(p));
         this.setStatus('ok',`${uniq.length} paciente(s) importado(s)`);
-        toast(`â ${uniq.length} paciente(s) sincronizado(s) do Sheets`);
+        toast(`✅ ${uniq.length} paciente(s) sincronizado(s) do Sheets`);
         // Se estiver na busca, recarrega
         if(V==='search') go('search');
       } else {
@@ -512,12 +512,12 @@ const SYNC = {
       }
     } catch(e){
       console.error('[Sync] pullAll failed:', e);
-      this.setStatus('err','Falha na conexÃ£o');
-      toast('Falha de conexÃ£o com o Sheets');
+      this.setStatus('err','Falha na conexão');
+      toast('Falha de conexão com o Sheets');
     }
   },
 
-  // Testa a conexÃ£o
+  // Testa a conexão
   async ping(){
     if(!this.isConfigured()) return false;
     try {
@@ -528,21 +528,21 @@ const SYNC = {
     } catch { return false; }
   },
 
-  // Inicializa ao carregar a pÃ¡gina
+  // Inicializa ao carregar a página
   init(){
     if(this.isConfigured()){
-      this.setStatus('syncing','Verificandoâ¦');
+      this.setStatus('syncing','Verificando…');
       this.ping().then(ok=>{
-        this.setStatus(ok?'ok':'err', ok?'Conectado ao Sheets':'Sheets inacessÃ­vel');
+        this.setStatus(ok?'ok':'err', ok?'Conectado ao Sheets':'Sheets inacessível');
       });
     }
   }
 };
 
-// ââ TIMELINE ââââââââââââââââââââââââââââââââââ
+// ── TIMELINE ──────────────────────────────────
 const TL = {
-  icons:{cadastro:'ð¤',questionario:'ð',exame:'ð§ª',evolucao:'ð',receita:'ð',
-         pedido:'ð',bioimpedancia:'âï¸',consulta:'ð©º',arquivo:'ð',sistema:'âï¸'},
+  icons:{cadastro:'👤',questionario:'📋',exame:'🧪',evolucao:'📝',receita:'💊',
+         pedido:'📋',bioimpedancia:'⚖️',consulta:'🩺',arquivo:'📎',sistema:'⚙️'},
   add(p, tipo, desc){
     if(!p.timeline) p.timeline=[];
     p.timeline.unshift({id:Date.now(), tipo, desc, data:new Date().toISOString()});
@@ -550,7 +550,7 @@ const TL = {
   }
 };
 
-// ââ ROUTER ââââââââââââââââââââââââââââââââââââ
+// ── ROUTER ────────────────────────────────────
 let P = null; // current patient
 let V = '';   // current view
 
@@ -574,9 +574,9 @@ function go(view){
   }
 
   // Title
-  const titles={dashboard:'Dashboard',cadastro:'Cadastro',questionarios:'QuestionÃ¡rios',
-    exames:'Exames',timeline:'Timeline',evolucoes:'EvoluÃ§Ãµes','evolucoes-new':'Nova EvoluÃ§Ã£o',
-    adesao:'Score de AdesÃ£o',relatorios:'RelatÃ³rios',mensagens:'Mensagens WhatsApp',config:'ConfiguraÃ§Ãµes'};
+  const titles={dashboard:'Dashboard',cadastro:'Cadastro',questionarios:'Questionários',
+    exames:'Exames',timeline:'Timeline',evolucoes:'Evoluções','evolucoes-new':'Nova Evolução',
+    adesao:'Score de Adesão',relatorios:'Relatórios',mensagens:'Mensagens WhatsApp',config:'Configurações'};
   document.getElementById('topbar-title').textContent = titles[view]||'';
 
   const ct = document.getElementById('content');
@@ -590,7 +590,7 @@ function go(view){
   (vs[view]||vSearch)(ct);
 }
 
-// ââ HELPERS âââââââââââââââââââââââââââââââââââ
+// ── HELPERS ───────────────────────────────────
 function fmtCPF(c){ c=String(c).replace(/\D/g,''); return c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4') }
 function maskCPF(inp){
   let v=inp.value.replace(/\D/g,'').slice(0,11);
@@ -600,7 +600,7 @@ function maskCPF(inp){
   inp.value=v;
 }
 function idade(dob){
-  if(!dob) return 'â';
+  if(!dob) return '—';
   const t=new Date(),b=new Date(dob);
   let a=t.getFullYear()-b.getFullYear();
   if(t.getMonth()<b.getMonth()||(t.getMonth()===b.getMonth()&&t.getDate()<b.getDate())) a--;
@@ -621,16 +621,16 @@ function classImc(v){
   return 'Obesidade Grau III';
 }
 function jornada(di){
-  if(!di) return 'â';
+  if(!di) return '—';
   const d=Math.floor((new Date()-new Date(di))/86400000);
-  return d>=0?`Dia ${d+1}`:'â';
+  return d>=0?`Dia ${d+1}`:'—';
 }
 function fmtDt(iso){
-  if(!iso) return 'â';
+  if(!iso) return '—';
   return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 function fmtD(iso){
-  if(!iso) return 'â';
+  if(!iso) return '—';
   return new Date(iso).toLocaleDateString('pt-BR');
 }
 function bytes(b){
@@ -639,19 +639,19 @@ function bytes(b){
   return (b/1048576).toFixed(1)+' MB';
 }
 function qBadge(s){
-  const m={'nao-enviado':['bg-gray','NÃ£o enviado'],'enviado':['bg-blue','Enviado'],
+  const m={'nao-enviado':['bg-gray','Não enviado'],'enviado':['bg-blue','Enviado'],
     'respondido':['bg-yellow','Respondido'],'interpretado':['bg-green','Interpretado']};
   const [c,l]=m[s]||['bg-gray',s];
   return `<span class="badge ${c}">${l}</span>`;
 }
 function pendencias(p){
   const r=[];
-  if(!p.nome) r.push('Cadastro incompleto â nome nÃ£o preenchido');
+  if(!p.nome) r.push('Cadastro incompleto — nome não preenchido');
   const qp=(p.questionarios||[]).filter(q=>q.status==='nao-enviado'||q.status==='enviado');
-  if(qp.length) r.push(`${qp.length} questionÃ¡rio(s) pendente(s)`);
+  if(qp.length) r.push(`${qp.length} questionário(s) pendente(s)`);
   if(!(p.exames||[]).length) r.push('Nenhum exame laboratorial anexado');
-  if(!(p.evolucoes||[]).length) r.push('Nenhuma evoluÃ§Ã£o registrada');
-  if(!p.pesoInicial) r.push('Peso inicial nÃ£o cadastrado');
+  if(!(p.evolucoes||[]).length) r.push('Nenhuma evolução registrada');
+  if(!p.pesoInicial) r.push('Peso inicial não cadastrado');
   return r;
 }
 function toast(msg){
@@ -660,7 +660,7 @@ function toast(msg){
   setTimeout(()=>el.style.opacity='0',2600);
 }
 
-// ââ VIEWS âââââââââââââââââââââââââââââââââââââ
+// ── VIEWS ─────────────────────────────────────
 
 // BUSCA
 function vSearch(ct){
@@ -671,14 +671,14 @@ function vSearch(ct){
         <div style="font-size:34px;letter-spacing:-1px;font-weight:800;color:#0F172A;line-height:1;margin-bottom:8px">
           <span style="font-weight:800">menos</span><span style="font-weight:400">peso</span><span style="color:#059669;font-weight:400">.</span>
         </div>
-        <p style="color:var(--muted);font-size:13px;margin-top:2px">Sistema ClÃ­nico</p>
+        <p style="color:var(--muted);font-size:13px;margin-top:2px">Sistema Clínico</p>
       </div>
       <input type="text" id="q" placeholder="CPF ou nome do paciente"
         oninput="onQ(this)" onkeydown="onQK(event)" autocomplete="off"
         style="width:100%;font-size:18px;padding:14px 18px;border-radius:10px;border:2px solid var(--border);text-align:center">
       <div id="q-res" style="margin-top:10px"></div>
       <div id="q-new" class="hidden" style="text-align:center;margin-top:14px">
-        <p style="color:var(--muted);font-size:13px;margin-bottom:10px">CPF nÃ£o encontrado no sistema</p>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:10px">CPF não encontrado no sistema</p>
         <button class="btn bp blg" onclick="novoP()">+ Cadastrar novo paciente</button>
       </div>
       <div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
@@ -701,8 +701,8 @@ function onQ(inp){
     nw.classList.add('hidden');
     res.innerHTML=found.map(p=>`
       <div class="sr" onclick="abrirP('${p.cpf}')">
-        <div class="sr-name">${p.nome||'Sem nome'}${p.preRegistro?` <span class="badge bg-orange">Aguardando formulÃ¡rio</span>`:''}</div>
-        <div class="sr-info">${p.preRegistro?`WhatsApp: ${p.whatsapp||'â'}`:fmtCPF(p.cpf)+' Â· '+(p.programaContratado||'Programa nÃ£o definido')+' Â· '+jornada(p.dataInicio)}</div>
+        <div class="sr-name">${p.nome||'Sem nome'}${p.preRegistro?` <span class="badge bg-orange">Aguardando formulário</span>`:''}</div>
+        <div class="sr-info">${p.preRegistro?`WhatsApp: ${p.whatsapp||'—'}`:fmtCPF(p.cpf)+' · '+(p.programaContratado||'Programa não definido')+' · '+jornada(p.dataInicio)}</div>
       </div>`).join('');
   } else {
     res.innerHTML='';
@@ -719,13 +719,13 @@ function onQK(e){
 function abrirP(cpf){ P=DB.get(cpf); go('dashboard'); }
 function novoP(){
   const cpf=DB.norm(document.getElementById('q').value);
-  if(cpf.length!==11){toast('CPF deve ter 11 dÃ­gitos');return;}
+  if(cpf.length!==11){toast('CPF deve ter 11 dígitos');return;}
   P=DB.blank(cpf);
   TL.add(P,'cadastro','Paciente cadastrado no sistema');
   go('cadastro');
 }
 
-// PRÃ-CADASTRO (Novo Agendamento â sem CPF)
+// PRÉ-CADASTRO (Novo Agendamento — sem CPF)
 function goNovoAgendamento(){
   const overlay=document.createElement('div');
   overlay.id='modal-agendamento';
@@ -733,7 +733,7 @@ function goNovoAgendamento(){
   overlay.innerHTML=`
     <div style="background:#fff;border-radius:12px;padding:28px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.18)">
       <h3 style="margin:0 0 4px;font-size:17px;font-weight:700">Novo Agendamento</h3>
-      <p style="margin:0 0 20px;font-size:13px;color:var(--muted)">PrÃ©-cadastro sem CPF â link do formulÃ¡rio enviado via WhatsApp</p>
+      <p style="margin:0 0 20px;font-size:13px;color:var(--muted)">Pré-cadastro sem CPF — link do formulário enviado via WhatsApp</p>
       <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">Nome *</label>
       <input id="pre-nome" type="text" placeholder="Nome completo"
         style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:14px;box-sizing:border-box">
@@ -758,11 +758,11 @@ function salvarPreCadastro(){
   const wa=(document.getElementById('pre-wa')?.value||'').replace(/\D/g,'');
   const email=(document.getElementById('pre-email')?.value||'').trim();
   if(!nome){toast('Informe o nome do paciente');return;}
-  if(wa.length<10){toast('Informe um WhatsApp vÃ¡lido');return;}
+  if(wa.length<10){toast('Informe um WhatsApp válido');return;}
 
   const cpfTemp='PRE-'+wa;
-  // NÃ£o sobrescrever se jÃ¡ existir
-  if(DB.get(cpfTemp)){toast('JÃ¡ existe um prÃ©-cadastro para este WhatsApp');return;}
+  // Não sobrescrever se já existir
+  if(DB.get(cpfTemp)){toast('Já existe um pré-cadastro para este WhatsApp');return;}
 
   const p=DB.blank(cpfTemp);
   p.nome=nome;
@@ -771,17 +771,17 @@ function salvarPreCadastro(){
   p.preRegistro=true;
   p.preRegistroEm=new Date().toISOString();
 
-  TL.add(p,'cadastro','PrÃ©-cadastro realizado. FormulÃ¡rio enviado via WhatsApp.');
+  TL.add(p,'cadastro','Pré-cadastro realizado. Formulário enviado via WhatsApp.');
   DB.put(p);
   SYNC.push(p);
 
   document.getElementById('modal-agendamento')?.remove();
-  toast('PrÃ©-cadastro salvo!');
+  toast('Pré-cadastro salvo!');
 
-  // Gerar mensagem WhatsApp com link do formulÃ¡rio
+  // Gerar mensagem WhatsApp com link do formulário
   const primeiroNome=nome.split(' ')[0];
   const qLink=`https://www.menospesosaudedigital.com.br/questionario.html?cpf=${encodeURIComponent(cpfTemp)}`;
-  const msg=`OlÃ¡, *${primeiroNome}*!\n\nSeja muito bem-vindo ao *Menos Peso*. Fico feliz em ter vocÃª por aqui.\n\nPara darmos inÃ­cio ao seu acompanhamento, preciso que vocÃª preencha a avaliaÃ§Ã£o inicial. SÃ£o apenas alguns minutos e vÃ£o me ajudar a personalizar o seu tratamento:\n\n*Clique aqui para preencher:*\n${qLink}\n\nQualquer dÃºvida, pode me chamar aqui.`;
+  const msg=`Olá, *${primeiroNome}*!\n\nSeja muito bem-vindo ao *Menos Peso*. Fico feliz em ter você por aqui.\n\nPara darmos início ao seu acompanhamento, preciso que você preencha a avaliação inicial. São apenas alguns minutos e vão me ajudar a personalizar o seu tratamento:\n\n*Clique aqui para preencher:*\n${qLink}\n\nQualquer dúvida, pode me chamar aqui.`;
   const waNum=wa.startsWith('55')?wa:'55'+wa;
   window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`,'_blank');
 }
@@ -797,7 +797,7 @@ function vDash(ct){
   const ult=p.evolucoes&&p.evolucoes.length?p.evolucoes[0]:null;
 
   ct.innerHTML=`
-  ${!p.nome?`<div class="alert a-warn">â ï¸ Cadastro incompleto. <a href="#" onclick="go('cadastro')" style="color:inherit;font-weight:600">Preencher agora â</a></div>`:''}
+  ${!p.nome?`<div class="alert a-warn">⚠️ Cadastro incompleto. <a href="#" onclick="go('cadastro')" style="color:inherit;font-weight:600">Preencher agora →</a></div>`:''}
 
   <div class="card">
     <div class="row sb" style="flex-wrap:wrap;gap:12px">
@@ -807,15 +807,15 @@ function vDash(ct){
           ${p.programaContratado?`<span class="badge bg-blue">${p.programaContratado}</span>`:''}
         </div>
         <div style="color:var(--muted);font-size:13px;margin-top:3px">
-          ${fmtCPF(p.cpf)} Â· ${id!=='â'?id+' anos':'Idade nÃ£o informada'} Â· ${p.sexoBiologico||'Sexo nÃ£o informado'}${p.genero?' Â· '+p.genero:''}${p.pronomes?` <span style="font-size:11px;color:var(--muted);font-style:italic">(${p.pronomes})</span>`:''}
+          ${fmtCPF(p.cpf)} · ${id!=='—'?id+' anos':'Idade não informada'} · ${p.sexoBiologico||'Sexo não informado'}${p.genero?' · '+p.genero:''}${p.pronomes?` <span style="font-size:11px;color:var(--muted);font-style:italic">(${p.pronomes})</span>`:''}
         </div>
         <div style="font-size:12px;color:var(--muted);margin-top:3px">
-          ${p.dataInicio?`InÃ­cio: ${fmtD(p.dataInicio)} Â· <strong>${jornada(p.dataInicio)}</strong>`:'Data de inÃ­cio nÃ£o definida'}
+          ${p.dataInicio?`Início: ${fmtD(p.dataInicio)} · <strong>${jornada(p.dataInicio)}</strong>`:'Data de início não definida'}
         </div>
       </div>
       ${p.medicacaoAtual?`<div style="text-align:right">
-        <div style="font-size:11px;color:var(--muted)">MedicaÃ§Ã£o atual</div>
-        <div style="font-size:14px;font-weight:600">ð ${p.medicacaoAtual}${p.doseAtual?' â '+p.doseAtual:''}</div>
+        <div style="font-size:11px;color:var(--muted)">Medicação atual</div>
+        <div style="font-size:14px;font-weight:600">💊 ${p.medicacaoAtual}${p.doseAtual?' — '+p.doseAtual:''}</div>
       </div>`:''}
     </div>
   </div>
@@ -823,56 +823,56 @@ function vDash(ct){
   <div class="g4" style="margin-bottom:16px">
     <div class="stat">
       <div class="stat-l">Peso Inicial</div>
-      <div class="stat-v">${p.pesoInicial?p.pesoInicial+' kg':'â'}</div>
-      <div class="stat-s">${im0?'IMC '+im0+' Â· '+classImc(im0):'Altura nÃ£o informada'}</div>
+      <div class="stat-v">${p.pesoInicial?p.pesoInicial+' kg':'—'}</div>
+      <div class="stat-s">${im0?'IMC '+im0+' · '+classImc(im0):'Altura não informada'}</div>
     </div>
     <div class="stat ${parseFloat(perdaAb)>0?'green':''}">
       <div class="stat-l">Peso Atual</div>
-      <div class="stat-v">${p.pesoAtual?p.pesoAtual+' kg':'â'}</div>
-      <div class="stat-s">${ima?'IMC '+ima+' Â· '+classImc(ima):''}</div>
+      <div class="stat-v">${p.pesoAtual?p.pesoAtual+' kg':'—'}</div>
+      <div class="stat-s">${ima?'IMC '+ima+' · '+classImc(ima):''}</div>
     </div>
     <div class="stat ${parseFloat(perdaAb)>0?'green':''}">
       <div class="stat-l">Perda Total</div>
-      <div class="stat-v">${perdaAb?(parseFloat(perdaAb)>0?'-':'+')+ Math.abs(perdaAb)+' kg':'â'}</div>
+      <div class="stat-v">${perdaAb?(parseFloat(perdaAb)>0?'-':'+')+ Math.abs(perdaAb)+' kg':'—'}</div>
       <div class="stat-s">${perdaPc?Math.abs(perdaPc)+'% do peso inicial':''}</div>
     </div>
     <div class="stat">
       <div class="stat-l">Jornada</div>
       <div class="stat-v" style="font-size:16px">${jornada(p.dataInicio)}</div>
-      <div class="stat-s">${p.dataInicio?'Desde '+fmtD(p.dataInicio):'NÃ£o iniciada'}</div>
+      <div class="stat-s">${p.dataInicio?'Desde '+fmtD(p.dataInicio):'Não iniciada'}</div>
     </div>
   </div>
 
   <div class="g2" style="margin-bottom:16px;align-items:start">
     <div class="card" style="margin-bottom:0">
-      <div class="card-title">Resumo ClÃ­nico</div>
+      <div class="card-title">Resumo Clínico</div>
       ${p.resumoClinico
         ?`<div class="resumo-box">${p.resumoClinico}</div>`
-        :`<div class="muted">O resumo clÃ­nico Ã© gerado automaticamente a partir das evoluÃ§Ãµes.</div>`}
+        :`<div class="muted">O resumo clínico é gerado automaticamente a partir das evoluções.</div>`}
     </div>
     <div class="card" style="margin-bottom:0">
-      <div class="card-title">PendÃªncias <span class="nb" style="vertical-align:middle;margin-left:4px">${pends.length}</span></div>
+      <div class="card-title">Pendências <span class="nb" style="vertical-align:middle;margin-left:4px">${pends.length}</span></div>
       ${pends.length
         ?pends.map(p=>`<div class="pend-item"><div class="pend-dot"></div>${p}</div>`).join('')
-        :'<div class="muted">Sem pendÃªncias â</div>'}
+        :'<div class="muted">Sem pendências ✓</div>'}
     </div>
   </div>
 
   ${ult?`
   <div class="card">
     <div class="row sb" style="margin-bottom:10px">
-      <div class="card-title" style="margin-bottom:0">Ãltima EvoluÃ§Ã£o</div>
+      <div class="card-title" style="margin-bottom:0">Última Evolução</div>
       <span style="font-size:12px;color:var(--muted)">${fmtDt(ult.data)}</span>
     </div>
     ${ult.resumo?`<p style="font-size:14px;line-height:1.6;margin-bottom:8px">${ult.resumo}</p>`:''}
     ${ult.conduta?`<div style="padding:8px 12px;background:#f9fafb;border-radius:6px;font-size:13px"><strong>Conduta:</strong> ${ult.conduta}</div>`:''}
-    <div class="mt"><button class="btn bg bsm" onclick="go('evolucoes')">Ver todas as evoluÃ§Ãµes â</button></div>
+    <div class="mt"><button class="btn bg bsm" onclick="go('evolucoes')">Ver todas as evoluções →</button></div>
   </div>`:''}
 
   ${p.questionarioRespondidoEm ? `
   <div class="card">
     <div class="row sb" style="margin-bottom:14px">
-      <div class="card-title" style="margin-bottom:0">ð AvaliaÃ§Ã£o Inicial do Paciente</div>
+      <div class="card-title" style="margin-bottom:0">📋 Avaliação Inicial do Paciente</div>
       <span style="font-size:11px;color:var(--muted)">Respondido em ${fmtD(p.questionarioRespondidoEm)}</span>
     </div>
     <div class="g2" style="gap:12px">
@@ -890,39 +890,39 @@ function vDash(ct){
     ${(p.hm&&(p.hm.doencas||p.hm.medicamentos||p.hm.alergias))?`
     <hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
     <div class="g3" style="gap:10px;font-size:12px">
-      ${p.hm.doencas?`<div><span style="color:var(--muted)">DoenÃ§as: </span><strong>${p.hm.doencas}</strong></div>`:''}
+      ${p.hm.doencas?`<div><span style="color:var(--muted)">Doenças: </span><strong>${p.hm.doencas}</strong></div>`:''}
       ${p.hm.medicamentos?`<div><span style="color:var(--muted)">Medicamentos: </span><strong>${p.hm.medicamentos}</strong></div>`:''}
       ${p.hm.alergias?`<div><span style="color:var(--muted)">Alergias: </span><strong>${p.hm.alergias}</strong></div>`:''}
     </div>`:''}
     ${(p.hm&&(p.hm.tabagismo||p.hm.alcool||p.hm.atividadeFisica||p.hm.horasSono))?`
     <hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
     <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:12px">
-      ${p.hm.tabagismo?`<span class="badge bg-gray">ð¬ ${p.hm.tabagismo}</span>`:''}
-      ${p.hm.alcool?`<span class="badge bg-gray">ðº ${p.hm.alcool}</span>`:''}
-      ${p.hm.atividadeFisica?`<span class="badge bg-gray">ð ${p.hm.atividadeFisica}</span>`:''}
-      ${p.hm.horasSono?`<span class="badge bg-gray">ð´ ${p.hm.horasSono}</span>`:''}
-      ${p.hm.dietaEspecifica&&p.hm.dietaEspecifica!=='Nenhum'?`<span class="badge bg-gray">ð¥ ${p.hm.dietaEspecifica}</span>`:''}
+      ${p.hm.tabagismo?`<span class="badge bg-gray">🚬 ${p.hm.tabagismo}</span>`:''}
+      ${p.hm.alcool?`<span class="badge bg-gray">🍺 ${p.hm.alcool}</span>`:''}
+      ${p.hm.atividadeFisica?`<span class="badge bg-gray">🏃 ${p.hm.atividadeFisica}</span>`:''}
+      ${p.hm.horasSono?`<span class="badge bg-gray">😴 ${p.hm.horasSono}</span>`:''}
+      ${p.hm.dietaEspecifica&&p.hm.dietaEspecifica!=='Nenhum'?`<span class="badge bg-gray">🥗 ${p.hm.dietaEspecifica}</span>`:''}
     </div>`:''}
   </div>` : `
   <div class="card" style="border-style:dashed">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
       <div>
-        <div style="font-size:13px;font-weight:600;color:var(--muted)">ð AvaliaÃ§Ã£o Inicial â nÃ£o respondida</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">Envie o link do questionÃ¡rio ao paciente</div>
+        <div style="font-size:13px;font-weight:600;color:var(--muted)">📋 Avaliação Inicial — não respondida</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Envie o link do questionário ao paciente</div>
       </div>
-      <button class="btn bg bsm" onclick="navigator.clipboard.writeText('https://www.menospesosaudedigital.com.br/questionario.html?cpf=${p.cpf}').then(()=>toast('Link copiado!'))">ð Copiar link</button>
+      <button class="btn bg bsm" onclick="navigator.clipboard.writeText('https://www.menospesosaudedigital.com.br/questionario.html?cpf=${p.cpf}').then(()=>toast('Link copiado!'))">📋 Copiar link</button>
     </div>
   </div>`}
 
   <div class="card">
-    <div class="card-title">AÃ§Ãµes RÃ¡pidas</div>
+    <div class="card-title">Ações Rápidas</div>
     <div class="row" style="flex-wrap:wrap;gap:8px">
-      <button class="btn bp" onclick="go('evolucoes-new')">ð Nova EvoluÃ§Ã£o</button>
-      <button class="btn bs" onclick="go('exames')">ð§ª Anexar Exame</button>
-      <button class="btn bs" onclick="go('questionarios')">ð QuestionÃ¡rios</button>
-      <button class="btn bs" onclick="go('mensagens')" style="background:#25D366;color:#fff;border-color:#25D366">ð¬ Mensagem WA</button>
-      <button class="btn bp" onclick="openMemed(this)">ð Receitar</button>
-      <button class="btn bg" onclick="go('cadastro')">ð¤ Editar Cadastro</button>
+      <button class="btn bp" onclick="go('evolucoes-new')">📝 Nova Evolução</button>
+      <button class="btn bs" onclick="go('exames')">🧪 Anexar Exame</button>
+      <button class="btn bs" onclick="go('questionarios')">📋 Questionários</button>
+      <button class="btn bs" onclick="go('mensagens')" style="background:#25D366;color:#fff;border-color:#25D366">💬 Mensagem WA</button>
+      <button class="btn bp" onclick="openMemed(this)">💊 Receitar</button>
+      <button class="btn bg" onclick="go('cadastro')">👤 Editar Cadastro</button>
     </div>
   </div>`;
 }
@@ -934,20 +934,20 @@ function vCadastro(ct){
   const qStatus=p.questionarioRespondidoEm;
   ct.innerHTML=`
   ${qStatus
-    ? `<div class="alert a-info">â QuestionÃ¡rio inicial respondido pelo paciente em ${fmtDt(qStatus)}.</div>`
+    ? `<div class="alert a-info">✅ Questionário inicial respondido pelo paciente em ${fmtDt(qStatus)}.</div>`
     : `<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <div>
-          <div style="font-size:13px;font-weight:600;color:#16a34a">ð QuestionÃ¡rio inicial</div>
+          <div style="font-size:13px;font-weight:600;color:#16a34a">📋 Questionário inicial</div>
           <div style="font-size:12px;color:#15803d;margin-top:2px">Envie este link ao paciente para preencher antes da consulta</div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn bs bsm" onclick="navigator.clipboard.writeText('${qLink}').then(()=>toast('Link copiado!'))">ð Copiar link</button>
-          <a href="${qLink}" target="_blank" class="btn bg bsm">ð Abrir questionÃ¡rio</a>
+          <button class="btn bs bsm" onclick="navigator.clipboard.writeText('${qLink}').then(()=>toast('Link copiado!'))">📋 Copiar link</button>
+          <a href="${qLink}" target="_blank" class="btn bg bsm">🔗 Abrir questionário</a>
         </div>
       </div>`}
   <div class="tabs">
     <div class="tab active" onclick="sTab('tp',this)">Dados Pessoais</div>
-    <div class="tab" onclick="sTab('tc',this)">AvaliaÃ§Ã£o ClÃ­nica</div>
+    <div class="tab" onclick="sTab('tc',this)">Avaliação Clínica</div>
     <div class="tab" onclick="sTab('tprog',this)">Programa</div>
   </div>
   <script>setTimeout(_initCadastroInputs,100)<\/script>
@@ -955,7 +955,7 @@ function vCadastro(ct){
   <!-- PESSOAL -->
   <div id="tp">
     <div class="card">
-      <div class="card-title">IdentificaÃ§Ã£o</div>
+      <div class="card-title">Identificação</div>
       <div class="fr c3">
         <div class="fg"><label>Nome completo *</label><input id="f-nome" value="${p.nome||''}" placeholder="Nome completo"></div>
         <div class="fg"><label>CPF</label><input value="${fmtCPF(p.cpf)}" disabled></div>
@@ -963,27 +963,27 @@ function vCadastro(ct){
       </div>
       <div class="fr c3">
         <div class="fg">
-          <label>Sexo biolÃ³gico <span style="font-weight:400;color:#9ca3af">(uso clÃ­nico)</span></label>
+          <label>Sexo biológico <span style="font-weight:400;color:#9ca3af">(uso clínico)</span></label>
           <select id="f-sexo">
-            <option value="">â</option>
+            <option value="">—</option>
             <option ${p.sexoBiologico==='Masculino'?'selected':''}>Masculino</option>
             <option ${p.sexoBiologico==='Feminino'?'selected':''}>Feminino</option>
             <option ${p.sexoBiologico==='Intersexo'?'selected':''}>Intersexo</option>
           </select>
         </div>
         <div class="fg">
-          <label>Identidade de gÃªnero</label>
+          <label>Identidade de gênero</label>
           <select id="f-gen" onchange="document.getElementById('f-gen-outro').style.display=this.value==='Outro'?'block':'none'">
-            <option value="">â</option>
-            ${['Mulher cis','Homem cis','Mulher trans','Homem trans','NÃ£o-binÃ¡rio(a)','GÃªnero fluido','AgÃªnero','Prefiro nÃ£o informar','Outro']
+            <option value="">—</option>
+            ${['Mulher cis','Homem cis','Mulher trans','Homem trans','Não-binário(a)','Gênero fluido','Agênero','Prefiro não informar','Outro']
               .map(o=>`<option ${p.genero===o?'selected':''}>${o}</option>`).join('')}
           </select>
-          <input id="f-gen-outro" type="text" placeholder="Como prefere se identificar?" value="${!['Mulher cis','Homem cis','Mulher trans','Homem trans','NÃ£o-binÃ¡rio(a)','GÃªnero fluido','AgÃªnero','Prefiro nÃ£o informar','Outro',''].includes(p.genero)?p.genero:''}" style="margin-top:6px;display:${!['Mulher cis','Homem cis','Mulher trans','Homem trans','NÃ£o-binÃ¡rio(a)','GÃªnero fluido','AgÃªnero','Prefiro nÃ£o informar',''].includes(p.genero)&&p.genero?'block':'none'}">
+          <input id="f-gen-outro" type="text" placeholder="Como prefere se identificar?" value="${!['Mulher cis','Homem cis','Mulher trans','Homem trans','Não-binário(a)','Gênero fluido','Agênero','Prefiro não informar','Outro',''].includes(p.genero)?p.genero:''}" style="margin-top:6px;display:${!['Mulher cis','Homem cis','Mulher trans','Homem trans','Não-binário(a)','Gênero fluido','Agênero','Prefiro não informar',''].includes(p.genero)&&p.genero?'block':'none'}">
         </div>
         <div class="fg"><label>Estado civil</label>
           <select id="f-ecivil">
-            <option value="">â</option>
-            ${['Solteiro(a)','Casado(a)','UniÃ£o estÃ¡vel','Divorciado(a)','ViÃºvo(a)']
+            <option value="">—</option>
+            ${['Solteiro(a)','Casado(a)','União estável','Divorciado(a)','Viúvo(a)']
               .map(o=>`<option ${p.estadoCivil===o?'selected':''}>${o}</option>`).join('')}
           </select></div>
       </div>
@@ -991,24 +991,24 @@ function vCadastro(ct){
         <div class="fg">
           <label>Pronomes</label>
           <select id="f-pronomes">
-            <option value="">â</option>
-            ${['Ela/Dela','Ele/Dele','Eles/Deles (neutro)','Prefiro nÃ£o informar']
+            <option value="">—</option>
+            ${['Ela/Dela','Ele/Dele','Eles/Deles (neutro)','Prefiro não informar']
               .map(o=>`<option ${p.pronomes===o?'selected':''}>${o}</option>`).join('')}
           </select>
         </div>
-        <div class="fg"><label>ProfissÃ£o</label><input id="f-prof" value="${p.profissao||''}"></div>
+        <div class="fg"><label>Profissão</label><input id="f-prof" value="${p.profissao||''}"></div>
         <div class="fg"><label>E-mail</label><input type="email" id="f-email" value="${p.email||''}"></div>
       </div>
       <div class="fr c3">
         <div class="fg"><label>Telefone / SMS</label><input type="tel" id="f-tel" value="${p.telefoneSms||''}"></div>
         <div class="fg"><label>WhatsApp</label><input type="tel" id="f-wapp" value="${p.whatsapp||''}"></div>
-        <div class="fg"><label>Contato de emergÃªncia</label><input id="f-emerg" value="${p.contatoEmergencia||''}" placeholder="Nome â telefone"></div>
+        <div class="fg"><label>Contato de emergência</label><input id="f-emerg" value="${p.contatoEmergencia||''}" placeholder="Nome — telefone"></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">EndereÃ§o</div>
+      <div class="card-title">Endereço</div>
       <div class="fr c2">
-        <div class="fg"><label>EndereÃ§o completo</label><input id="f-end" value="${p.endereco||''}"></div>
+        <div class="fg"><label>Endereço completo</label><input id="f-end" value="${p.endereco||''}"></div>
         <div class="fg"><label>CEP</label><input id="f-cep" value="${p.cep||''}"></div>
       </div>
       <div class="fr c3">
@@ -1021,10 +1021,10 @@ function vCadastro(ct){
         <div class="fg"><label>Estado (UF)</label><input id="f-uf" value="${p.estado||''}" maxlength="2" placeholder="SP" readonly style="background:#f9fafb"></div>
       </div>
     </div>
-    <div class="brow"><button class="btn bp" onclick="savePessoal()">ð¾ Salvar dados pessoais</button></div>
+    <div class="brow"><button class="btn bp" onclick="savePessoal()">💾 Salvar dados pessoais</button></div>
   </div>
 
-  <!-- CLÃNICO -->
+  <!-- CLÍNICO -->
   <div id="tc" class="hidden">
     <div class="card">
       <div class="card-title">Queixa e Objetivo</div>
@@ -1032,13 +1032,13 @@ function vCadastro(ct){
       <div class="fg"><label>Objetivo do tratamento</label><textarea id="f-obj">${p.objetivoTratamento||''}</textarea></div>
     </div>
     <div class="card">
-      <div class="card-title">HistÃ³ria MÃ©dica</div>
+      <div class="card-title">História Médica</div>
       <div class="fr c2">
-        <div class="fg"><label>DoenÃ§as / comorbidades</label><textarea id="f-doe">${p.hm.doencas||''}</textarea></div>
+        <div class="fg"><label>Doenças / comorbidades</label><textarea id="f-doe">${p.hm.doencas||''}</textarea></div>
         <div class="fg"><label>Cirurgias anteriores</label><textarea id="f-cir">${p.hm.cirurgias||''}</textarea></div>
       </div>
       <div class="fr c2">
-        <div class="fg"><label>InternaÃ§Ãµes</label><textarea id="f-int" style="min-height:60px">${p.hm.internacoes||''}</textarea></div>
+        <div class="fg"><label>Internações</label><textarea id="f-int" style="min-height:60px">${p.hm.internacoes||''}</textarea></div>
         <div class="fg"><label>Alergias</label><textarea id="f-ale" style="min-height:60px">${p.hm.alergias||''}</textarea></div>
       </div>
       <div class="fr c2">
@@ -1047,38 +1047,38 @@ function vCadastro(ct){
       </div>
     </div>
     <div class="card">
-      <div class="card-title">HÃ¡bitos</div>
+      <div class="card-title">Hábitos</div>
       <div class="fr c2">
         <div class="fg"><label>Tabagismo</label>
           <select id="f-tab">
-            <option value="">â</option>
+            <option value="">—</option>
             ${['Nunca fumou','Ex-tabagista','Fumante atual'].map(o=>`<option ${p.hm.tabagismo===o?'selected':''}>${o}</option>`).join('')}
           </select></div>
-        <div class="fg"><label>Ãlcool</label>
+        <div class="fg"><label>Álcool</label>
           <select id="f-alc">
-            <option value="">â</option>
-            ${['NÃ£o consome','Socialmente','Regularmente','Dependente'].map(o=>`<option ${p.hm.alcool===o?'selected':''}>${o}</option>`).join('')}
+            <option value="">—</option>
+            ${['Não consome','Socialmente','Regularmente','Dependente'].map(o=>`<option ${p.hm.alcool===o?'selected':''}>${o}</option>`).join('')}
           </select></div>
       </div>
       <div class="fr c2">
         <div class="fg"><label>Cannabis</label>
           <select id="f-can">
-            <option value="">â</option>
-            ${['NÃ£o','Eventualmente','Regularmente'].map(o=>`<option ${p.hm.cannabis===o?'selected':''}>${o}</option>`).join('')}
+            <option value="">—</option>
+            ${['Não','Eventualmente','Regularmente'].map(o=>`<option ${p.hm.cannabis===o?'selected':''}>${o}</option>`).join('')}
           </select></div>
         <div class="fg"><label>Outras drogas</label><input id="f-drog" value="${p.hm.outrasDrogas||''}"></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">SaÃºde da Mulher</div>
+      <div class="card-title">Saúde da Mulher</div>
       <div class="fr c3">
-        <div class="fg"><label>GestaÃ§Ã£o atual</label>
-          <select id="f-gest"><option value="">NÃ£o</option><option value="Sim" ${p.hm.gestacao==='Sim'?'selected':''}>Sim</option></select></div>
-        <div class="fg"><label>Ãltima menstruaÃ§Ã£o</label><input type="date" id="f-mens" value="${p.hm.ultimaMenstruacao||''}"></div>
-        <div class="fg"><label>MÃ©todo contraceptivo</label><input id="f-contra" value="${p.hm.metodoContraceptivo||''}"></div>
+        <div class="fg"><label>Gestação atual</label>
+          <select id="f-gest"><option value="">Não</option><option value="Sim" ${p.hm.gestacao==='Sim'?'selected':''}>Sim</option></select></div>
+        <div class="fg"><label>Última menstruação</label><input type="date" id="f-mens" value="${p.hm.ultimaMenstruacao||''}"></div>
+        <div class="fg"><label>Método contraceptivo</label><input id="f-contra" value="${p.hm.metodoContraceptivo||''}"></div>
       </div>
     </div>
-    <div class="brow"><button class="btn bp" onclick="saveClinico()">ð¾ Salvar avaliaÃ§Ã£o clÃ­nica</button></div>
+    <div class="brow"><button class="btn bp" onclick="saveClinico()">💾 Salvar avaliação clínica</button></div>
   </div>
 
   <!-- PROGRAMA -->
@@ -1088,11 +1088,11 @@ function vCadastro(ct){
       <div class="fr c2">
         <div class="fg"><label>Programa contratado</label>
           <select id="f-prog">
-            <option value="">â</option>
-            ${['InÃ­cio Seguro','Acompanhamento Estendido']
+            <option value="">—</option>
+            ${['Início Seguro','Acompanhamento Estendido']
               .map(o=>`<option ${p.programaContratado===o?'selected':''}>${o}</option>`).join('')}
           </select></div>
-        <div class="fg"><label>Data de inÃ­cio</label><input type="date" id="f-ini" value="${p.dataInicio||''}"></div>
+        <div class="fg"><label>Data de início</label><input type="date" id="f-ini" value="${p.dataInicio||''}"></div>
       </div>
       <div class="fr c3">
         <div class="fg"><label>Altura (cm)</label><input type="number" id="f-alt" value="${p.altura||''}" placeholder="170"></div>
@@ -1100,11 +1100,11 @@ function vCadastro(ct){
         <div class="fg"><label>Peso atual (kg)</label><input type="number" id="f-pa" value="${p.pesoAtual||''}" step="0.1"></div>
       </div>
       <div class="fr c2">
-        <div class="fg"><label>MedicaÃ§Ã£o atual</label><input id="f-meda" value="${p.medicacaoAtual||''}" placeholder="ex: Semaglutida"></div>
+        <div class="fg"><label>Medicação atual</label><input id="f-meda" value="${p.medicacaoAtual||''}" placeholder="ex: Semaglutida"></div>
         <div class="fg"><label>Dose atual</label><input id="f-dose" value="${p.doseAtual||''}" placeholder="ex: 0,5 mg/sem"></div>
       </div>
     </div>
-    <div class="brow"><button class="btn bp" onclick="saveProg()">ð¾ Salvar dados do programa</button></div>
+    <div class="brow"><button class="btn bp" onclick="saveProg()">💾 Salvar dados do programa</button></div>
   </div>`;
 }
 
@@ -1128,14 +1128,14 @@ function _initCadastroInputs(){ mountCidadeInput(); }
 function savePessoal(){
   const p=P, wasMissing=!p.nome;
   p.nome=v('f-nome'); p.dataNascimento=v('f-dob'); p.sexoBiologico=v('f-sexo');
-  // GÃªnero: se "Outro", usa o campo de texto livre
+  // Gênero: se "Outro", usa o campo de texto livre
   const genSel=v('f-gen');
   p.genero = genSel==='Outro' ? (v('f-gen-outro')||'Outro') : genSel;
   p.pronomes=v('f-pronomes'); p.estadoCivil=v('f-ecivil'); p.profissao=v('f-prof');
   p.email=v('f-email'); p.telefoneSms=v('f-tel'); p.whatsapp=v('f-wapp');
   p.contatoEmergencia=v('f-emerg'); p.endereco=v('f-end'); p.cidade=v('f-cid');
   p.estado=v('f-uf'); p.cep=v('f-cep');
-  TL.add(p,'cadastro', wasMissing&&p.nome?`Cadastro preenchido â ${p.nome}`:'Dados pessoais atualizados');
+  TL.add(p,'cadastro', wasMissing&&p.nome?`Cadastro preenchido — ${p.nome}`:'Dados pessoais atualizados');
   P=p; refreshSb(); toast('Dados pessoais salvos!');
 }
 function saveClinico(){
@@ -1146,15 +1146,15 @@ function saveClinico(){
   p.hm.tabagismo=v('f-tab'); p.hm.alcool=v('f-alc'); p.hm.cannabis=v('f-can');
   p.hm.outrasDrogas=v('f-drog'); p.hm.gestacao=v('f-gest');
   p.hm.ultimaMenstruacao=v('f-mens'); p.hm.metodoContraceptivo=v('f-contra');
-  TL.add(p,'cadastro','AvaliaÃ§Ã£o clÃ­nica atualizada');
-  P=p; toast('AvaliaÃ§Ã£o clÃ­nica salva!');
+  TL.add(p,'cadastro','Avaliação clínica atualizada');
+  P=p; toast('Avaliação clínica salva!');
 }
 function saveProg(){
   const p=P;
   p.programaContratado=v('f-prog'); p.dataInicio=v('f-ini');
   p.altura=v('f-alt'); p.pesoInicial=v('f-pi'); p.pesoAtual=v('f-pa');
   p.medicacaoAtual=v('f-meda'); p.doseAtual=v('f-dose');
-  TL.add(p,'sistema',`Dados do programa atualizados â ${p.programaContratado||'sem programa'}`);
+  TL.add(p,'sistema',`Dados do programa atualizados — ${p.programaContratado||'sem programa'}`);
   P=p; refreshSb(); toast('Dados do programa salvos!');
 }
 function v(id){ const el=document.getElementById(id); return el?el.value:''; }
@@ -1163,39 +1163,39 @@ function refreshSb(){
   if(P) s.innerHTML=`<div class="pname">${P.nome||'Paciente sem nome'}</div><div class="pcpf">${fmtCPF(P.cpf)}</div>`;
 }
 
-// QUESTIONÃRIOS
+// QUESTIONÁRIOS
 function vQs(ct){
   const p=P;
   ct.innerHTML=`
   <div class="card">
     <div class="sec-head">
-      <div class="sec-title">QuestionÃ¡rios (${p.questionarios.length})</div>
+      <div class="sec-title">Questionários (${p.questionarios.length})</div>
       <button class="btn bg bsm" onclick="addQ()">+ Adicionar</button>
     </div>
     ${p.questionarios.map((q,i)=>`
       <div class="qi">
-        <span>ð</span>
+        <span>📋</span>
         <div class="qi-name">${q.nome}</div>
         ${qBadge(q.status)}
         <select class="btn bs bsm" style="cursor:pointer" onchange="updQ(${i},this.value)">
-          <option value="nao-enviado" ${q.status==='nao-enviado'?'selected':''}>NÃ£o enviado</option>
+          <option value="nao-enviado" ${q.status==='nao-enviado'?'selected':''}>Não enviado</option>
           <option value="enviado" ${q.status==='enviado'?'selected':''}>Enviado</option>
           <option value="respondido" ${q.status==='respondido'?'selected':''}>Respondido</option>
           <option value="interpretado" ${q.status==='interpretado'?'selected':''}>Interpretado</option>
         </select>
       </div>`).join('')}
   </div>
-  <div class="alert a-info">â¹ï¸ Futuramente os questionÃ¡rios serÃ£o enviados via WhatsApp e respondidos pelo prÃ³prio paciente.</div>`;
+  <div class="alert a-info">ℹ️ Futuramente os questionários serão enviados via WhatsApp e respondidos pelo próprio paciente.</div>`;
 }
 function updQ(i,s){
   const p=P, q=p.questionarios[i], old=q.status;
   q.status=s;
-  if(s!==old && s!=='nao-enviado') TL.add(p,'questionario',`QuestionÃ¡rio "${q.nome}" marcado como ${s}`);
+  if(s!==old && s!=='nao-enviado') TL.add(p,'questionario',`Questionário "${q.nome}" marcado como ${s}`);
   else DB.put(p);
   toast('Status atualizado');
 }
 function addQ(){
-  const nome=prompt('Nome do questionÃ¡rio:');
+  const nome=prompt('Nome do questionário:');
   if(!nome) return;
   P.questionarios.push({id:Date.now()+'',nome,status:'nao-enviado'});
   DB.put(P); vQs(document.getElementById('content'));
@@ -1205,10 +1205,10 @@ function addQ(){
 function vExames(ct){
   const p=P;
   const cats=[
-    {id:'laboratorial',ico:'ð§ª',label:'Laboratorial'},
-    {id:'bioimpedancia',ico:'âï¸',label:'BioimpedÃ¢ncia'},
-    {id:'imagem',ico:'ð©»',label:'Imagem'},
-    {id:'outro',ico:'ð',label:'Outros'},
+    {id:'laboratorial',ico:'🧪',label:'Laboratorial'},
+    {id:'bioimpedancia',ico:'⚖️',label:'Bioimpedância'},
+    {id:'imagem',ico:'🩻',label:'Imagem'},
+    {id:'outro',ico:'📎',label:'Outros'},
   ];
   const exames=p.exames||[];
   ct.innerHTML=`
@@ -1223,9 +1223,9 @@ function vExames(ct){
       ondragover="event.preventDefault();this.classList.add('dz-over')"
       ondragleave="this.classList.remove('dz-over')"
       ondrop="onDrop(event)">
-      <div class="dz-ico">ð¤</div>
+      <div class="dz-ico">📤</div>
       <div class="dz-txt">Arraste arquivos aqui ou clique para selecionar<br>
-        <span style="font-size:12px">Exames, laudos, bioimpedÃ¢ncia, imagens</span></div>
+        <span style="font-size:12px">Exames, laudos, bioimpedância, imagens</span></div>
     </div>
     <input type="file" id="fi" multiple class="hidden" onchange="onFiles(this.files)">
   </div>
@@ -1239,8 +1239,8 @@ function vExames(ct){
         <div class="fi">
           <span style="font-size:18px">${c.ico}</span>
           <div class="fi-name">${e.nome}</div>
-          <div class="fi-meta">${e.tam||''} Â· ${fmtD(e.data)}</div>
-          <button class="btn bs bsm" onclick="rmExame('${e.id}')">â</button>
+          <div class="fi-meta">${e.tam||''} · ${fmtD(e.data)}</div>
+          <button class="btn bs bsm" onclick="rmExame('${e.id}')">✕</button>
         </div>`).join('')}
     </div>`;
   }).join('')}
@@ -1256,7 +1256,7 @@ function onFiles(files){
   if(!files||!files.length) return;
   const p=P, cat=getCat();
   if(!p.exames) p.exames=[];
-  const cico={laboratorial:'ð§ª',bioimpedancia:'âï¸',imagem:'ð©»',outro:'ð'};
+  const cico={laboratorial:'🧪',bioimpedancia:'⚖️',imagem:'🩻',outro:'📎'};
   Array.from(files).forEach(f=>{
     const ex={id:Date.now()+Math.random().toString(36).slice(2),nome:f.name,cat,tam:bytes(f.size),tipo:f.type,data:new Date().toISOString()};
     p.exames.push(ex);
@@ -1284,7 +1284,7 @@ function vTL(ct){
     <div>
       ${evs.map(e=>`
         <div class="tl-item">
-          <div class="tl-dot">${TL.icons[e.tipo]||'â¢'}</div>
+          <div class="tl-dot">${TL.icons[e.tipo]||'•'}</div>
           <div class="tl-body">
             <div class="tl-title">${e.desc}</div>
             <div class="tl-date">${fmtDt(e.data)}</div>
@@ -1294,37 +1294,37 @@ function vTL(ct){
   </div>`;
 }
 
-// EVOLUÃÃES
+// EVOLUÇÕES
 function vEvs(ct){
   const evs=P.evolucoes||[];
   ct.innerHTML=`
   <div class="sec-head" style="margin-bottom:14px">
-    <div class="sec-title">EvoluÃ§Ãµes (${evs.length})</div>
-    <button class="btn bp" onclick="go('evolucoes-new')">+ Nova EvoluÃ§Ã£o</button>
+    <div class="sec-title">Evoluções (${evs.length})</div>
+    <button class="btn bp" onclick="go('evolucoes-new')">+ Nova Evolução</button>
   </div>
-  ${!evs.length?'<div class="card muted">Nenhuma evoluÃ§Ã£o registrada</div>':''}
+  ${!evs.length?'<div class="card muted">Nenhuma evolução registrada</div>':''}
   ${evs.map((e,i)=>`
     <div class="ev-card">
       <div class="ev-head" onclick="tgEv('eb${i}')">
         <div class="row" style="gap:10px">
-          <strong>EvoluÃ§Ã£o ${evs.length-i}</strong>
+          <strong>Evolução ${evs.length-i}</strong>
           <span class="muted">${fmtDt(e.data)}</span>
           ${e.tipo?`<span class="badge bg-gray">${e.tipo}</span>`:''}
           ${e.pesoAtd?`<span class="badge bg-blue">${e.pesoAtd} kg</span>`:''}
         </div>
-        <span class="muted">â¼</span>
+        <span class="muted">▼</span>
       </div>
       <div id="eb${i}" class="ev-body hidden">
         ${evSec('Resumo',e.resumo)}
-        ${evSec('S â Subjetivo',e.s)}
-        ${evSec('O â Objetivo',e.o)}
-        ${evSec('A â AvaliaÃ§Ã£o',e.a)}
-        ${evSec('P â Plano',e.pl)}
+        ${evSec('S — Subjetivo',e.s)}
+        ${evSec('O — Objetivo',e.o)}
+        ${evSec('A — Avaliação',e.a)}
+        ${evSec('P — Plano',e.pl)}
         ${evSec('Conduta',e.conduta)}
-        ${evSec('OrientaÃ§Ãµes',e.orient)}
+        ${evSec('Orientações',e.orient)}
         ${evSec('Receitas',e.receitas)}
         ${evSec('Pedidos',e.pedidos)}
-        ${evSec('PrÃ³ximos passos',e.prox)}
+        ${evSec('Próximos passos',e.prox)}
       </div>
     </div>`).join('')}`;
 }
@@ -1335,7 +1335,7 @@ function vNovaEv(ct){
   const p=P;
   ct.innerHTML=`
   <div class="card">
-    <div class="card-title">Nova EvoluÃ§Ã£o â ${p.nome||'Paciente'}</div>
+    <div class="card-title">Nova Evolução — ${p.nome||'Paciente'}</div>
     <div class="fr c3" style="margin-bottom:14px">
       <div class="fg"><label>Data / hora</label><input type="datetime-local" id="ev-dt" value="${new Date().toISOString().slice(0,16)}"></div>
       <div class="fg"><label>Peso (kg)</label><input type="number" id="ev-peso" step="0.1" value="${p.pesoAtual||''}" placeholder="kg"></div>
@@ -1346,32 +1346,32 @@ function vNovaEv(ct){
           <option>Retorno 60 dias</option>
           <option>Retorno 90 dias</option>
           <option>Retorno livre</option>
-          <option>IntercorrÃªncia</option>
+          <option>Intercorrência</option>
         </select></div>
     </div>
     <div class="fg"><label>Resumo do atendimento</label>
-      <textarea id="ev-res" rows="3" placeholder="SÃ­ntese do atendimento â aparece no dashboard..."></textarea></div>
+      <textarea id="ev-res" rows="3" placeholder="Síntese do atendimento — aparece no dashboard..."></textarea></div>
 
     <hr class="div">
     <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">SOAP</div>
-    <div class="fg"><div class="soap-l">S â Subjetivo</div><textarea id="ev-s" rows="3" placeholder="Queixas e relato do paciente..."></textarea></div>
-    <div class="fg"><div class="soap-l">O â Objetivo</div><textarea id="ev-o" rows="3" placeholder="Peso, PA, FC, exames..."></textarea></div>
-    <div class="fg"><div class="soap-l">A â AvaliaÃ§Ã£o</div><textarea id="ev-a" rows="3" placeholder="InterpretaÃ§Ã£o clÃ­nica..."></textarea></div>
-    <div class="fg"><div class="soap-l">P â Plano</div><textarea id="ev-p" rows="3" placeholder="Plano terapÃªutico..."></textarea></div>
+    <div class="fg"><div class="soap-l">S — Subjetivo</div><textarea id="ev-s" rows="3" placeholder="Queixas e relato do paciente..."></textarea></div>
+    <div class="fg"><div class="soap-l">O — Objetivo</div><textarea id="ev-o" rows="3" placeholder="Peso, PA, FC, exames..."></textarea></div>
+    <div class="fg"><div class="soap-l">A — Avaliação</div><textarea id="ev-a" rows="3" placeholder="Interpretação clínica..."></textarea></div>
+    <div class="fg"><div class="soap-l">P — Plano</div><textarea id="ev-p" rows="3" placeholder="Plano terapêutico..."></textarea></div>
 
     <hr class="div">
     <div class="fr c2">
-      <div class="fg"><label>Conduta</label><textarea id="ev-cond" rows="3" placeholder="DecisÃµes tomadas..."></textarea></div>
-      <div class="fg"><label>OrientaÃ§Ãµes ao paciente</label><textarea id="ev-ori" rows="3" placeholder="O que foi orientado..."></textarea></div>
+      <div class="fg"><label>Conduta</label><textarea id="ev-cond" rows="3" placeholder="Decisões tomadas..."></textarea></div>
+      <div class="fg"><label>Orientações ao paciente</label><textarea id="ev-ori" rows="3" placeholder="O que foi orientado..."></textarea></div>
     </div>
     <div class="fr c2">
-      <div class="fg"><label>ð Receitas emitidas</label><textarea id="ev-rx" rows="2" placeholder="Medicamentos, dose, posologia..."></textarea></div>
-      <div class="fg"><label>ð Pedidos / encaminhamentos</label><textarea id="ev-ped" rows="2" placeholder="Exames solicitados..."></textarea></div>
+      <div class="fg"><label>💊 Receitas emitidas</label><textarea id="ev-rx" rows="2" placeholder="Medicamentos, dose, posologia..."></textarea></div>
+      <div class="fg"><label>📋 Pedidos / encaminhamentos</label><textarea id="ev-ped" rows="2" placeholder="Exames solicitados..."></textarea></div>
     </div>
-    <div class="fg"><label>PrÃ³ximos passos</label><textarea id="ev-prox" rows="2" placeholder="PrÃ³ximo retorno, metas..."></textarea></div>
+    <div class="fg"><label>Próximos passos</label><textarea id="ev-prox" rows="2" placeholder="Próximo retorno, metas..."></textarea></div>
 
     <div class="row" style="gap:10px;margin-top:8px">
-      <button class="btn bp blg" onclick="saveEv()">ð¾ Salvar EvoluÃ§Ã£o</button>
+      <button class="btn bp blg" onclick="saveEv()">💾 Salvar Evolução</button>
       <button class="btn bs" onclick="go('evolucoes')">Cancelar</button>
     </div>
   </div>`;
@@ -1392,13 +1392,13 @@ function saveEv(){
   p.evolucoes.unshift(ev);
   if(peso) p.pesoAtual=peso;
   if(ev.resumo) p.resumoClinico=ev.resumo;
-  TL.add(p,'consulta',`EvoluÃ§Ã£o registrada â ${ev.tipo}${peso?' Â· '+peso+' kg':''}`);
+  TL.add(p,'consulta',`Evolução registrada — ${ev.tipo}${peso?' · '+peso+' kg':''}`);
   if(ev.receitas) TL.add(p,'receita','Receita: '+ev.receitas.slice(0,80));
   if(ev.pedidos) TL.add(p,'pedido','Pedido: '+ev.pedidos.slice(0,80));
-  P=p; toast('EvoluÃ§Ã£o salva!'); go('dashboard');
+  P=p; toast('Evolução salva!'); go('dashboard');
 }
 
-// ADESÃO
+// ADESÃO
 function vAdesao(ct){
   const p=P;
   const qResp=(p.questionarios||[]).filter(q=>q.status==='respondido'||q.status==='interpretado').length;
@@ -1408,16 +1408,16 @@ function vAdesao(ct){
   const nEv=(p.evolucoes||[]).length;
 
   const itens=[
-    {l:'QuestionÃ¡rios respondidos', val:qResp, max:qTot||1, disp:`${qResp}/${qTot}`},
+    {l:'Questionários respondidos', val:qResp, max:qTot||1, disp:`${qResp}/${qTot}`},
     {l:'Exames realizados', val:Math.min(nEx,5), max:5, disp:`${nEx} exame(s)`},
-    {l:'BioimpedÃ¢ncias', val:Math.min(nBio,3), max:3, disp:`${nBio} registro(s)`},
-    {l:'EvoluÃ§Ãµes/consultas', val:Math.min(nEv,5), max:5, disp:`${nEv} consulta(s)`},
-    {l:'Peso cadastrado', val:p.pesoAtual?1:0, max:1, disp:p.pesoAtual?'Sim â':'Pendente'},
-    {l:'MedicaÃ§Ã£o cadastrada', val:p.medicacaoAtual?1:0, max:1, disp:p.medicacaoAtual||'NÃ£o cadastrada'},
+    {l:'Bioimpedâncias', val:Math.min(nBio,3), max:3, disp:`${nBio} registro(s)`},
+    {l:'Evoluções/consultas', val:Math.min(nEv,5), max:5, disp:`${nEv} consulta(s)`},
+    {l:'Peso cadastrado', val:p.pesoAtual?1:0, max:1, disp:p.pesoAtual?'Sim ✓':'Pendente'},
+    {l:'Medicação cadastrada', val:p.medicacaoAtual?1:0, max:1, disp:p.medicacaoAtual||'Não cadastrada'},
   ];
 
   ct.innerHTML=`
-  <div class="alert a-info">â¹ï¸ Score de AdesÃ£o estruturado. O cÃ¡lculo automÃ¡tico serÃ¡ implementado em versÃ£o futura.</div>
+  <div class="alert a-info">ℹ️ Score de Adesão estruturado. O cálculo automático será implementado em versão futura.</div>
   <div class="card" style="margin-bottom:16px">
     <div class="card-title">Indicadores</div>
     <div class="ad-grid">
@@ -1432,12 +1432,12 @@ function vAdesao(ct){
   <div class="card">
     <div class="card-title">Campos Adicionais</div>
     <div class="fr c2">
-      <div class="fg"><label>AdesÃ£o medicamentosa (% auto-referida)</label>
-        <input type="number" id="ad-m" min="0" max="100" value="${p.adesao?.medicamentosa||''}" placeholder="0â100"></div>
-      <div class="fg"><label>Comparecimento Ã s consultas (%)</label>
-        <input type="number" id="ad-c" min="0" max="100" value="${p.adesao?.comparecimento||''}" placeholder="0â100"></div>
+      <div class="fg"><label>Adesão medicamentosa (% auto-referida)</label>
+        <input type="number" id="ad-m" min="0" max="100" value="${p.adesao?.medicamentosa||''}" placeholder="0–100"></div>
+      <div class="fg"><label>Comparecimento às consultas (%)</label>
+        <input type="number" id="ad-c" min="0" max="100" value="${p.adesao?.comparecimento||''}" placeholder="0–100"></div>
     </div>
-    <button class="btn bp" onclick="saveAdesao()">ð¾ Salvar</button>
+    <button class="btn bp" onclick="saveAdesao()">💾 Salvar</button>
   </div>`;
 }
 function saveAdesao(){
@@ -1446,7 +1446,7 @@ function saveAdesao(){
   DB.put(P); toast('Salvo!');
 }
 
-// RELATÃRIOS
+// RELATÓRIOS
 function vRelat(ct){
   const p=P;
   const cpf=p.cpf;
@@ -1455,50 +1455,50 @@ function vRelat(ct){
   ct.innerHTML=`
   <div class="g2">
     ${[
-      {ico:'ð',t:'Resumo Inicial',d:'AvaliaÃ§Ã£o inicial completa: histÃ³ria clÃ­nica, hÃ¡bitos, medidas e objetivo. Ideal para registrar o ponto de partida.',tipo:'inicial'},
-      {ico:'ð',t:'Resumo 60 Dias',d:'EvoluÃ§Ã£o do peso, tabela de consultas, questionÃ¡rios e medicaÃ§Ã£o atual. Comparativo de IMC.',tipo:'60dias'},
-      {ico:'ð',t:'Resumo Final',d:'Resultados totais do programa: antes Ã depois, perda total, resumo clÃ­nico e Ãºltima evoluÃ§Ã£o.',tipo:'final'},
-      {ico:'ð¯',t:'Score de AdesÃ£o',d:'RelatÃ³rio de adesÃ£o do paciente: questionÃ¡rios, exames, consultas, peso e medicaÃ§Ã£o.',tipo:'adesao'},
+      {ico:'📋',t:'Resumo Inicial',d:'Avaliação inicial completa: história clínica, hábitos, medidas e objetivo. Ideal para registrar o ponto de partida.',tipo:'inicial'},
+      {ico:'📊',t:'Resumo 60 Dias',d:'Evolução do peso, tabela de consultas, questionários e medicação atual. Comparativo de IMC.',tipo:'60dias'},
+      {ico:'🏁',t:'Resumo Final',d:'Resultados totais do programa: antes × depois, perda total, resumo clínico e última evolução.',tipo:'final'},
+      {ico:'🎯',t:'Score de Adesão',d:'Relatório de adesão do paciente: questionários, exames, consultas, peso e medicação.',tipo:'adesao'},
     ].map(r=>`
       <div class="card">
         <div style="font-size:28px;margin-bottom:8px">${r.ico}</div>
         <div style="font-size:14px;font-weight:600;margin-bottom:4px">${r.t}</div>
         <div class="muted" style="font-size:13px;margin-bottom:14px">${r.d}</div>
         <div style="display:flex;gap:8px">
-          <a href="${rel(r.tipo)}" target="_blank" class="btn bp bsm">ð Visualizar</a>
-          <a href="${rel(r.tipo)}" target="_blank" class="btn bg bsm" onclick="setTimeout(()=>window.open('${rel(r.tipo)}').print(),800)">ð¨ï¸ PDF</a>
+          <a href="${rel(r.tipo)}" target="_blank" class="btn bp bsm">🔍 Visualizar</a>
+          <a href="${rel(r.tipo)}" target="_blank" class="btn bg bsm" onclick="setTimeout(()=>window.open('${rel(r.tipo)}').print(),800)">🖨️ PDF</a>
         </div>
       </div>`).join('')}
   </div>
 
   <div class="card" style="margin-top:4px">
-    <div class="card-title">Resumo rÃ¡pido do paciente</div>
+    <div class="card-title">Resumo rápido do paciente</div>
     <div class="g2" style="font-size:13px">
       <div>
-        <div class="muted">Peso inicial â atual</div>
-        <strong>${p.pesoInicial||'â'} kg â ${p.pesoAtual||'â'} kg</strong>
-        ${p.pesoInicial&&p.pesoAtual?`<span class="badge bg-green" style="margin-left:8px">â${(parseFloat(p.pesoInicial)-parseFloat(p.pesoAtual)).toFixed(1)} kg</span>`:''}
+        <div class="muted">Peso inicial → atual</div>
+        <strong>${p.pesoInicial||'—'} kg → ${p.pesoAtual||'—'} kg</strong>
+        ${p.pesoInicial&&p.pesoAtual?`<span class="badge bg-green" style="margin-left:8px">−${(parseFloat(p.pesoInicial)-parseFloat(p.pesoAtual)).toFixed(1)} kg</span>`:''}
       </div>
       <div>
-        <div class="muted">MedicaÃ§Ã£o</div>
-        <strong>${p.medicacaoAtual||'â'}${p.doseAtual?' â '+p.doseAtual:''}</strong>
+        <div class="muted">Medicação</div>
+        <strong>${p.medicacaoAtual||'—'}${p.doseAtual?' — '+p.doseAtual:''}</strong>
       </div>
       <div>
-        <div class="muted">EvoluÃ§Ãµes registradas</div>
+        <div class="muted">Evoluções registradas</div>
         <strong>${(p.evolucoes||[]).length} consulta(s)</strong>
       </div>
       <div>
         <div class="muted">Jornada</div>
-        <strong>${p.dataInicio?`${Math.floor((new Date()-new Date(p.dataInicio))/86400000)+1} dias`:'â'}</strong>
+        <strong>${p.dataInicio?`${Math.floor((new Date()-new Date(p.dataInicio))/86400000)+1} dias`:'—'}</strong>
       </div>
     </div>
   </div>`;
 }
 
-// ââ MEMED PRESCRIÃÃO DIGITAL âââââââââââââââââââââââââââââââââââââ
+// ── MEMED PRESCRIÇÃO DIGITAL ─────────────────────────────────────
 let _memedReady = false;
 
-// Credenciais Memed homologaÃ§Ã£o (substituir por produÃ§Ã£o quando disponÃ­vel)
+// Credenciais Memed homologação (substituir por produção quando disponível)
 const _MEMED_CPF        = '01547182628';
 const _MEMED_API_KEY    = 'iJGiB4kjDGOLeDFPWMG3no9VnN7Abpqe3w1jEFm6olkhkZD6oSfSmYCm';
 const _MEMED_SECRET_KEY = 'Xe8M5GvBGCr4FStKfxXKisRo3SfYKI7KrTMkJpCAstzu2yXVN4av5nmL';
@@ -1515,7 +1515,7 @@ async function _getMemedToken() {
     } catch(e) { console.warn('[Memed] Backend falhou, tentando direto:', e.message); }
   }
 
-  // 2. Fallback: chama API Memed diretamente do browser (homologaÃ§Ã£o)
+  // 2. Fallback: chama API Memed diretamente do browser (homologação)
   const base    = 'https://integrations.api.memed.com.br/v1/sinapse-prescricao/usuarios';
   const qs      = `?api-key=${_MEMED_API_KEY}&secret-key=${_MEMED_SECRET_KEY}`;
   const headers = { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/json' };
@@ -1528,7 +1528,7 @@ async function _getMemedToken() {
     if (token) return { ok: true, token, scriptUrl: _MEMED_SCRIPT_URL };
   } catch(e) { console.warn('[Memed] GET direto falhou:', e.message); }
 
-  // Cadastra prescritor se nÃ£o encontrado
+  // Cadastra prescritor se não encontrado
   try {
     const payload = JSON.stringify({ data: { type: 'usuarios', attributes: {
       external_id: _MEMED_CPF, nome: 'Ailton', sobrenome: 'Vieira', cpf: _MEMED_CPF,
@@ -1547,13 +1547,13 @@ async function openMemed(btn) {
   if (!P) { toast('Selecione um paciente primeiro'); return; }
 
   const orig = btn?.textContent;
-  if (btn) { btn.disabled = true; btn.textContent = 'Carregandoâ¦'; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Carregando…'; }
 
   try {
     const d = await _getMemedToken();
-    if (!d.ok) { toast('Erro Memed: ' + (d.error || 'token nÃ£o obtido')); return; }
+    if (!d.ok) { toast('Erro Memed: ' + (d.error || 'token não obtido')); return; }
 
-    // Se o mÃ³dulo jÃ¡ estÃ¡ carregado, sÃ³ abre e seta paciente
+    // Se o módulo já está carregado, só abre e seta paciente
     if (_memedReady && window.MdHub) {
       await _memedSetPaciente();
       MdHub.module.show('plataforma.prescricao');
@@ -1572,7 +1572,7 @@ async function openMemed(btn) {
     s.setAttribute('data-color', '#059669');
     document.head.appendChild(s);
 
-    // Aguarda o mÃ³dulo de prescriÃ§Ã£o inicializar
+    // Aguarda o módulo de prescrição inicializar
     await new Promise((resolve) => {
       const waitScript = () => {
         if (window.MdSinapsePrescricao) {
@@ -1594,7 +1594,7 @@ async function openMemed(btn) {
 
   } catch(e) {
     console.error('[Memed]', e);
-    toast('Erro ao abrir prescriÃ§Ã£o: ' + e.message);
+    toast('Erro ao abrir prescrição: ' + e.message);
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = orig; }
   }
@@ -1647,13 +1647,13 @@ function _memedSalvarReceita(prescricao) {
 
   DB.put(P);
   SYNC.push(P);
-  toast('Receita salva no prontuÃ¡rio');
+  toast('Receita salva no prontuário');
 }
 
-// ââ MENSAGENS WHATSAPP ââââââââââââââââââââââââââââââââââââââââââââ
+// ── MENSAGENS WHATSAPP ────────────────────────────────────────────
 function vMensagens(ct){
   const p=P;
-  const nome=p.nome||(p.cpf?'Paciente':'â');
+  const nome=p.nome||(p.cpf?'Paciente':'—');
   const primeiroNome=nome.split(' ')[0];
   const fone=(p.whatsapp||p.telefoneSms||'').replace(/\D/g,'');
   const foneBR=fone.startsWith('55')?fone:'55'+fone;
@@ -1665,38 +1665,38 @@ function vMensagens(ct){
   const qLink='https://www.menospesosaudedigital.com.br/questionario.html?cpf='+p.cpf;
   const hoje=new Date().toLocaleDateString('pt-BR');
 
-  // PendÃªncias automÃ¡ticas
+  // Pendências automáticas
   const pends=[];
-  if(!p.questionarioRespondidoEm) pends.push('ð AvaliaÃ§Ã£o inicial ainda nÃ£o preenchida');
+  if(!p.questionarioRespondidoEm) pends.push('📋 Avaliação inicial ainda não preenchida');
   const qPend=(p.questionarios||[]).filter(q=>q.status==='nao-enviado'||q.status==='aguardando').length;
-  if(qPend) pends.push(`ð ${qPend} questionÃ¡rio(s) pendente(s)`);
+  if(qPend) pends.push(`📝 ${qPend} questionário(s) pendente(s)`);
   const semExame=(p.exames||[]).length===0;
-  if(semExame) pends.push('ð§ª Nenhum exame laboratorial anexado');
+  if(semExame) pends.push('🧪 Nenhum exame laboratorial anexado');
 
   const OCASIOES=[
-    {id:'cadastro',   icon:'ð', label:'PÃ³s-cadastro',        sub:'Boas-vindas + link de avaliaÃ§Ã£o'},
-    {id:'avaliacao',  icon:'ð', label:'AvaliaÃ§Ã£o inicial',    sub:'Enviar link do questionÃ¡rio'},
-    {id:'consulta',   icon:'ð', label:'PÃ³s-consulta',         sub:'Resumo do atendimento'},
-    {id:'progresso',  icon:'ð', label:'Progresso mensal',     sub:'MÃ©tricas e evoluÃ§Ã£o do peso'},
-    {id:'pendencia',  icon:'â°', label:'PendÃªncia',            sub:'Cobrar exame, questionÃ¡rio etc.'},
+    {id:'cadastro',   icon:'🎉', label:'Pós-cadastro',        sub:'Boas-vindas + link de avaliação'},
+    {id:'avaliacao',  icon:'📋', label:'Avaliação inicial',    sub:'Enviar link do questionário'},
+    {id:'consulta',   icon:'📞', label:'Pós-consulta',         sub:'Resumo do atendimento'},
+    {id:'progresso',  icon:'📊', label:'Progresso mensal',     sub:'Métricas e evolução do peso'},
+    {id:'pendencia',  icon:'⏰', label:'Pendência',            sub:'Cobrar exame, questionário etc.'},
   ];
 
   const templates={
-    cadastro:()=>`OlÃ¡, *${primeiroNome}*!\n\nSeja muito bem-vindo ao *Menos Peso*. Fico feliz em ter vocÃª por aqui.\n\nPara comeÃ§armos, preciso que vocÃª preencha a avaliaÃ§Ã£o inicial. SÃ£o apenas alguns minutos e vÃ£o me ajudar a personalizar o seu tratamento:\n\n*AvaliaÃ§Ã£o Inicial:*\n${qLink}\n\nQualquer dÃºvida, pode me chamar aqui.`,
+    cadastro:()=>`Olá, *${primeiroNome}*!\n\nSeja muito bem-vindo ao *Menos Peso*. Fico feliz em ter você por aqui.\n\nPara começarmos, preciso que você preencha a avaliação inicial. São apenas alguns minutos e vão me ajudar a personalizar o seu tratamento:\n\n*Avaliação Inicial:*\n${qLink}\n\nQualquer dúvida, pode me chamar aqui.`,
 
-    avaliacao:()=>`OlÃ¡, *${primeiroNome}*!\n\nAntes da nossa consulta, preciso que vocÃª preencha a avaliaÃ§Ã£o inicial. Ela Ã© fundamental para eu entender melhor a sua saÃºde e personalizar o tratamento:\n\n*Clique aqui para preencher:*\n${qLink}\n\nPreencha com calma e sinceridade. Qualquer dÃºvida, estou aqui.`,
+    avaliacao:()=>`Olá, *${primeiroNome}*!\n\nAntes da nossa consulta, preciso que você preencha a avaliação inicial. Ela é fundamental para eu entender melhor a sua saúde e personalizar o tratamento:\n\n*Clique aqui para preencher:*\n${qLink}\n\nPreencha com calma e sinceridade. Qualquer dúvida, estou aqui.`,
 
     consulta:()=>{
-      const med=document.getElementById('wa-med')?.value||'â';
-      const ori=document.getElementById('wa-ori')?.value||'â';
+      const med=document.getElementById('wa-med')?.value||'—';
+      const ori=document.getElementById('wa-ori')?.value||'—';
       const prox=document.getElementById('wa-prox')?.value||'em breve';
-      return `OlÃ¡, *${primeiroNome}*!\n\nSegue o resumo da nossa consulta de hoje (${hoje}):\n\n*MedicaÃ§Ã£o:* ${med}\n*OrientaÃ§Ãµes:*\n${ori}\n\n*PrÃ³xima consulta:* ${prox}\n\nQualquer dÃºvida ou intercorrÃªncia, pode me chamar aqui.`;
+      return `Olá, *${primeiroNome}*!\n\nSegue o resumo da nossa consulta de hoje (${hoje}):\n\n*Medicação:* ${med}\n*Orientações:*\n${ori}\n\n*Próxima consulta:* ${prox}\n\nQualquer dúvida ou intercorrência, pode me chamar aqui.`;
     },
 
     progresso:()=>{
       const mes=document.getElementById('wa-mes')?.value||'?';
       const motiv=document.getElementById('wa-motiv')?.value||'Continue assim. Cada passo conta.';
-      let txt=`OlÃ¡, *${primeiroNome}*!\n\nSegue o balanÃ§o do *${mes}Âº mÃªs* no programa:\n\n`;
+      let txt=`Olá, *${primeiroNome}*!\n\nSegue o balanço do *${mes}º mês* no programa:\n\n`;
       if(pesoAtual) txt+=`*Peso atual:* ${pesoAtual} kg\n`;
       if(perdaTotal) txt+=`*Perda total:* ${perdaTotal} kg\n`;
       if(pesoMeta) txt+=`*Meta:* ${pesoMeta} kg${faltaMeta?' (faltam '+faltaMeta+' kg)':''}\n`;
@@ -1706,11 +1706,11 @@ function vMensagens(ct){
 
     pendencia:()=>{
       const extra=document.getElementById('wa-pend-extra')?.value||'';
-      const prazo=document.getElementById('wa-prazo')?.value||'o mais breve possÃ­vel';
-      let lista=pends.map(p=>`â¢ ${p}`).join('\n');
-      if(extra) lista+=`\nâ¢ ${extra}`;
-      if(!lista) lista='â¢ Verificar pendÃªncias no sistema';
-      return `OlÃ¡, *${primeiroNome}*!\n\nTemos alguns itens que precisam da sua atenÃ§Ã£o para darmos continuidade ao tratamento:\n\n${lista}\n\nConsegue resolver atÃ© *${prazo}*?\n\nQualquer dÃºvida, Ã© sÃ³ me chamar.`;
+      const prazo=document.getElementById('wa-prazo')?.value||'o mais breve possível';
+      let lista=pends.map(p=>`• ${p}`).join('\n');
+      if(extra) lista+=`\n• ${extra}`;
+      if(!lista) lista='• Verificar pendências no sistema';
+      return `Olá, *${primeiroNome}*!\n\nTemos alguns itens que precisam da sua atenção para darmos continuidade ao tratamento:\n\n${lista}\n\nConsegue resolver até *${prazo}*?\n\nQualquer dúvida, é só me chamar.`;
     },
   };
 
@@ -1731,7 +1731,7 @@ function vMensagens(ct){
 
   ct.innerHTML=`
   <div style="margin-bottom:16px">
-    ${!fone?`<div class="alert a-warn" style="margin-bottom:0">â ï¸ NÃºmero de WhatsApp nÃ£o cadastrado â <button onclick="go('cadastro')" class="btn bg bsm" style="display:inline-flex;padding:2px 8px">Cadastrar agora</button></div>`:''}
+    ${!fone?`<div class="alert a-warn" style="margin-bottom:0">⚠️ Número de WhatsApp não cadastrado — <button onclick="go('cadastro')" class="btn bg bsm" style="display:inline-flex;padding:2px 8px">Cadastrar agora</button></div>`:''}
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px">
@@ -1744,23 +1744,23 @@ function vMensagens(ct){
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-    <!-- CAMPOS DINÃMICOS -->
+    <!-- CAMPOS DINÂMICOS -->
     <div>
       <div id="wa-fields">
-        <div style="color:var(--muted);font-size:13px;text-align:center;padding:40px 0">Selecione uma ocasiÃ£o acima</div>
+        <div style="color:var(--muted);font-size:13px;text-align:center;padding:40px 0">Selecione uma ocasião acima</div>
       </div>
       <div style="margin-top:14px;padding:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:12px;color:#15803d">
         <b>Dados do paciente preenchidos automaticamente:</b><br>
-        Nome: ${nome}${pesoAtual?' Â· Peso: '+pesoAtual+' kg':''}${pesoMeta?' Â· Meta: '+pesoMeta+' kg':''}${perdaTotal?' Â· Perda: -'+perdaTotal+' kg':''}
+        Nome: ${nome}${pesoAtual?' · Peso: '+pesoAtual+' kg':''}${pesoMeta?' · Meta: '+pesoMeta+' kg':''}${perdaTotal?' · Perda: -'+perdaTotal+' kg':''}
       </div>
     </div>
 
     <!-- PREVIEW -->
     <div>
       <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Preview da mensagem</div>
-      <div style="background:#e8f5e9;border-radius:12px 12px 2px 12px;padding:14px 16px;font-size:13px;line-height:1.6;white-space:pre-wrap;min-height:200px;color:#1a1a1a;font-family:inherit;border:1px solid #c8e6c9" id="wa-preview">Selecione uma ocasiÃ£o para visualizar a mensagem...</div>
+      <div style="background:#e8f5e9;border-radius:12px 12px 2px 12px;padding:14px 16px;font-size:13px;line-height:1.6;white-space:pre-wrap;min-height:200px;color:#1a1a1a;font-family:inherit;border:1px solid #c8e6c9" id="wa-preview">Selecione uma ocasião para visualizar a mensagem...</div>
       <div style="display:flex;gap:8px;margin-top:12px">
-        <button id="wa-copy" class="btn bs" style="flex:1">ð Copiar texto</button>
+        <button id="wa-copy" class="btn bs" style="flex:1">📋 Copiar texto</button>
         <a id="wa-open" href="#" target="_blank" class="btn" style="flex:1;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:6px;font-size:13px;font-weight:500;text-decoration:none">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Abrir WhatsApp
@@ -1769,24 +1769,24 @@ function vMensagens(ct){
     </div>
   </div>`;
 
-  // CAMPOS por ocasiÃ£o
+  // CAMPOS por ocasião
   const fieldSets={
-    cadastro:`<div style="color:var(--muted);font-size:13px;padding:12px 0">â Mensagem gerada automaticamente com o link de avaliaÃ§Ã£o.<br><br>Revise o preview ao lado e envie!</div>`,
-    avaliacao:`<div style="color:var(--muted);font-size:13px;padding:12px 0">â Mensagem com o link do questionÃ¡rio gerada automaticamente.<br><br>Revise o preview ao lado e envie!</div>`,
+    cadastro:`<div style="color:var(--muted);font-size:13px;padding:12px 0">✅ Mensagem gerada automaticamente com o link de avaliação.<br><br>Revise o preview ao lado e envie!</div>`,
+    avaliacao:`<div style="color:var(--muted);font-size:13px;padding:12px 0">✅ Mensagem com o link do questionário gerada automaticamente.<br><br>Revise o preview ao lado e envie!</div>`,
     consulta:`
-      <div class="fg"><label>ð MedicaÃ§Ã£o prescrita</label><input id="wa-med" placeholder="Ex: Semaglutida 0,5mg 1x/semana" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
-      <div class="fg"><label>ð OrientaÃ§Ãµes</label><textarea id="wa-ori" placeholder="Ex: Manter dieta com dÃ©ficit calÃ³rico, beber 2L de Ã¡gua..." oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;min-height:90px;resize:vertical"></textarea></div>
-      <div class="fg"><label>ð PrÃ³xima consulta</label><input id="wa-prox" placeholder="Ex: 15/07/2026 Ã s 14h" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>`,
+      <div class="fg"><label>💊 Medicação prescrita</label><input id="wa-med" placeholder="Ex: Semaglutida 0,5mg 1x/semana" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
+      <div class="fg"><label>📋 Orientações</label><textarea id="wa-ori" placeholder="Ex: Manter dieta com déficit calórico, beber 2L de água..." oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;min-height:90px;resize:vertical"></textarea></div>
+      <div class="fg"><label>📅 Próxima consulta</label><input id="wa-prox" placeholder="Ex: 15/07/2026 às 14h" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>`,
     progresso:`
-      <div class="fg"><label>ð MÃªs na jornada</label><input id="wa-mes" type="number" min="1" max="24" placeholder="Ex: 3" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
-      <div class="fg"><label>ð¬ Mensagem motivacional</label><textarea id="wa-motiv" placeholder="Ex: VocÃª estÃ¡ arrasando! Mais 2kg e chegamos na meta!" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;min-height:80px;resize:vertical">Continue assim! Cada passo conta na sua jornada. ðª</textarea></div>`,
+      <div class="fg"><label>📆 Mês na jornada</label><input id="wa-mes" type="number" min="1" max="24" placeholder="Ex: 3" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
+      <div class="fg"><label>💬 Mensagem motivacional</label><textarea id="wa-motiv" placeholder="Ex: Você está arrasando! Mais 2kg e chegamos na meta!" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;min-height:80px;resize:vertical">Continue assim! Cada passo conta na sua jornada. 💪</textarea></div>`,
     pendencia:`
       <div style="margin-bottom:12px">
-        <div style="font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px">PendÃªncias detectadas automaticamente:</div>
-        ${pends.length?pends.map(p=>`<div style="font-size:12px;background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:6px 10px;margin-bottom:4px">${p}</div>`).join(''):'<div style="font-size:12px;color:var(--muted)">Nenhuma pendÃªncia automÃ¡tica detectada.</div>'}
+        <div style="font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px">Pendências detectadas automaticamente:</div>
+        ${pends.length?pends.map(p=>`<div style="font-size:12px;background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:6px 10px;margin-bottom:4px">${p}</div>`).join(''):'<div style="font-size:12px;color:var(--muted)">Nenhuma pendência automática detectada.</div>'}
       </div>
-      <div class="fg"><label>â PendÃªncia adicional (opcional)</label><input id="wa-pend-extra" placeholder="Ex: Enviar foto da balanÃ§a esta semana" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
-      <div class="fg"><label>â° Prazo para resoluÃ§Ã£o</label><input id="wa-prazo" placeholder="Ex: sexta-feira (26/06)" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>`,
+      <div class="fg"><label>➕ Pendência adicional (opcional)</label><input id="wa-pend-extra" placeholder="Ex: Enviar foto da balança esta semana" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
+      <div class="fg"><label>⏰ Prazo para resolução</label><input id="wa-prazo" placeholder="Ex: sexta-feira (26/06)" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>`,
   };
 
   window._waTemplates=templates;
@@ -1807,11 +1807,11 @@ function vMensagens(ct){
     if(window._waOcSel) render(window._waOcSel);
   };
 
-  // Copiar padrÃ£o
-  document.getElementById('wa-copy').onclick=()=>toast('Selecione uma ocasiÃ£o primeiro');
+  // Copiar padrão
+  document.getElementById('wa-copy').onclick=()=>toast('Selecione uma ocasião primeiro');
 }
 
-// CONFIGURAÃÃES
+// CONFIGURAÇÕES
 function vConfig(ct){
   const url = SYNC.url;
   const key = SYNC.key;
@@ -1819,23 +1819,23 @@ function vConfig(ct){
 
   ct.innerHTML=`
   <div class="config-section">
-    <h3>Status da ConexÃ£o</h3>
+    <h3>Status da Conexão</h3>
     <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#f9fafb;border-radius:7px;margin-bottom:12px">
       <span class="sync-dot ${configured?'sync-ok':'sync-off'}" style="width:12px;height:12px"></span>
-      <span style="font-size:13px">${configured?'Google Sheets configurado':'NÃ£o configurado â dados salvos apenas localmente'}</span>
+      <span style="font-size:13px">${configured?'Google Sheets configurado':'Não configurado — dados salvos apenas localmente'}</span>
     </div>
-    <button class="btn bp bsm" onclick="testConn()">ð Testar conexÃ£o</button>
+    <button class="btn bp bsm" onclick="testConn()">🔌 Testar conexão</button>
     <span id="ping-result" style="font-size:12px;margin-left:10px;color:var(--muted)"></span>
   </div>
 
   <div class="config-section">
     <h3>Como Configurar</h3>
-    <div class="setup-step"><span class="step-num">1</span><div>Abra <a href="https://script.google.com" target="_blank" style="color:var(--accent)">script.google.com</a> â <strong>Novo projeto</strong></div></div>
-    <div class="setup-step"><span class="step-num">2</span><div>Cole o conteÃºdo do arquivo <code>apps-script.gs</code> no editor. Altere o valor de <code>SECRET_KEY</code> para uma senha sua.</div></div>
-    <div class="setup-step"><span class="step-num">3</span><div>Clique em <strong>Implantar â Nova implantaÃ§Ã£o â App da Web</strong><br>
-      Executar como: <strong>Eu</strong> Â· Quem tem acesso: <strong>Qualquer pessoa</strong></div></div>
+    <div class="setup-step"><span class="step-num">1</span><div>Abra <a href="https://script.google.com" target="_blank" style="color:var(--accent)">script.google.com</a> → <strong>Novo projeto</strong></div></div>
+    <div class="setup-step"><span class="step-num">2</span><div>Cole o conteúdo do arquivo <code>apps-script.gs</code> no editor. Altere o valor de <code>SECRET_KEY</code> para uma senha sua.</div></div>
+    <div class="setup-step"><span class="step-num">3</span><div>Clique em <strong>Implantar → Nova implantação → App da Web</strong><br>
+      Executar como: <strong>Eu</strong> · Quem tem acesso: <strong>Qualquer pessoa</strong></div></div>
     <div class="setup-step"><span class="step-num">4</span><div>Copie a <strong>URL do app da Web</strong> gerada e cole abaixo</div></div>
-    <div class="setup-step"><span class="step-num">5</span><div>O sistema passarÃ¡ a salvar automaticamente no Google Sheets a cada alteraÃ§Ã£o</div></div>
+    <div class="setup-step"><span class="step-num">5</span><div>O sistema passará a salvar automaticamente no Google Sheets a cada alteração</div></div>
   </div>
 
   <div class="config-section">
@@ -1849,8 +1849,8 @@ function vConfig(ct){
       <input type="text" id="cfg-key" value="${key}" placeholder="MENOSYS_2025">
     </div>
     <div class="row" style="gap:8px">
-      <button class="btn bp" onclick="saveConfig()">ð¾ Salvar configuraÃ§Ã£o</button>
-      ${configured?`<button class="btn bs" onclick="if(confirm('Remover configuraÃ§Ã£o do Sheets?')){SYNC.url='';SYNC.key='MENOSYS_2025';SYNC.setStatus('off');go('config')}">Remover</button>`:''}
+      <button class="btn bp" onclick="saveConfig()">💾 Salvar configuração</button>
+      ${configured?`<button class="btn bs" onclick="if(confirm('Remover configuração do Sheets?')){SYNC.url='';SYNC.key='MENOSYS_2025';SYNC.setStatus('off');go('config')}">Remover</button>`:''}
     </div>
   </div>
 
@@ -1860,9 +1860,9 @@ function vConfig(ct){
       ${Object.keys(DB.all()).length} paciente(s) no cache local.
     </div>
     <div class="row" style="gap:8px;flex-wrap:wrap">
-      <button class="btn bg bsm" onclick="SYNC.pullAll()">â¬ï¸ Importar tudo do Sheets</button>
-      <button class="btn bs bsm" onclick="exportLocal()">ð¤ Exportar JSON local</button>
-      <button class="btn bs bsm" onclick="importLocal()">ð¥ Importar JSON</button>
+      <button class="btn bg bsm" onclick="SYNC.pullAll()">⬇️ Importar tudo do Sheets</button>
+      <button class="btn bs bsm" onclick="exportLocal()">📤 Exportar JSON local</button>
+      <button class="btn bs bsm" onclick="importLocal()">📥 Importar JSON</button>
     </div>
     <input type="file" id="import-file" accept=".json" class="hidden" onchange="onImport(this)">
   </div>`;
@@ -1871,22 +1871,22 @@ function vConfig(ct){
 function saveConfig(){
   const url = v('cfg-url').trim();
   const key = v('cfg-key').trim();
-  if(!url){ toast('URL obrigatÃ³ria'); return; }
+  if(!url){ toast('URL obrigatória'); return; }
   SYNC.url = url;
   SYNC.key = key || 'MENOSYS_2025';
-  toast('ConfiguraÃ§Ã£o salva! Testando conexÃ£oâ¦');
+  toast('Configuração salva! Testando conexão…');
   testConn();
 }
 
 async function testConn(){
   const result = document.getElementById('ping-result');
-  if(result) result.textContent = 'Testandoâ¦';
-  if(!SYNC.isConfigured()){ if(result) result.textContent='URL nÃ£o configurada'; return; }
+  if(result) result.textContent = 'Testando…';
+  if(!SYNC.isConfigured()){ if(result) result.textContent='URL não configurada'; return; }
   const ok = await SYNC.ping();
-  if(result) result.textContent = ok ? 'â ConexÃ£o OK!' : 'â Falha â verifique a URL e a chave';
+  if(result) result.textContent = ok ? '✅ Conexão OK!' : '❌ Falha — verifique a URL e a chave';
   SYNC.setStatus(ok?'ok':'err');
-  if(ok) toast('â ConexÃ£o com o Sheets estabelecida!');
-  else toast('â Falha na conexÃ£o â verifique URL e chave secreta');
+  if(ok) toast('✅ Conexão com o Sheets estabelecida!');
+  else toast('❌ Falha na conexão — verifique URL e chave secreta');
 }
 
 function exportLocal(){
@@ -1909,18 +1909,18 @@ function onImport(input){
     try {
       const data = JSON.parse(e.target.result);
       const count = Object.keys(data).length;
-      if(!confirm(`Importar ${count} paciente(s)? Dados existentes serÃ£o mesclados.`)) return;
+      if(!confirm(`Importar ${count} paciente(s)? Dados existentes serão mesclados.`)) return;
       const all = DB.all();
       Object.assign(all, data);
       DB.save(all);
       toast(`${count} paciente(s) importado(s)!`);
       go('config');
-    } catch { toast('Arquivo JSON invÃ¡lido'); }
+    } catch { toast('Arquivo JSON inválido'); }
   };
   reader.readAsText(file);
 }
 
-// ââ INIT ââââââââââââââââââââââââââââââââââââââ
+// ── INIT ──────────────────────────────────────
 go('search');
 // Inicializa sync ao carregar
 setTimeout(()=>SYNC.init(), 500);
