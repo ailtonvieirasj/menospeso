@@ -152,13 +152,18 @@
     margin-top:8px;
   }
   .footer-card p{font-size:13px;color:#94a3b8;line-height:1.6;margin-bottom:14px}
+  .footer-btns{display:flex;flex-direction:column;gap:8px}
   .footer-btn{
-    display:inline-block;background:var(--green);
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--green);
     color:#fff;font-size:13px;font-weight:700;
     padding:11px 22px;border-radius:12px;
     cursor:pointer;transition:all .2s;border:none;
+    text-decoration:none;width:100%;
   }
   .footer-btn:hover{background:var(--green-dark)}
+  .footer-btn.secondary{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2)}
+  .footer-btn.secondary:hover{background:rgba(255,255,255,.2)}
 </style>
 </head>
 <body>
@@ -357,7 +362,14 @@
     <!-- FOOTER -->
     <div class="footer-card">
       <p>Dúvidas? Nossa equipe está sempre disponível para te apoiar em cada etapa da jornada.</p>
-      <button class="footer-btn" onclick="alert('Entre em contato via WhatsApp ou na próxima consulta.')">💬 Falar com a equipe</button>
+      <div class="footer-btns">
+        <a class="footer-btn" href="https://www.menospesosaudedigital.com.br" target="_blank">
+          🌐 Acessar o site
+        </a>
+        <a class="footer-btn secondary" href="https://www.instagram.com/menospeso.saudedigital" target="_blank">
+          📷 @menospeso.saudedigital
+        </a>
+      </div>
     </div>
 
   </div><!-- /scroll -->
