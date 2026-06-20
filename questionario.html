@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Avaliação Inicial — menospeso.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f9f7;--card:#fff;--border:#e2e8e2;
+  --text:#0F172A;--muted:#64748b;
+  --accent:#059669;--accent-light:#D1FAE5;--accent-dark:#047857;
+  --warn:#b45309;--warn-light:#fffbeb;
+  --err:#dc2626;
+  --radius:12px;
+}
+html,body{min-height:100vh;background:var(--bg);font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--text)}
+
+/* PROGRESS */
+#progress-wrap{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px 10px}
+.prog-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.prog-logo{font-size:15px;letter-spacing:-0.3px;line-height:1}
+.prog-logo .pl-menos{font-weight:800;color:#0F172A}
+.prog-logo .pl-peso{font-weight:400;color:#0F172A}
+.prog-logo .pl-dot{font-weight:400;color:#059669}
+.prog-step{font-size:12px;color:var(--muted)}
+.prog-bar{height:4px;background:#e2e8e2;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease}
+
+/* CONTAINER */
+#container{max-width:540px;margin:0 auto;padding:80px 16px 40px}
+
+/* STEPS */
+.step{display:none;animation:fadeIn .3s ease}
+.step.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* STEP HEADER */
+.step-ico{font-size:36px;margin-bottom:10px}
+.step-title{font-size:20px;font-weight:700;margin-bottom:6px;line-height:1.2}
+.step-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.5}
+
+/* FIELDS */
+.fg{margin-bottom:18px}
+label.lbl{display:block;font-size:14px;font-weight:500;margin-bottom:6px}
+label.lbl span{color:var(--err);margin-left:2px}
+input[type=text],input[type=tel],input[type=email],input[type=date],input[type=number],textarea,select{
+  width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:10px;
+  font-size:15px;color:var(--text);background:#fff;outline:none;
+  transition:.2s;font-family:inherit;-webkit-appearance:none;appearance:none
+}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7d6b' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;background-size:18px;
+  padding-right:38px;cursor:pointer
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,122,79,.12)}
+textarea{resize:vertical;min-height:80px}
+input::placeholder,textarea::placeholder{color:#b0bdb0}
+
+/* RADIO / CHECK GROUPS */
+.opt-group{display:flex;flex-direction:column;gap:8px}
+.opt-group.horiz{flex-direction:row;flex-wrap:wrap;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;width:0;height:0}
+.opt label{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:14px;transition:.15s;background:#fff;user-select:none;line-height:1.4}
+.opt input:checked + label{border-color:var(--accent);background:var(--accent-light);color:var(--accent-dark);font-weight:500}
+.opt label .opt-ico{font-size:18px;flex-shrink:0}
+.opt.small label{padding:9px 13px;font-size:13px}
+.check-group{display:flex;flex-direction:column;gap:8px}
+.chk{position:relative}
+.chk input{position:absolute;opacity:0;width:0;height:0}
+.chk label{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:14px;transition:.15s;background:#fff;user-select:none;line-height:1.4}
+.chk input:checked + label{border-color:var(--accent);background:var(--accent-light);color:var(--accent-dark)}
+.chk label::before{content:'';width:18px;height:18px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;margin-top:1px;transition:.15s}
+.chk input:checked + label::before{background:var(--accent);border-color:var(--accent);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 7l4 4 6-6' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:12px;background-position:center;background-repeat:no-repeat}
+
+/* SCALE */
+.scale{display:flex;gap:6px}
+.scale .opt{flex:1}
+.scale .opt label{flex-direction:column;text-align:center;padding:10px 4px;font-size:12px;justify-content:center;gap:4px}
+.scale .opt label .num{font-size:18px;font-weight:700}
+
+/* TEXTAREA COUNT */
+.ta-wrap{position:relative}
+.ta-count{position:absolute;bottom:8px;right:10px;font-size:11px;color:var(--muted)}
+
+/* DIVIDER */
+.fg-div{margin:20px 0;border:none;border-top:1px solid var(--border)}
+
+/* NOTE BOX */
+.note{background:var(--accent-light);border:1px solid #a7d7bc;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--accent-dark);margin-bottom:18px;line-height:1.5}
+
+/* CONDITIONAL */
+.cond{display:none}
+.cond.show{display:block}
+
+/* NAVIGATION */
+.nav-btns{display:flex;gap:10px;margin-top:28px}
+.btn-next{flex:1;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:600;cursor:pointer;transition:.15s}
+.btn-next:hover{background:var(--accent-dark)}
+.btn-next:active{transform:scale(.98)}
+.btn-back{background:#f3f5f3;color:var(--muted);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-size:14px;font-weight:500;cursor:pointer;transition:.15s}
+.btn-back:hover{background:#e8ece8}
+
+/* ERROR */
+.field-err{color:var(--err);font-size:12px;margin-top:4px;display:none}
+.has-err input,.has-err select,.has-err textarea{border-color:var(--err)}
+.has-err .field-err{display:block}
+
+/* SUCCESS SCREEN */
+#success{display:none;text-align:center;padding:60px 20px}
+#success .s-ico{font-size:64px;margin-bottom:16px}
+#success h2{font-size:22px;font-weight:700;margin-bottom:8px}
+#success p{font-size:15px;color:var(--muted);line-height:1.6}
+
+/* CPF NOT FOUND WARNING */
+#cpf-warn{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:10px;padding:12px 14px;font-size:13px;color:#92400e;margin-top:8px;display:none}
+
+/* CIDADE AUTOCOMPLETE */
+#cidade-dd{position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid var(--accent);border-top:none;border-radius:0 0 10px 10px;max-height:220px;overflow-y:auto;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.cd-opt{padding:11px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.cd-opt:hover,.cd-opt.sel{background:var(--accent-light)}
+.cd-uf{font-size:11px;font-weight:700;background:#e8f5ee;color:var(--accent);padding:2px 6px;border-radius:4px}
+.cd-loading{padding:12px 14px;font-size:13px;color:var(--muted);font-style:italic}
+
+/* RESPONSIVE */
+@media(min-width:540px){
+  #container{padding:90px 24px 60px}
+  .opt-group.horiz .opt{flex:0 0 calc(50% - 4px)}
+}
+</style>
+</head>
+<body>
+
+<!-- BARRA DE PROGRESSO -->
+<div id="progress-wrap">
+  <div class="prog-header">
+    <div class="prog-logo"><span class="pl-menos">menos</span><span class="pl-peso">peso</span><span class="pl-dot">.</span></div>
+    <div class="prog-step" id="prog-label">Etapa 1 de 8</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:12%"></div></div>
+</div>
+
+<div id="container">
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 1 — IDENTIFICAÇÃO
+  ══════════════════════════════════════════ -->
+  <div class="step active" id="s1">
+    <div class="step-ico">👋</div>
+    <div class="step-title">Olá! Vamos começar.</div>
+    <div class="step-sub">Este questionário nos ajuda a entender melhor a sua saúde antes da consulta. Leva cerca de 10 minutos.</div>
+
+    <div class="fg">
+      <label class="lbl">Seu nome completo <span>*</span></label>
+      <input type="text" id="nome" placeholder="Como você se chama?" autocomplete="name">
+      <div class="field-err" id="err-nome">Por favor, informe seu nome completo.</div>
+    </div>
+    <div class="fg">
+      <label class="lbl">CPF <span>*</span></label>
+      <input type="tel" id="cpf" placeholder="000.000.000-00" oninput="mCPF(this)" maxlength="14" inputmode="numeric">
+      <div id="cpf-warn">⚠️ CPF não encontrado. Verifique se o número está correto ou entre em contato com nossa equipe.</div>
+      <div class="field-err" id="err-cpf">Informe um CPF válido com 11 dígitos.</div>
+    </div>
+    <div class="fg">
+      <label class="lbl">Data de nascimento <span>*</span></label>
+      <input type="date" id="dob">
+      <div class="field-err" id="err-dob">Informe sua data de nascimento.</div>
+    </div>
+    <div class="fg">
+      <label class="lbl">Sexo biológico <span>*</span> <span style="font-weight:400;color:#6b7d6b;font-size:12px">(para fins clínicos)</span></label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="sexo" id="sx-m" value="Masculino"><label for="sx-m">Masculino</label></div>
+        <div class="opt"><input type="radio" name="sexo" id="sx-f" value="Feminino"><label for="sx-f">Feminino</label></div>
+        <div class="opt"><input type="radio" name="sexo" id="sx-i" value="Intersexo"><label for="sx-i">Intersexo</label></div>
+      </div>
+      <div class="field-err" id="err-sexo">Selecione uma opção.</div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Identidade de gênero</label>
+      <select id="genero" onchange="document.getElementById('fg-genero-outro').style.display=this.value==='Outro'?'block':'none'">
+        <option value="">Selecionar</option>
+        <option>Mulher cis</option>
+        <option>Homem cis</option>
+        <option>Mulher trans</option>
+        <option>Homem trans</option>
+        <option>Não-binário(a)</option>
+        <option>Gênero fluido</option>
+        <option>Agênero</option>
+        <option>Prefiro não informar</option>
+        <option>Outro</option>
+      </select>
+      <div id="fg-genero-outro" style="display:none;margin-top:8px">
+        <input type="text" id="genero-outro" placeholder="Como prefere se identificar?">
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Pronomes</label>
+      <select id="pronomes">
+        <option value="">Selecionar</option>
+        <option>Ela/Dela</option>
+        <option>Ele/Dele</option>
+        <option>Eles/Deles (neutro)</option>
+        <option>Prefiro não informar</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label class="lbl">E-mail <span>*</span></label>
+      <input type="email" id="email" placeholder="seu@email.com" autocomplete="email" inputmode="email">
+      <div class="field-err" id="err-email">Informe um e-mail válido.</div>
+    </div>
+    <div class="fg">
+      <label class="lbl">WhatsApp <span>*</span></label>
+      <input type="tel" id="whats" placeholder="(00) 90000-0000" inputmode="numeric">
+      <div class="field-err" id="err-whats">Informe seu WhatsApp.</div>
+    </div>
+    <div class="fg">
+      <label class="lbl">Cidade</label>
+      <input type="text" id="cidade" placeholder="Sua cidade" autocomplete="off">
+    </div>
+    <div class="fg">
+      <label class="lbl">Estado (UF)</label>
+      <select id="estado-uf">
+        <option value="">Selecionar</option>
+        <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+        <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+        <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+        <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+        <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+        <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+        <option>SP</option><option>SE</option><option>TO</option>
+      </select>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-next" onclick="next(1)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 2 — QUEIXA E OBJETIVO
+  ══════════════════════════════════════════ -->
+  <div class="step" id="s2">
+    <div class="step-ico">🎯</div>
+    <div class="step-title">O que te trouxe até aqui?</div>
+    <div class="step-sub">Conte um pouco sobre o que motivou você a buscar o programa.</div>
+
+    <div class="fg">
+      <label class="lbl">Qual é sua principal queixa ou dificuldade com o peso? <span>*</span></label>
+      <div class="ta-wrap">
+        <textarea id="queixa" placeholder="Ex: Já tentei várias dietas, mas não consigo manter. Tenho muita fome à noite..." maxlength="500" oninput="updCount(this,'qc')"></textarea>
+        <div class="ta-count" id="qc">0/500</div>
+      </div>
+      <div class="field-err" id="err-queixa">Conte um pouco sobre sua queixa.</div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">O que você <strong>mais</strong> espera alcançar com o programa? <span>*</span></label>
+      <div class="opt-group">
+        <div class="opt"><input type="radio" name="objetivo" id="ob1" value="Emagrecer e manter o peso"><label for="ob1"><span class="opt-ico">⚖️</span>Emagrecer e manter o peso</label></div>
+        <div class="opt"><input type="radio" name="objetivo" id="ob2" value="Melhorar saúde e exames"><label for="ob2"><span class="opt-ico">❤️</span>Melhorar saúde e exames</label></div>
+        <div class="opt"><input type="radio" name="objetivo" id="ob3" value="Ter mais energia e disposição"><label for="ob3"><span class="opt-ico">⚡</span>Ter mais energia e disposição</label></div>
+        <div class="opt"><input type="radio" name="objetivo" id="ob4" value="Melhorar autoestima e bem-estar"><label for="ob4"><span class="opt-ico">🌟</span>Melhorar autoestima e bem-estar</label></div>
+        <div class="opt"><input type="radio" name="objetivo" id="ob5" value="Controlar comorbidade (DM2, HAS, etc.)"><label for="ob5"><span class="opt-ico">💊</span>Controlar comorbidade (DM2, HAS etc.)</label></div>
+        <div class="opt"><input type="radio" name="objetivo" id="ob6" value="Outros"><label for="ob6"><span class="opt-ico">✏️</span>Outros</label></div>
+      </div>
+      <div class="field-err" id="err-objetivo">Selecione seu principal objetivo.</div>
+    </div>
+
+    <div class="fg" id="fg-ob-outro" style="display:none">
+      <label class="lbl">Descreva seu objetivo</label>
+      <input type="text" id="ob-outro" placeholder="Conta pra gente...">
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Há quanto tempo você enfrenta esse problema?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="tempo" id="t1" value="Menos de 1 ano"><label for="t1">Menos de 1 ano</label></div>
+        <div class="opt small"><input type="radio" name="tempo" id="t2" value="1 a 3 anos"><label for="t2">1 a 3 anos</label></div>
+        <div class="opt small"><input type="radio" name="tempo" id="t3" value="3 a 10 anos"><label for="t3">3 a 10 anos</label></div>
+        <div class="opt small"><input type="radio" name="tempo" id="t4" value="Mais de 10 anos"><label for="t4">Mais de 10 anos</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você já tentou emagrecer antes?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="tentativas" id="ten1" value="Não"><label for="ten1">Nunca tentei</label></div>
+        <div class="opt"><input type="radio" name="tentativas" id="ten2" value="Sim, sem sucesso"><label for="ten2">Tentei, sem sucesso</label></div>
+        <div class="opt"><input type="radio" name="tentativas" id="ten3" value="Sim, emagreci mas voltei"><label for="ten3">Emagreci, mas voltei</label></div>
+        <div class="opt"><input type="radio" name="tentativas" id="ten4" value="Sim, várias vezes — efeito sanfona"><label for="ten4">Várias vezes — efeito sanfona</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Peso atual (kg)</label>
+      <input type="number" id="peso-at" placeholder="ex: 92" step="0.1" inputmode="decimal">
+    </div>
+    <div class="fg">
+      <label class="lbl">Altura (cm)</label>
+      <input type="number" id="altura" placeholder="ex: 168" inputmode="numeric">
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="back(2)">←</button>
+      <button class="btn-next" onclick="next(2)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 3 — HISTÓRICO MÉDICO
+  ══════════════════════════════════════════ -->
+  <div class="step" id="s3">
+    <div class="step-ico">🏥</div>
+    <div class="step-title">Histórico de saúde</div>
+    <div class="step-sub">Essas informações são confidenciais e ajudam o médico a cuidar melhor de você.</div>
+
+    <div class="fg">
+      <label class="lbl">Você tem alguma doença diagnosticada?</label>
+      <div class="check-group" id="doencas-lista">
+        <div class="chk"><input type="checkbox" id="d1" value="Diabetes tipo 2 (DM2)"><label for="d1">Diabetes tipo 2 (DM2)</label></div>
+        <div class="chk"><input type="checkbox" id="d2" value="Pré-diabetes"><label for="d2">Pré-diabetes</label></div>
+        <div class="chk"><input type="checkbox" id="d3" value="Hipertensão (HAS)"><label for="d3">Hipertensão (pressão alta)</label></div>
+        <div class="chk"><input type="checkbox" id="d4" value="Dislipidemia (colesterol/triglicerídeos alterados)"><label for="d4">Colesterol ou triglicerídeos alterados</label></div>
+        <div class="chk"><input type="checkbox" id="d5" value="Hipotireoidismo"><label for="d5">Hipotireoidismo</label></div>
+        <div class="chk"><input type="checkbox" id="d6" value="Síndrome dos ovários policísticos (SOP)"><label for="d6">Síndrome dos ovários policísticos (SOP)</label></div>
+        <div class="chk"><input type="checkbox" id="d7" value="Apneia do sono"><label for="d7">Apneia do sono</label></div>
+        <div class="chk"><input type="checkbox" id="d8" value="Depressão"><label for="d8">Depressão</label></div>
+        <div class="chk"><input type="checkbox" id="d9" value="Ansiedade"><label for="d9">Ansiedade</label></div>
+        <div class="chk"><input type="checkbox" id="d10" value="Outra doença"><label for="d10">Outra — vou descrever abaixo</label></div>
+        <div class="chk"><input type="checkbox" id="d0" value="Nenhuma"><label for="d0">Nenhuma doença</label></div>
+      </div>
+    </div>
+
+    <div class="fg" id="fg-outra-doenca" style="display:none">
+      <label class="lbl">Qual outra doença?</label>
+      <input type="text" id="outra-doenca" placeholder="Descreva...">
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você já fez alguma cirurgia?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="cirurgia" id="ci1" value="Não"><label for="ci1">Não</label></div>
+        <div class="opt"><input type="radio" name="cirurgia" id="ci2" value="Sim"><label for="ci2">Sim</label></div>
+      </div>
+    </div>
+    <div class="fg cond" id="fg-cirurgia">
+      <label class="lbl">Qual cirurgia?</label>
+      <input type="text" id="cirurgias" placeholder="Ex: apendicectomia, bariátrica...">
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Tem alguma alergia conhecida?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="alergia" id="al1" value="Não"><label for="al1">Não</label></div>
+        <div class="opt"><input type="radio" name="alergia" id="al2" value="Sim"><label for="al2">Sim</label></div>
+      </div>
+    </div>
+    <div class="fg cond" id="fg-alergia">
+      <label class="lbl">Quais alergias?</label>
+      <input type="text" id="alergias" placeholder="Ex: dipirona, penicilina, camarão...">
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Usa algum medicamento regularmente?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="usa-med" id="um1" value="Não"><label for="um1">Não</label></div>
+        <div class="opt"><input type="radio" name="usa-med" id="um2" value="Sim"><label for="um2">Sim</label></div>
+      </div>
+    </div>
+    <div class="fg cond" id="fg-medicamentos">
+      <label class="lbl">Quais medicamentos?</label>
+      <textarea id="medicamentos" placeholder="Nome do remédio e para que usa. Ex: Metformina 500mg — diabetes"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Histórico familiar</label>
+      <div class="step-sub" style="margin-bottom:10px;font-size:13px">Algum familiar próximo tem:</div>
+      <div class="check-group">
+        <div class="chk"><input type="checkbox" id="hf1" value="Obesidade na família"><label for="hf1">Obesidade</label></div>
+        <div class="chk"><input type="checkbox" id="hf2" value="Diabetes na família"><label for="hf2">Diabetes</label></div>
+        <div class="chk"><input type="checkbox" id="hf3" value="Hipertensão na família"><label for="hf3">Hipertensão</label></div>
+        <div class="chk"><input type="checkbox" id="hf4" value="Doença cardíaca na família"><label for="hf4">Doença cardíaca</label></div>
+        <div class="chk"><input type="checkbox" id="hf0" value="Nenhum antecedente familiar relevante"><label for="hf0">Nenhum relevante</label></div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="back(3)">←</button>
+      <button class="btn-next" onclick="next(3)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 4 — HÁBITOS
+  ══════════════════════════════════════════ -->
+  <div class="step" id="s4">
+    <div class="step-ico">🚬</div>
+    <div class="step-title">Hábitos de vida</div>
+    <div class="step-sub">Sem julgamentos — queremos apenas entender melhor sua rotina.</div>
+
+    <div class="fg">
+      <label class="lbl">Você fuma? <span>*</span></label>
+      <div class="opt-group">
+        <div class="opt"><input type="radio" name="tabagismo" id="tab1" value="Nunca fumou"><label for="tab1"><span class="opt-ico">✅</span>Nunca fumei</label></div>
+        <div class="opt"><input type="radio" name="tabagismo" id="tab2" value="Ex-tabagista"><label for="tab2"><span class="opt-ico">🕐</span>Fumei, mas parei</label></div>
+        <div class="opt"><input type="radio" name="tabagismo" id="tab3" value="Fumante atual"><label for="tab3"><span class="opt-ico">🚬</span>Fumo atualmente</label></div>
+      </div>
+      <div class="field-err" id="err-tab">Selecione uma opção.</div>
+    </div>
+
+    <div class="fg cond" id="fg-cigdiario">
+      <label class="lbl">Quantos cigarros por dia?</label>
+      <input type="number" id="cigdiario" placeholder="Quantidade" inputmode="numeric">
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você consome bebidas alcoólicas? <span>*</span></label>
+      <div class="opt-group">
+        <div class="opt"><input type="radio" name="alcool" id="alc1" value="Não consome"><label for="alc1"><span class="opt-ico">🚫</span>Não consumo</label></div>
+        <div class="opt"><input type="radio" name="alcool" id="alc2" value="Raramente (ocasiões especiais)"><label for="alc2"><span class="opt-ico">🥂</span>Raramente — ocasiões especiais</label></div>
+        <div class="opt"><input type="radio" name="alcool" id="alc3" value="Socialmente (fins de semana)"><label for="alc3"><span class="opt-ico">🍺</span>Socialmente — fins de semana</label></div>
+        <div class="opt"><input type="radio" name="alcool" id="alc4" value="Regularmente (todo dia ou quase)"><label for="alc4"><span class="opt-ico">⚠️</span>Regularmente — todo dia ou quase</label></div>
+      </div>
+      <div class="field-err" id="err-alc">Selecione uma opção.</div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você usa cannabis?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="cannabis" id="can1" value="Não"><label for="can1">Não</label></div>
+        <div class="opt small"><input type="radio" name="cannabis" id="can2" value="Eventualmente"><label for="can2">Eventualmente</label></div>
+        <div class="opt small"><input type="radio" name="cannabis" id="can3" value="Regularmente"><label for="can3">Regularmente</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Usa outras substâncias? (opcional)</label>
+      <input type="text" id="outras-drogas" placeholder="Se preferir não informar, deixe em branco">
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="back(4)">←</button>
+      <button class="btn-next" onclick="next(4)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 5 — COMPORTAMENTO ALIMENTAR
+  ══════════════════════════════════════════ -->
+  <div class="step" id="s5">
+    <div class="step-ico">🍽️</div>
+    <div class="step-title">Como você se alimenta?</div>
+    <div class="step-sub">Não existe resposta certa ou errada — seja honesto(a) para que possamos ajudar melhor.</div>
+
+    <div class="fg">
+      <label class="lbl">Quantas refeições você faz por dia, em média?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="refeicoes" id="rf1" value="1 a 2"><label for="rf1">1 a 2</label></div>
+        <div class="opt small"><input type="radio" name="refeicoes" id="rf2" value="3"><label for="rf2">3</label></div>
+        <div class="opt small"><input type="radio" name="refeicoes" id="rf3" value="4 a 5"><label for="rf3">4 a 5</label></div>
+        <div class="opt small"><input type="radio" name="refeicoes" id="rf4" value="6 ou mais"><label for="rf4">6 ou mais</label></div>
+        <div class="opt small"><input type="radio" name="refeicoes" id="rf5" value="Como sem horário fixo"><label for="rf5">Sem horário fixo</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Como você se considera quanto à velocidade de comer?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="velocidade" id="vel1" value="Devagar"><label for="vel1">Devagar 🐢</label></div>
+        <div class="opt"><input type="radio" name="velocidade" id="vel2" value="Normal"><label for="vel2">Normal</label></div>
+        <div class="opt"><input type="radio" name="velocidade" id="vel3" value="Rápido"><label for="vel3">Rápido 🐇</label></div>
+        <div class="opt"><input type="radio" name="velocidade" id="vel4" value="Muito rápido"><label for="vel4">Muito rápido</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Com que frequência você come na frente de tela (TV, celular, computador)?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="tela" id="tel1" value="Nunca"><label for="tel1">Nunca</label></div>
+        <div class="opt small"><input type="radio" name="tela" id="tel2" value="Às vezes"><label for="tel2">Às vezes</label></div>
+        <div class="opt small"><input type="radio" name="tela" id="tel3" value="Quase sempre"><label for="tel3">Quase sempre</label></div>
+        <div class="opt small"><input type="radio" name="tela" id="tel4" value="Sempre"><label for="tel4">Sempre</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você costuma comer por emoção (ansiedade, estresse, tristeza)?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="emocao" id="em1" value="Nunca"><label for="em1">Nunca</label></div>
+        <div class="opt small"><input type="radio" name="emocao" id="em2" value="Às vezes"><label for="em2">Às vezes</label></div>
+        <div class="opt small"><input type="radio" name="emocao" id="em3" value="Frequentemente"><label for="em3">Frequente</label></div>
+        <div class="opt small"><input type="radio" name="emocao" id="em4" value="Sempre"><label for="em4">Sempre</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você come fora de hora (beliscar entre refeições)?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="belisco" id="bel1" value="Nunca"><label for="bel1">Nunca</label></div>
+        <div class="opt small"><input type="radio" name="belisco" id="bel2" value="Às vezes"><label for="bel2">Às vezes</label></div>
+        <div class="opt small"><input type="radio" name="belisco" id="bel3" value="Frequentemente"><label for="bel3">Frequente</label></div>
+        <div class="opt small"><input type="radio" name="belisco" id="bel4" value="Sempre"><label for="bel4">Sempre</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Com que frequência você consome doces ou ultraprocessados (biscoito, salgadinho, refrigerante)?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="ultraproc" id="up1" value="Raramente"><label for="up1">Raramente</label></div>
+        <div class="opt small"><input type="radio" name="ultraproc" id="up2" value="1 a 2x/semana"><label for="up2">1–2x/semana</label></div>
+        <div class="opt small"><input type="radio" name="ultraproc" id="up3" value="Quase todo dia"><label for="up3">Quase todo dia</label></div>
+        <div class="opt small"><input type="radio" name="ultraproc" id="up4" value="Todo dia"><label for="up4">Todo dia</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Quantos copos de água você bebe por dia?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="agua" id="ag1" value="Menos de 4 copos"><label for="ag1">Menos de 4</label></div>
+        <div class="opt small"><input type="radio" name="agua" id="ag2" value="4 a 6 copos"><label for="ag2">4 a 6</label></div>
+        <div class="opt small"><input type="radio" name="agua" id="ag3" value="7 a 8 copos"><label for="ag3">7 a 8</label></div>
+        <div class="opt small"><input type="radio" name="agua" id="ag4" value="Mais de 8 copos"><label for="ag4">Mais de 8</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você segue alguma dieta ou padrão alimentar específico?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="dieta" id="dt1" value="Nenhum"><label for="dt1">Nenhum</label></div>
+        <div class="opt small"><input type="radio" name="dieta" id="dt2" value="Vegetariano"><label for="dt2">Vegetariano</label></div>
+        <div class="opt small"><input type="radio" name="dieta" id="dt3" value="Vegano"><label for="dt3">Vegano</label></div>
+        <div class="opt small"><input type="radio" name="dieta" id="dt4" value="Low carb / cetogênica"><label for="dt4">Low carb / keto</label></div>
+        <div class="opt small"><input type="radio" name="dieta" id="dt5" value="Sem glúten"><label for="dt5">Sem glúten</label></div>
+        <div class="opt small"><input type="radio" name="dieta" id="dt6" value="Sem lactose"><label for="dt6">Sem lactose</label></div>
+        <div class="opt small"><input type="radio" name="dieta" id="dt7" value="Outra"><label for="dt7">Outra</label></div>
+      </div>
+      <div id="fg-dieta-outra" style="display:none;margin-top:8px">
+        <input type="text" id="dieta-outra" placeholder="Qual dieta você segue?">
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Algo mais sobre sua alimentação que queira compartilhar?</label>
+      <div class="ta-wrap">
+        <textarea id="obs-alimentar" placeholder="Ex: não consigo comer de manhã, tenho compulsão à noite..." maxlength="400" oninput="updCount(this,'ac')"></textarea>
+        <div class="ta-count" id="ac">0/400</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="back(5)">←</button>
+      <button class="btn-next" onclick="next(5)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 6 — ATIVIDADE FÍSICA
+  ══════════════════════════════════════════ -->
+  <div class="step" id="s6">
+    <div class="step-ico">🏃</div>
+    <div class="step-title">Atividade física</div>
+    <div class="step-sub">Toda movimentação conta — não precisa ser academia.</div>
+
+    <div class="fg">
+      <label class="lbl">Você pratica alguma atividade física regularmente? <span>*</span></label>
+      <div class="opt-group">
+        <div class="opt"><input type="radio" name="ativo" id="at1" value="Não pratico"><label for="at1"><span class="opt-ico">🛋️</span>Não pratico nenhuma atividade</label></div>
+        <div class="opt"><input type="radio" name="ativo" id="at2" value="Sim, regularmente"><label for="at2"><span class="opt-ico">💪</span>Sim, pratico regularmente</label></div>
+        <div class="opt"><input type="radio" name="ativo" id="at3" value="Às vezes, sem regularidade"><label for="at3"><span class="opt-ico">🔄</span>Às vezes, sem regularidade</label></div>
+        <div class="opt"><input type="radio" name="ativo" id="at4" value="Parei recentemente"><label for="at4"><span class="opt-ico">⏸️</span>Parei recentemente</label></div>
+      </div>
+      <div class="field-err" id="err-ativo">Selecione uma opção.</div>
+    </div>
+
+    <div class="fg cond" id="fg-ativ-tipo">
+      <label class="lbl">Qual tipo de atividade?</label>
+      <div class="check-group">
+        <div class="chk"><input type="checkbox" id="at-c1" value="Caminhada"><label for="at-c1">🚶 Caminhada</label></div>
+        <div class="chk"><input type="checkbox" id="at-c2" value="Corrida"><label for="at-c2">🏃 Corrida</label></div>
+        <div class="chk"><input type="checkbox" id="at-c3" value="Musculação"><label for="at-c3">🏋️ Musculação / academia</label></div>
+        <div class="chk"><input type="checkbox" id="at-c4" value="Natação"><label for="at-c4">🏊 Natação</label></div>
+        <div class="chk"><input type="checkbox" id="at-c5" value="Ciclismo"><label for="at-c5">🚴 Ciclismo</label></div>
+        <div class="chk"><input type="checkbox" id="at-c6" value="Yoga/pilates"><label for="at-c6">🧘 Yoga / Pilates</label></div>
+        <div class="chk"><input type="checkbox" id="at-c7" value="Esporte coletivo"><label for="at-c7">⚽ Esporte coletivo</label></div>
+        <div class="chk"><input type="checkbox" id="at-c8" value="Outra atividade"><label for="at-c8">✏️ Outra</label></div>
+      </div>
+    </div>
+
+    <div class="fg cond" id="fg-ativ-freq">
+      <label class="lbl">Com que frequência?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="freq-ativ" id="fa1" value="1x/semana"><label for="fa1">1x/semana</label></div>
+        <div class="opt small"><input type="radio" name="freq-ativ" id="fa2" value="2 a 3x/semana"><label for="fa2">2–3x/semana</label></div>
+        <div class="opt small"><input type="radio" name="freq-ativ" id="fa3" value="4 a 5x/semana"><label for="fa3">4–5x/semana</label></div>
+        <div class="opt small"><input type="radio" name="freq-ativ" id="fa4" value="Todo dia"><label for="fa4">Todo dia</label></div>
+      </div>
+    </div>
+
+    <div class="fg cond" id="fg-ativ-parou">
+      <label class="lbl">Há quanto tempo parou?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="parou" id="par1" value="Menos de 3 meses"><label for="par1">Menos de 3 meses</label></div>
+        <div class="opt small"><input type="radio" name="parou" id="par2" value="3 a 12 meses"><label for="par2">3 a 12 meses</label></div>
+        <div class="opt small"><input type="radio" name="parou" id="par3" value="Mais de 1 ano"><label for="par3">Mais de 1 ano</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você tem alguma limitação física que dificulta se exercitar?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="limitacao" id="lim1" value="Não"><label for="lim1">Não</label></div>
+        <div class="opt"><input type="radio" name="limitacao" id="lim2" value="Sim"><label for="lim2">Sim</label></div>
+      </div>
+    </div>
+    <div class="fg cond" id="fg-limitacao">
+      <label class="lbl">Qual limitação?</label>
+      <input type="text" id="limitacao-desc" placeholder="Ex: dor no joelho, hérnia de disco...">
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="back(6)">←</button>
+      <button class="btn-next" onclick="next(6)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 7 — SONO
+  ══════════════════════════════════════════ -->
+  <div class="step" id="s7">
+    <div class="step-ico">😴</div>
+    <div class="step-title">Como você dorme?</div>
+    <div class="step-sub">O sono tem impacto direto no peso e no metabolismo.</div>
+
+    <div class="fg">
+      <label class="lbl">Quantas horas você dorme por noite, em média?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="h-sono" id="hs1" value="Menos de 5h"><label for="hs1">Menos de 5h</label></div>
+        <div class="opt small"><input type="radio" name="h-sono" id="hs2" value="5 a 6h"><label for="hs2">5 a 6h</label></div>
+        <div class="opt small"><input type="radio" name="h-sono" id="hs3" value="6 a 7h"><label for="hs3">6 a 7h</label></div>
+        <div class="opt small"><input type="radio" name="h-sono" id="hs4" value="7 a 8h"><label for="hs4">7 a 8h</label></div>
+        <div class="opt small"><input type="radio" name="h-sono" id="hs5" value="Mais de 8h"><label for="hs5">Mais de 8h</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Como você avalia a qualidade do seu sono?</label>
+      <div class="scale">
+        <div class="opt"><input type="radio" name="qual-sono" id="qs1" value="1"><label for="qs1"><span class="num">1</span>Péssimo</label></div>
+        <div class="opt"><input type="radio" name="qual-sono" id="qs2" value="2"><label for="qs2"><span class="num">2</span></label></div>
+        <div class="opt"><input type="radio" name="qual-sono" id="qs3" value="3"><label for="qs3"><span class="num">3</span>Regular</label></div>
+        <div class="opt"><input type="radio" name="qual-sono" id="qs4" value="4"><label for="qs4"><span class="num">4</span></label></div>
+        <div class="opt"><input type="radio" name="qual-sono" id="qs5" value="5"><label for="qs5"><span class="num">5</span>Ótimo</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você tem dificuldade para:</label>
+      <div class="check-group">
+        <div class="chk"><input type="checkbox" id="son1" value="Dificuldade para pegar no sono"><label for="son1">Pegar no sono</label></div>
+        <div class="chk"><input type="checkbox" id="son2" value="Acorda várias vezes durante a noite"><label for="son2">Manter o sono — acorda várias vezes</label></div>
+        <div class="chk"><input type="checkbox" id="son3" value="Acorda muito cedo e não consegue voltar a dormir"><label for="son3">Acorda muito cedo e não dorme mais</label></div>
+        <div class="chk"><input type="checkbox" id="son4" value="Sonolência excessiva durante o dia"><label for="son4">Sonolência excessiva durante o dia</label></div>
+        <div class="chk"><input type="checkbox" id="son0" value="Não tenho dificuldades com o sono"><label for="son0">Não tenho dificuldades</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você ronca ou te disseram que para de respirar dormindo?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="ronco" id="ron1" value="Não"><label for="ron1">Não</label></div>
+        <div class="opt"><input type="radio" name="ronco" id="ron2" value="Ronco"><label for="ron2">Ronco</label></div>
+        <div class="opt"><input type="radio" name="ronco" id="ron3" value="Ronco forte e paro de respirar"><label for="ron3">Ronco forte e paro de respirar</label></div>
+        <div class="opt"><input type="radio" name="ronco" id="ron4" value="Não sei"><label for="ron4">Não sei</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Você usa tela (celular, TV) antes de dormir?</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="tela-noite" id="tn1" value="Não"><label for="tn1">Não</label></div>
+        <div class="opt small"><input type="radio" name="tela-noite" id="tn2" value="Às vezes"><label for="tn2">Às vezes</label></div>
+        <div class="opt small"><input type="radio" name="tela-noite" id="tn3" value="Sempre"><label for="tn3">Sempre</label></div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="back(7)">←</button>
+      <button class="btn-next" onclick="next(7)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 8 — SAÚDE DA MULHER (condicional)
+  ══════════════════════════════════════════ -->
+  <div class="step" id="s8">
+    <div class="step-ico">🌸</div>
+    <div class="step-title">Saúde da mulher</div>
+    <div class="step-sub">Esta seção é importante para o cuidado adequado. Suas respostas são confidenciais.</div>
+
+    <div class="fg">
+      <label class="lbl">Você está grávida ou pode estar grávida atualmente?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="gestacao" id="ges1" value="Não"><label for="ges1">Não</label></div>
+        <div class="opt"><input type="radio" name="gestacao" id="ges2" value="Sim"><label for="ges2">Sim</label></div>
+        <div class="opt"><input type="radio" name="gestacao" id="ges3" value="Talvez, não sei"><label for="ges3">Talvez</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Data aproximada da última menstruação</label>
+      <input type="date" id="mens">
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Seu ciclo menstrual é:</label>
+      <div class="opt-group horiz">
+        <div class="opt small"><input type="radio" name="ciclo" id="cic1" value="Regular"><label for="cic1">Regular</label></div>
+        <div class="opt small"><input type="radio" name="ciclo" id="cic2" value="Irregular"><label for="cic2">Irregular</label></div>
+        <div class="opt small"><input type="radio" name="ciclo" id="cic3" value="Ausente (menopausa ou outra causa)"><label for="cic3">Ausente</label></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Usa algum método contraceptivo?</label>
+      <div class="opt-group">
+        <div class="opt"><input type="radio" name="contraceptivo" id="con1" value="Não usa"><label for="con1">Não uso</label></div>
+        <div class="opt"><input type="radio" name="contraceptivo" id="con2" value="Anticoncepcional oral (pílula)"><label for="con2">Pílula anticoncepcional</label></div>
+        <div class="opt"><input type="radio" name="contraceptivo" id="con3" value="DIU"><label for="con3">DIU</label></div>
+        <div class="opt"><input type="radio" name="contraceptivo" id="con4" value="Implante"><label for="con4">Implante</label></div>
+        <div class="opt"><input type="radio" name="contraceptivo" id="con5" value="Injeção"><label for="con5">Injeção</label></div>
+        <div class="opt"><input type="radio" name="contraceptivo" id="con6" value="Preservativo"><label for="con6">Preservativo</label></div>
+        <div class="opt"><input type="radio" name="contraceptivo" id="con7" value="Outro método"><label for="con7">Outro</label></div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="back(8)">←</button>
+      <button class="btn-next" onclick="next(8)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ETAPA 9 — CONFIRMAÇÃO / ENVIO
+  ══════════════════════════════════════════ -->
+  <div class="step" id="s9">
+    <div class="step-ico">✅</div>
+    <div class="step-title">Quase lá!</div>
+    <div class="step-sub">Revise suas informações e confirme o envio.</div>
+
+    <div id="resumo-final" style="margin-bottom:24px"></div>
+
+    <div class="fg">
+      <label class="lbl">Quer adicionar alguma observação geral para o médico?</label>
+      <div class="ta-wrap">
+        <textarea id="obs-geral" placeholder="Algo que não foi perguntado mas que considera importante compartilhar..." maxlength="500" oninput="updCount(this,'gc')"></textarea>
+        <div class="ta-count" id="gc">0/500</div>
+      </div>
+    </div>
+
+    <div class="note">
+      🔒 Seus dados são utilizados exclusivamente pela equipe clínica do Menos Peso para fins de atendimento médico. Tudo que você compartilhou é confidencial.
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="back(9)">←</button>
+      <button class="btn-next" style="background:#16a34a" onclick="enviar()">✓ Enviar Questionário</button>
+    </div>
+  </div>
+
+  <!-- TELA DE SUCESSO -->
+  <div id="success">
+    <div class="s-ico">🎉</div>
+    <h2>Questionário enviado!</h2>
+    <p style="margin-top:8px">Obrigado por preencher. Sua equipe médica já tem acesso às suas informações e estará preparada para um atendimento muito mais completo.</p>
+    <p style="margin-top:16px;font-size:14px">Nos vemos na consulta! ⚖️</p>
+    <div style="margin-top:28px;padding:14px 16px;background:#f0fdf4;border-radius:10px;font-size:13px;color:#166534">
+      📅 Você receberá um lembrete da sua consulta por e-mail e WhatsApp.
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════════════
+// QUESTIONÁRIO INICIAL — Menos Peso
+// Integra com o localStorage do sistema principal
+// ═══════════════════════════════════════════════
+
+// ── CONFIG ────────────────────────────────────
+const DB_KEY = 'menosys_v1';
+
+// ── IBGE AUTOCOMPLETE ─────────────────────────
+const IBGE = {
+  _data: null,
+  async load(){
+    if(this._data) return this._data;
+    try {
+      const r = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/municipios?orderBy=nome');
+      const raw = await r.json();
+      this._data = raw.map(m=>({
+        nome: m.nome,
+        uf:   m.microrregiao.mesorregiao.UF.sigla,
+        estado: m.microrregiao.mesorregiao.UF.nome
+      }));
+    } catch { this._data = []; }
+    return this._data;
+  },
+  norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); },
+  search(q, max=8){
+    if(!this._data||!q) return [];
+    const ql=this.norm(q);
+    return this._data.filter(m=>this.norm(m.nome).startsWith(ql)||this.norm(m.nome).includes(ql)).slice(0,max);
+  },
+  mount(){
+    const inp=document.getElementById('cidade');
+    const dd=document.getElementById('cidade-dd');
+    const ufInp=document.getElementById('estado-uf');
+    if(!inp||!dd) return;
+    let activeIdx=-1;
+
+    this.load(); // preload
+
+    inp.addEventListener('input',()=>{
+      const q=inp.value.trim();
+      activeIdx=-1;
+      if(q.length<2){ dd.innerHTML=''; return; }
+      if(!this._data){ dd.innerHTML='<div class="cd-loading">Carregando cidades...</div>'; this.load().then(()=>inp.dispatchEvent(new Event('input'))); return; }
+      const res=this.search(q);
+      if(!res.length){ dd.innerHTML='<div class="cd-loading">Nenhuma cidade encontrada</div>'; return; }
+      dd.innerHTML=res.map((m,i)=>
+        `<div class="cd-opt" data-nome="${m.nome}" data-uf="${m.uf}" data-estado="${m.estado}">
+          <span>${m.nome}</span><span class="cd-uf">${m.uf}</span>
+        </div>`
+      ).join('');
+      dd.querySelectorAll('.cd-opt').forEach(el=>{
+        el.addEventListener('mousedown',e=>{
+          e.preventDefault();
+          inp.value=el.dataset.nome;
+          if(ufInp) ufInp.value=el.dataset.estado+' ('+el.dataset.uf+')';
+          dd.innerHTML='';
+        });
+      });
+    });
+
+    inp.addEventListener('keydown',e=>{
+      const opts=dd.querySelectorAll('.cd-opt');
+      if(!opts.length) return;
+      if(e.key==='ArrowDown'){e.preventDefault();activeIdx=Math.min(activeIdx+1,opts.length-1);opts.forEach((o,i)=>o.classList.toggle('sel',i===activeIdx));}
+      if(e.key==='ArrowUp'){e.preventDefault();activeIdx=Math.max(activeIdx-1,0);opts.forEach((o,i)=>o.classList.toggle('sel',i===activeIdx));}
+      if(e.key==='Enter'&&activeIdx>=0){e.preventDefault();opts[activeIdx].dispatchEvent(new MouseEvent('mousedown'));}
+      if(e.key==='Escape'){dd.innerHTML='';activeIdx=-1;}
+    });
+
+    inp.addEventListener('blur',()=>setTimeout(()=>dd.innerHTML='',150));
+  }
+};
+let currentStep = 1;
+let totalSteps  = 8; // ajustado se sexo = masculino → pula s8
+
+// ── UTILS ─────────────────────────────────────
+function norm(cpf){ return String(cpf).replace(/\D/g,''); }
+function mCPF(inp){
+  let v=inp.value.replace(/\D/g,'').slice(0,11);
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})\.(\d{3})(\d)/,'$1.$2.$3');
+  v=v.replace(/\.(\d{3})\.(\d{3})(\d)/,(m,a,b,c)=>'.'+a+'.'+b+'-'+c);
+  inp.value=v;
+}
+function updCount(el,cntId){
+  document.getElementById(cntId).textContent=el.value.length+'/'+el.maxLength;
+}
+function g(id){ return document.getElementById(id); }
+function val(id){ const e=g(id); return e?e.value.trim():''; }
+function radio(name){ const e=document.querySelector(`input[name="${name}"]:checked`); return e?e.value:''; }
+function checks(groupId){
+  return Array.from(document.querySelectorAll(`#${groupId} input:checked`)).map(e=>e.value);
+}
+function checksList(prefix,nums){
+  return nums.map(n=>g(prefix+n)).filter(e=>e&&e.checked).map(e=>e.value);
+}
+
+// ── CONDITIONAL FIELDS ────────────────────────
+function setupConditionals(){
+  // Objetivo outro
+  document.querySelectorAll('input[name="objetivo"]').forEach(r=>{
+    r.addEventListener('change',()=>{
+      g('fg-ob-outro').style.display = r.value==='Outros'&&r.checked?'block':'none';
+    });
+  });
+  // Dieta outra
+  document.querySelectorAll('input[name="dieta"]').forEach(r=>{
+    r.addEventListener('change',()=>{
+      g('fg-dieta-outra').style.display = r.value==='Outra'&&r.checked?'block':'none';
+    });
+  });
+  // Cirurgia
+  document.querySelectorAll('input[name="cirurgia"]').forEach(r=>{
+    r.addEventListener('change',()=>toggleCond('fg-cirurgia',r.value==='Sim'&&r.checked));
+  });
+  // Alergia
+  document.querySelectorAll('input[name="alergia"]').forEach(r=>{
+    r.addEventListener('change',()=>toggleCond('fg-alergia',r.value==='Sim'&&r.checked));
+  });
+  // Medicamentos
+  document.querySelectorAll('input[name="usa-med"]').forEach(r=>{
+    r.addEventListener('change',()=>toggleCond('fg-medicamentos',r.value==='Sim'&&r.checked));
+  });
+  // Outra doença
+  g('d10').addEventListener('change',function(){
+    g('fg-outra-doenca').style.display=this.checked?'block':'none';
+  });
+  // Tabagismo → qtd cigarros
+  document.querySelectorAll('input[name="tabagismo"]').forEach(r=>{
+    r.addEventListener('change',()=>toggleCond('fg-cigdiario',r.value==='Fumante atual'&&r.checked));
+  });
+  // Atividade
+  document.querySelectorAll('input[name="ativo"]').forEach(r=>{
+    r.addEventListener('change',()=>{
+      const v=r.value, checked=r.checked;
+      toggleCond('fg-ativ-tipo', checked&&(v==='Sim, regularmente'||v==='Às vezes, sem regularidade'));
+      toggleCond('fg-ativ-freq', checked&&(v==='Sim, regularmente'||v==='Às vezes, sem regularidade'));
+      toggleCond('fg-ativ-parou', checked&&v==='Parei recentemente');
+    });
+  });
+  // Limitação
+  document.querySelectorAll('input[name="limitacao"]').forEach(r=>{
+    r.addEventListener('change',()=>toggleCond('fg-limitacao',r.value==='Sim'&&r.checked));
+  });
+}
+function toggleCond(id,show){
+  const el=g(id);
+  if(el) el.classList.toggle('show',show);
+}
+
+// ── PROGRESS BAR ──────────────────────────────
+function updateProgress(){
+  const n=currentStep, total=totalSteps+1; // +1 for confirmation step
+  const pct=Math.round((n/total)*100);
+  g('prog-fill').style.width=pct+'%';
+  const stepNames=['Identificação','Queixa','Histórico','Hábitos','Alimentação','Atividade','Sono','Saúde da Mulher','Confirmação'];
+  const idx=Math.min(n-1,stepNames.length-1);
+  g('prog-label').textContent=`${stepNames[idx]} (${n}/${total})`;
+}
+
+// ── NAVIGATION ────────────────────────────────
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  g('s'+n).classList.add('active');
+  currentStep=n;
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function next(from){
+  if(!validate(from)) return;
+  // Etapa 8 (saúde da mulher) só aparece para sexo biológico Feminino ou Intersexo
+  const sexo=radio('sexo');
+  const temEtapa8 = sexo==='Feminino' || sexo==='Intersexo';
+  if(from===7&&!temEtapa8){
+    buildResumo();
+    showStep(9);
+    return;
+  }
+  if(from===8){ buildResumo(); showStep(9); return; }
+  showStep(from+1);
+}
+
+function back(from){
+  const sexo=radio('sexo');
+  const temEtapa8 = sexo==='Feminino' || sexo==='Intersexo';
+  if(from===9&&!temEtapa8){ showStep(7); return; }
+  showStep(from-1);
+}
+
+// ── VALIDAÇÃO ─────────────────────────────────
+function setErr(id,show){ g(id)?.parentElement?.classList.toggle('has-err',show); if(show) g(id).style.display='block'; else if(g(id)) g(id).style.display='none'; }
+function validate(step){
+  let ok=true;
+  if(step===1){
+    if(!val('nome')){ setErr('err-nome',true); ok=false; } else setErr('err-nome',false);
+    if(norm(val('cpf')).length!==11){ setErr('err-cpf',true); ok=false; } else setErr('err-cpf',false);
+    if(!val('dob')){ setErr('err-dob',true); ok=false; } else setErr('err-dob',false);
+    if(!radio('sexo')){ setErr('err-sexo',true); ok=false; } else setErr('err-sexo',false);
+    if(!val('email')||!val('email').includes('@')){ setErr('err-email',true); ok=false; } else setErr('err-email',false);
+    if(!val('whats')){ setErr('err-whats',true); ok=false; } else setErr('err-whats',false);
+  }
+  if(step===2){
+    if(!val('queixa')){ setErr('err-queixa',true); ok=false; } else setErr('err-queixa',false);
+    if(!radio('objetivo')){ setErr('err-objetivo',true); ok=false; } else setErr('err-objetivo',false);
+  }
+  if(step===4){
+    if(!radio('tabagismo')){ setErr('err-tab',true); ok=false; } else setErr('err-tab',false);
+    if(!radio('alcool')){ setErr('err-alc',true); ok=false; } else setErr('err-alc',false);
+  }
+  if(step===6){
+    if(!radio('ativo')){ setErr('err-ativo',true); ok=false; } else setErr('err-ativo',false);
+  }
+  if(!ok) g('container').scrollIntoView({behavior:'smooth'});
+  return ok;
+}
+
+// ── RESUMO FINAL ──────────────────────────────
+function buildResumo(){
+  const el=g('resumo-final');
+  const obj=radio('objetivo')==='Outros'?val('ob-outro'):radio('objetivo');
+  el.innerHTML=`
+    <div style="background:#f7f9f7;border:1px solid var(--border);border-radius:12px;padding:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em">Resumo das suas respostas</div>
+      ${row('Nome',val('nome'))}
+      ${row('CPF',val('cpf'))}
+      ${row('Queixa principal',val('queixa').slice(0,100)+'...')}
+      ${row('Objetivo',obj)}
+      ${row('Tabagismo',radio('tabagismo'))}
+      ${row('Álcool',radio('alcool'))}
+      ${row('Atividade física',radio('ativo'))}
+      ${row('Horas de sono',radio('h-sono'))}
+    </div>`;
+}
+function row(l,v){ return v?`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:var(--muted);min-width:120px;flex-shrink:0">${l}</span><span>${v}</span></div>`:''; }
+
+// ── COLETAR DADOS ─────────────────────────────
+function coletarDados(){
+  const doencasChecks=checksList('d',[1,2,3,4,5,6,7,8,9,10,0]).filter(v=>v!=='Nenhuma');
+  const hfChecks=checksList('hf',[1,2,3,4,0]).filter(v=>v!=='Nenhum antecedente familiar relevante');
+  const ativTipo=checksList('at-c',[1,2,3,4,5,6,7,8]);
+  const difSono=checksList('son',[1,2,3,4,0]).filter(v=>v!=='Não tenho dificuldades com o sono');
+  const obj=radio('objetivo')==='Outros'?val('ob-outro'):radio('objetivo');
+
+  return {
+    // Identificação
+    nome:val('nome'), cpf:norm(val('cpf')),
+    dataNascimento:val('dob'), sexoBiologico:radio('sexo'),
+    genero: val('genero')==='Outro' ? (val('genero-outro')||'Outro') : val('genero'),
+    pronomes: val('pronomes'),
+    email:val('email'), whatsapp:val('whats'),
+    cidade:val('cidade'),
+    estado: val('estado-uf'),
+    estadoNome: val('estado-uf'),
+
+    // Queixa
+    queixaPrincipal:val('queixa'), objetivoTratamento:obj,
+    tempoProblema:radio('tempo'), tentativasAnteriores:radio('tentativas'),
+    pesoAtual:val('peso-at'), altura:val('altura'),
+    pesoInicial:val('peso-at'), // peso informado vira peso inicial
+
+    // Histórico médico
+    hm:{
+      doencas:doencasChecks.join(', '),
+      outraDoenca:val('outra-doenca'),
+      cirurgias:radio('cirurgia')==='Sim'?val('cirurgias'):'',
+      alergias:radio('alergia')==='Sim'?val('alergias'):'',
+      medicamentos:radio('usa-med')==='Sim'?val('medicamentos'):'',
+      antecedenteFamiliar:hfChecks.join(', '),
+      // Hábitos
+      tabagismo:radio('tabagismo'),
+      qtdCigarros:val('cigdiario'),
+      alcool:radio('alcool'),
+      cannabis:radio('cannabis'),
+      outrasDrogas:val('outras-drogas'),
+      // Alimentação
+      refeicoesDia:radio('refeicoes'),
+      velocidadeComer:radio('velocidade'),
+      comeComTela:radio('tela'),
+      comeEmocional:radio('emocao'),
+      beliscosForaHora:radio('belisco'),
+      ultraprocessados:radio('ultraproc'),
+      dietaEspecifica: radio('dieta')==='Outra' ? (val('dieta-outra')||'Outra') : radio('dieta'),
+      ingestaoAgua:radio('agua'),
+      obsAlimentar:val('obs-alimentar'),
+      // Atividade
+      atividadeFisica:radio('ativo'),
+      tiposAtividade:ativTipo.join(', '),
+      freqAtividade:radio('freq-ativ'),
+      tempoParado:radio('parou'),
+      limitacaoFisica:radio('limitacao')==='Sim'?val('limitacao-desc'):'Não',
+      // Sono
+      horasSono:radio('h-sono'),
+      qualidadeSono:radio('qual-sono'),
+      difSono:difSono.join(', '),
+      ronco:radio('ronco'),
+      telaNoite:radio('tela-noite'),
+      // Saúde da mulher
+      gestacao:radio('gestacao')||'',
+      ultimaMenstruacao:val('mens'),
+      cicloMenstrual:radio('ciclo'),
+      metodoContraceptivo:radio('contraceptivo')||'',
+    },
+    obsGeral:val('obs-geral'),
+    questionarioRespondidoEm:new Date().toISOString(),
+  };
+}
+
+// ── ENVIAR / SALVAR ───────────────────────────
+function enviar(){
+  const dados=coletarDados();
+  const cpf=dados.cpf;
+  if(cpf.length!==11){ alert('CPF inválido'); return; }
+
+  try {
+    // Ler dados existentes ou criar novo paciente
+    let all={};
+    try{ all=JSON.parse(localStorage.getItem(DB_KEY)||'{}'); }catch{}
+
+    let p=all[cpf];
+    const isNovo=!p;
+
+    if(isNovo){
+      // Cria estrutura base
+      p={
+        cpf, questionarios:[
+          {id:'roda',nome:'Roda da Vida',status:'nao-enviado'},
+          {id:'comp-ali',nome:'Comportamento Alimentar',status:'respondido'},
+          {id:'atv-fis',nome:'Atividade Física',status:'respondido'},
+          {id:'phq9',nome:'PHQ-9 (Depressão)',status:'nao-enviado'},
+          {id:'gad7',nome:'GAD-7 (Ansiedade)',status:'nao-enviado'},
+          {id:'sono',nome:'Sono',status:'respondido'},
+          {id:'comp-ali2',nome:'Competência Alimentar',status:'nao-enviado'},
+          {id:'culin',nome:'Habilidades Culinárias',status:'nao-enviado'},
+        ],
+        exames:[],evolucoes:[],timeline:[],
+        adesao:{medicamentosa:'',comparecimento:''},
+        criadoEm:new Date().toISOString(),
+      };
+    }
+
+    // Mesclar dados do questionário no prontuário
+    p.nome           = dados.nome;
+    p.dataNascimento = dados.dataNascimento;
+    p.sexoBiologico  = dados.sexoBiologico;
+    p.email          = dados.email;
+    p.whatsapp       = dados.whatsapp;
+    if(dados.cidade) p.cidade = dados.cidade;
+    if(dados.estado) p.estado = dados.estado;
+    if(dados.estadoNome) p.estadoNome = dados.estadoNome;
+    if(dados.pesoAtual) p.pesoAtual = dados.pesoAtual;
+    if(dados.pesoInicial && !p.pesoInicial) p.pesoInicial = dados.pesoInicial;
+    if(dados.altura) p.altura = dados.altura;
+    p.queixaPrincipal    = dados.queixaPrincipal;
+    p.objetivoTratamento = dados.objetivoTratamento;
+    p.hm = Object.assign(p.hm||{}, dados.hm);
+    p.obsGeral = dados.obsGeral;
+    p.questionarioInicial = dados; // snapshot completo
+    p.questionarioRespondidoEm = dados.questionarioRespondidoEm;
+
+    // Atualizar status dos questionários já respondidos
+    const qsRespondidos=['comp-ali','atv-fis','sono'];
+    (p.questionarios||[]).forEach(q=>{
+      if(qsRespondidos.includes(q.id)) q.status='respondido';
+    });
+
+    // Timeline
+    if(!p.timeline) p.timeline=[];
+    p.timeline.unshift({
+      id:Date.now(), tipo:'questionario',
+      desc:'Questionário inicial respondido pelo paciente',
+      data:new Date().toISOString()
+    });
+    if(isNovo){
+      p.timeline.push({id:Date.now()+1, tipo:'cadastro',
+        desc:`Paciente cadastrado via questionário — ${dados.nome}`,
+        data:new Date().toISOString()
+      });
+    }
+
+    // Salvar localmente
+    all[cpf]=p;
+    localStorage.setItem(DB_KEY, JSON.stringify(all));
+
+    // Sincronizar com Google Sheets (se configurado)
+    syncToSheets(p);
+
+    // Mostrar sucesso
+    document.querySelectorAll('.step').forEach(s=>s.style.display='none');
+    g('success').style.display='block';
+    g('progress-wrap').style.display='none';
+    g('prog-fill').style.width='100%';
+
+  } catch(e) {
+    console.error(e);
+    alert('Erro ao salvar. Verifique sua conexão e tente novamente.');
+  }
+}
+
+// ── SYNC COM SHEETS ───────────────────────────
+async function syncToSheets(patient){
+  const url = localStorage.getItem('menosys_sheets_url') || 'https://script.google.com/macros/s/AKfycbzfDUlL_-nXkFtY1ty7Bu8-8VG06IPWdGyaNm88S2_Fg7QtNBAeqQnBY1_UyKT5Y5Hi/exec';
+  const key = localStorage.getItem('menosys_sheets_key') || 'MENOSYS_2025';
+  if(!url) return;
+  try {
+    await fetch(url, {
+      method:'POST', redirect:'follow',
+      headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({ key, action:'save', patient })
+    });
+    console.log('[Sync] Paciente enviado ao Sheets via questionário');
+  } catch(e){
+    console.warn('[Sync] Falha ao sincronizar com Sheets:', e);
+    // Não interrompe o fluxo — dados já estão no localStorage
+  }
+}
+
+// ── INIT ──────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  setupConditionals();
+  updateProgress();
+
+  // Pré-preencher CPF da URL (?cpf=...)
+  const params=new URLSearchParams(window.location.search);
+  const cpfParam=params.get('cpf');
+  if(cpfParam){
+    const inp=g('cpf');
+    inp.value=cpfParam;
+    mCPF(inp);
+  }
+});
+</script>
+</body>
+</html>
