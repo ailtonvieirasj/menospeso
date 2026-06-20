@@ -257,6 +257,12 @@ code{background:#f3f4f6;padding:2px 6px;border-radius:4px;font-family:monospace;
 </div>
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script type="module">
+  import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4/build/pdf.min.mjs";
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4/build/pdf.worker.min.mjs";
+  window.pdfjsLib = pdfjsLib;
+</script>
 <script>
 // ═══════════════════════════════════════════════
 // MENOSYSTEM  —  MVP v1.0
@@ -305,7 +311,7 @@ const DB = {
         {id:'comp-ali2',nome:'Competência Alimentar',status:'nao-enviado'},
         {id:'culin',nome:'Habilidades Culinárias',status:'nao-enviado'},
       ],
-      exames:[],evolucoes:[],timeline:[],
+      exames:[],examesResultados:[],evolucoes:[],timeline:[],
       adesao:{medicamentosa:'',comparecimento:''},
       criadoEm:new Date().toISOString()
     };
@@ -1202,6 +1208,228 @@ function addQ(){
 }
 
 // EXAMES
+// ── LEITURA AUTOMÁTICA DE EXAMES (OCR) ────────
+const LAB_PARAMS = [
+  {id:'glicemia',nome:'Glicemia de jejum',unidade:'mg/dL',min:70,max:99,re:/glic(?:emia|ose)[^\d]{0,30}?(\d{2,3}(?:[.,]\d+)?)/i},
+  {id:'hba1c',nome:'Hemoglobina Glicada (HbA1c)',unidade:'%',min:4,max:5.6,re:/h(?:emoglobina)?\s*glic(?:ada|osilada)?[^\d]{0,30}?(\d{1,2}[.,]\d{1,2})/i},
+  {id:'col-total',nome:'Colesterol Total',unidade:'mg/dL',min:0,max:190,re:/colesterol\s*total[^\d]{0,30}?(\d{2,3}(?:[.,]\d+)?)/i},
+  {id:'ldl',nome:'LDL Colesterol',unidade:'mg/dL',min:0,max:130,re:/ldl[^\d]{0,30}?(\d{2,3}(?:[.,]\d+)?)/i},
+  {id:'hdl',nome:'HDL Colesterol',unidade:'mg/dL',min:40,max:999,re:/hdl[^\d]{0,30}?(\d{2,3}(?:[.,]\d+)?)/i},
+  {id:'trigli',nome:'Triglicerídeos',unidade:'mg/dL',min:0,max:150,re:/triglic[eé]r[ií]deos?[^\d]{0,30}?(\d{2,4}(?:[.,]\d+)?)/i},
+  {id:'tsh',nome:'TSH',unidade:'µUI/mL',min:0.4,max:4.0,re:/\btsh\b[^\d]{0,30}?(\d{1,2}[.,]\d{1,3})/i},
+  {id:'t4l',nome:'T4 Livre',unidade:'ng/dL',min:0.8,max:1.8,re:/t4\s*livre[^\d]{0,30}?(\d{1}[.,]\d{1,2})/i},
+  {id:'creatinina',nome:'Creatinina',unidade:'mg/dL',min:0.6,max:1.3,re:/creatinina[^\d]{0,30}?(\d{1,2}[.,]\d{1,2})/i},
+  {id:'ureia',nome:'Ureia',unidade:'mg/dL',min:10,max:50,re:/ureia[^\d]{0,30}?(\d{1,3}(?:[.,]\d+)?)/i},
+  {id:'tgo',nome:'TGO / AST',unidade:'U/L',min:0,max:40,re:/(?:tgo|ast)[^\d]{0,30}?(\d{1,3}(?:[.,]\d+)?)/i},
+  {id:'tgp',nome:'TGP / ALT',unidade:'U/L',min:0,max:41,re:/(?:tgp|alt)[^\d]{0,30}?(\d{1,3}(?:[.,]\d+)?)/i},
+  {id:'acido-urico',nome:'Ácido Úrico',unidade:'mg/dL',min:2.5,max:6.0,re:/[aá]cido\s*[uú]rico[^\d]{0,30}?(\d{1,2}[.,]\d{1,2})/i},
+  {id:'vit-d',nome:'Vitamina D (25-OH)',unidade:'ng/mL',min:30,max:100,re:/vitamina\s*d[^\d]{0,30}?(\d{1,3}(?:[.,]\d+)?)/i},
+  {id:'vit-b12',nome:'Vitamina B12',unidade:'pg/mL',min:200,max:900,re:/vitamina\s*b\s*12[^\d]{0,30}?(\d{2,4}(?:[.,]\d+)?)/i},
+  {id:'ferritina',nome:'Ferritina',unidade:'ng/mL',min:20,max:250,re:/ferritina[^\d]{0,30}?(\d{1,4}(?:[.,]\d+)?)/i},
+  {id:'hemoglobina',nome:'Hemoglobina',unidade:'g/dL',min:12,max:17,re:/hemoglobina[^\d]{0,30}?(\d{1,2}[.,]\d{1,2})/i},
+  {id:'leucocitos',nome:'Leucócitos',unidade:'/mm³',min:4000,max:11000,re:/leuc[oó]citos[^\d]{0,30}?([\d.]{3,7})/i},
+  {id:'plaquetas',nome:'Plaquetas',unidade:'/mm³',min:150000,max:450000,re:/plaquetas[^\d]{0,30}?([\d.]{3,8})/i},
+  {id:'insulina',nome:'Insulina',unidade:'µU/mL',min:2,max:25,re:/insulina[^\d]{0,30}?(\d{1,3}(?:[.,]\d+)?)/i},
+  {id:'pcr',nome:'PCR (Proteína C Reativa)',unidade:'mg/L',min:0,max:5,re:/\bpcr\b[^\d]{0,30}?(\d{1,3}(?:[.,]\d+)?)/i},
+];
+
+function parseLabText(text){
+  if(!text) return [];
+  const norm = text.replace(/\r/g,'');
+  const out=[];
+  LAB_PARAMS.forEach(def=>{
+    const m = def.re.exec(norm);
+    if(!m) return;
+    const valorNum = parseFloat(m[1].replace(/\.(?=\d{3}\b)/g,'').replace(',','.'));
+    if(isNaN(valorNum)) return;
+    const alterado = valorNum < def.min || valorNum > def.max;
+    out.push({param:def.id, nome:def.nome, valor:valorNum, unidade:def.unidade, faixaRef:`${def.min}–${def.max}`, alterado});
+  });
+  return out;
+}
+
+async function ocrImageFile(file){
+  const { data } = await Tesseract.recognize(file, 'por');
+  return data.text || '';
+}
+
+async function ocrPdfFile(file){
+  const buf = await file.arrayBuffer();
+  const pdf = await window.pdfjsLib.getDocument({data: buf}).promise;
+  let fullText = '';
+  const maxPages = Math.min(pdf.numPages, 5);
+  for(let i=1;i<=maxPages;i++){
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    const pageText = tc.items.map(it=>it.str).join(' ').trim();
+    if(pageText.length > 30){
+      fullText += pageText + '\n';
+    } else {
+      const viewport = page.getViewport({scale:2});
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width; canvas.height = viewport.height;
+      const ctx = canvas.getContext('2d');
+      await page.render({canvasContext:ctx, viewport}).promise;
+      const { data } = await Tesseract.recognize(canvas, 'por');
+      fullText += (data.text||'') + '\n';
+    }
+  }
+  return fullText;
+}
+
+function setExStatus(cpf, exId, patch){
+  const p = DB.get(cpf);
+  if(!p) return;
+  const ex = (p.exames||[]).find(e=>e.id===exId);
+  if(!ex) return;
+  Object.assign(ex, patch);
+  DB.put(p);
+  if(typeof P!=='undefined' && P && P.cpf===p.cpf){
+    P = p;
+    if(V==='exames') vExames(document.getElementById('content'));
+    if(V==='dashboard') vDash(document.getElementById('content'));
+  }
+}
+
+async function processExameOCR(cpf, exId, file){
+  setExStatus(cpf, exId, {ocrStatus:'processando'});
+  try {
+    let text = '';
+    if(file.type === 'application/pdf'){
+      text = await ocrPdfFile(file);
+    } else if(file.type.startsWith('image/')){
+      text = await ocrImageFile(file);
+    } else {
+      setExStatus(cpf, exId, {ocrStatus:'ignorado'});
+      return;
+    }
+    const valores = parseLabText(text);
+    const p = DB.get(cpf);
+    if(!p) return;
+    const ex = (p.exames||[]).find(e=>e.id===exId);
+    if(!ex) return;
+    ex.ocrStatus = valores.length ? 'concluido' : 'sem-parametros';
+    ex.ocrText = text.slice(0,5000);
+    if(!p.examesResultados) p.examesResultados=[];
+    valores.forEach(v=>{
+      p.examesResultados.push({
+        id: Date.now()+Math.random().toString(36).slice(2),
+        exameId: exId, param:v.param, nome:v.nome, valor:v.valor,
+        unidade:v.unidade, faixaRef:v.faixaRef, alterado:v.alterado,
+        data: ex.data, origem:'ocr'
+      });
+    });
+    DB.put(p);
+    if(typeof P!=='undefined' && P && P.cpf===p.cpf){
+      P = p;
+      if(V==='exames') vExames(document.getElementById('content'));
+      if(V==='dashboard') vDash(document.getElementById('content'));
+    }
+    toast(valores.length ? `Exame lido: ${valores.length} valor(es) extraído(s)` : 'Exame lido, mas nenhum parâmetro reconhecido');
+  } catch(e){
+    console.warn('[OCR] Falha ao processar exame:', e);
+    setExStatus(cpf, exId, {ocrStatus:'erro', ocrText:String(e&&e.message||e)});
+    toast('Não foi possível ler o exame automaticamente');
+  }
+}
+
+function ocrBadge(s){
+  const m={pendente:['bg-gray','Aguardando'],processando:['bg-yellow','Lendo...'],concluido:['bg-green','Lido'],'sem-parametros':['bg-yellow','Lido (sem valores)'],erro:['bg-red','Erro na leitura']};
+  if(!s||!m[s]) return '';
+  return `<span class="badge ${m[s][0]}" style="margin-left:6px">${m[s][1]}</span>`;
+}
+
+function tabelaResultados(resultados){
+  const params = [...new Map(resultados.map(r=>[r.param,r.nome])).entries()];
+  const datas = [...new Set(resultados.map(r=>r.data))].sort();
+  return `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
+    <thead><tr><th style="text-align:left;padding:6px;border-bottom:2px solid var(--border)">Parâmetro</th>
+      ${datas.map(d=>`<th style="text-align:center;padding:6px;border-bottom:2px solid var(--border)">${fmtD(d)}</th>`).join('')}
+    </tr></thead>
+    <tbody>
+    ${params.map(([pid,nome])=>`<tr>
+      <td style="padding:6px;border-bottom:1px solid var(--border)">${nome}</td>
+      ${datas.map(d=>{
+        const r=resultados.find(x=>x.param===pid && x.data===d);
+        if(!r) return `<td style="text-align:center;padding:6px;border-bottom:1px solid var(--border);color:var(--muted)">—</td>`;
+        return `<td style="text-align:center;padding:6px;border-bottom:1px solid var(--border)" class="${r.alterado?'bg-red':''}">${r.valor}${r.unidade?' '+r.unidade:''}</td>`;
+      }).join('')}
+    </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+function verTextoOCR(exId){
+  const ex=(P.exames||[]).find(e=>e.id===exId);
+  if(!ex) return;
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  overlay.innerHTML=`<div class="card" style="max-width:600px;width:100%;max-height:80vh;overflow:auto">
+    <div class="card-title">Texto lido — ${ex.nome}</div>
+    <pre style="white-space:pre-wrap;font-size:12px;color:var(--muted)">${(ex.ocrText||'(vazio)').replace(/</g,'&lt;')}</pre>
+    <button class="btn bsm" id="btn-fechar-ocr" style="margin-top:10px">Fechar</button>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#btn-fechar-ocr').onclick=()=>overlay.remove();
+}
+
+function abrirEdicaoResultados(){
+  const p=P;
+  const resultados=p.examesResultados||[];
+  const overlay=document.createElement('div');
+  overlay.id='modal-resultados';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  const linha=(r,i)=>`<tr data-i="${i}">
+    <td><input style="width:100%;border:1px solid var(--border);border-radius:4px;padding:4px;font-size:12px" value="${r.nome}" onchange="editResultado(${i},'nome',this.value)"></td>
+    <td><input style="width:70px;border:1px solid var(--border);border-radius:4px;padding:4px;font-size:12px" value="${r.valor}" onchange="editResultado(${i},'valor',this.value)"></td>
+    <td><input style="width:60px;border:1px solid var(--border);border-radius:4px;padding:4px;font-size:12px" value="${r.unidade||''}" onchange="editResultado(${i},'unidade',this.value)"></td>
+    <td><input style="width:120px;border:1px solid var(--border);border-radius:4px;padding:4px;font-size:12px" type="date" value="${(r.data||'').slice(0,10)}" onchange="editResultado(${i},'data',this.value)"></td>
+    <td><button class="btn bs bsm" onclick="delResultado(${i})">✕</button></td>
+  </tr>`;
+  overlay.innerHTML=`<div class="card" style="max-width:680px;width:100%;max-height:85vh;overflow:auto">
+    <div class="card-title">Revisar valores extraídos</div>
+    <div class="muted" style="font-size:12px;margin-bottom:10px">Corrija valores lidos incorretamente pelo OCR ou remova linhas erradas.</div>
+    <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr><th>Parâmetro</th><th>Valor</th><th>Unidade</th><th>Data</th><th></th></tr></thead>
+      <tbody id="tbody-resultados">${resultados.map(linha).join('')}</tbody>
+    </table></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn bp bsm" id="btn-add-manual">+ Adicionar valor manual</button>
+      <button class="btn bsm" id="btn-fechar-resultados" style="margin-left:auto">Concluir</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#btn-add-manual').onclick=addResultadoManual;
+  overlay.querySelector('#btn-fechar-resultados').onclick=()=>{ overlay.remove(); vExames(document.getElementById('content')); };
+}
+function editResultado(i,campo,valor){
+  const r=P.examesResultados[i];
+  if(!r) return;
+  if(campo==='valor') r.valor=parseFloat(String(valor).replace(',','.'));
+  else if(campo==='data') r.data=valor?new Date(valor).toISOString():r.data;
+  else r[campo]=valor;
+  r.origem='manual';
+  DB.put(P);
+}
+function delResultado(i){
+  P.examesResultados.splice(i,1);
+  DB.put(P);
+  document.getElementById('modal-resultados')?.remove();
+  abrirEdicaoResultados();
+}
+function addResultadoManual(){
+  const nome=prompt('Nome do parâmetro (ex: Glicemia de jejum):');
+  if(!nome) return;
+  const valor=parseFloat((prompt('Valor:')||'').replace(',','.'));
+  if(isNaN(valor)){ toast('Valor inválido'); return; }
+  const unidade=prompt('Unidade (ex: mg/dL):')||'';
+  if(!P.examesResultados) P.examesResultados=[];
+  P.examesResultados.push({id:Date.now()+Math.random().toString(36).slice(2),param:'manual-'+Date.now(),nome,valor,unidade,faixaRef:'',alterado:false,data:new Date().toISOString(),origem:'manual'});
+  DB.put(P);
+  document.getElementById('modal-resultados')?.remove();
+  abrirEdicaoResultados();
+}
+
 function vExames(ct){
   const p=P;
   const cats=[
@@ -1211,6 +1439,7 @@ function vExames(ct){
     {id:'outro',ico:'📎',label:'Outros'},
   ];
   const exames=p.exames||[];
+  const resultados=p.examesResultados||[];
   ct.innerHTML=`
   <div class="card">
     <div class="card-title">Categoria</div>
@@ -1228,7 +1457,17 @@ function vExames(ct){
         <span style="font-size:12px">Exames, laudos, bioimpedância, imagens</span></div>
     </div>
     <input type="file" id="fi" multiple class="hidden" onchange="onFiles(this.files)">
+    <div class="muted" style="font-size:12px;margin-top:8px">📷 Fotos e PDFs de exames laboratoriais são lidos automaticamente e os valores aparecem na tabela abaixo.</div>
   </div>
+
+  ${resultados.length ? `
+  <div class="card">
+    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>📊 Resultados Laboratoriais</span>
+      <button class="btn bs bsm" onclick="abrirEdicaoResultados()">✎ Revisar valores</button>
+    </div>
+    ${tabelaResultados(resultados)}
+  </div>` : ''}
 
   ${cats.map(c=>{
     const list=exames.filter(e=>e.cat===c.id);
@@ -1238,8 +1477,9 @@ function vExames(ct){
       ${list.map(e=>`
         <div class="fi">
           <span style="font-size:18px">${c.ico}</span>
-          <div class="fi-name">${e.nome}</div>
+          <div class="fi-name">${e.nome}${ocrBadge(e.ocrStatus)}</div>
           <div class="fi-meta">${e.tam||''} · ${fmtD(e.data)}</div>
+          ${e.ocrText?`<button class="btn bs bsm" onclick="verTextoOCR('${e.id}')">🔍 Texto lido</button>`:''}
           <button class="btn bs bsm" onclick="rmExame('${e.id}')">✕</button>
         </div>`).join('')}
     </div>`;
@@ -1256,18 +1496,22 @@ function onFiles(files){
   if(!files||!files.length) return;
   const p=P, cat=getCat();
   if(!p.exames) p.exames=[];
-  const cico={laboratorial:'🧪',bioimpedancia:'⚖️',imagem:'🩻',outro:'📎'};
+  const novos=[];
   Array.from(files).forEach(f=>{
-    const ex={id:Date.now()+Math.random().toString(36).slice(2),nome:f.name,cat,tam:bytes(f.size),tipo:f.type,data:new Date().toISOString()};
+    const podeOcr = cat==='laboratorial' && (f.type==='application/pdf' || f.type.startsWith('image/'));
+    const ex={id:Date.now()+Math.random().toString(36).slice(2),nome:f.name,cat,tam:bytes(f.size),tipo:f.type,data:new Date().toISOString(),ocrStatus:podeOcr?'pendente':null};
     p.exames.push(ex);
+    if(podeOcr) novos.push({ex,f});
     TL.add(p,cat==='bioimpedancia'?'bioimpedancia':'exame',`Exame anexado: ${f.name}`);
   });
-  P=p; toast(`${files.length} arquivo(s) adicionado(s)!`);
+  P=p; DB.put(p); toast(`${files.length} arquivo(s) adicionado(s)!`);
   vExames(document.getElementById('content'));
+  novos.forEach(({ex,f})=>processExameOCR(p.cpf, ex.id, f));
 }
 function rmExame(id){
   if(!confirm('Remover este arquivo?')) return;
   P.exames=(P.exames||[]).filter(e=>e.id!==id);
+  P.examesResultados=(P.examesResultados||[]).filter(r=>r.exameId!==id);
   DB.put(P); vExames(document.getElementById('content'));
 }
 
