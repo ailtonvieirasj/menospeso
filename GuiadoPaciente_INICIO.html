@@ -19,16 +19,15 @@
     --bg:#f8fafc;
     --white:#ffffff;
   }
-  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+  html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate)}
   #app{
-    display:flex;flex-direction:column;height:100vh;max-width:430px;
-    margin:0 auto;background:var(--white);
-    box-shadow:0 0 60px rgba(0,0,0,.10);overflow:hidden;
+    max-width:430px;margin:0 auto;background:var(--white);
+    min-height:100vh;
+    box-shadow:0 0 60px rgba(0,0,0,.10);
   }
 
   /* ── CAPA ── */
   .cover{
-    flex-shrink:0;
     background:var(--white);
     padding:0;position:relative;overflow:hidden;
   }
@@ -40,56 +39,56 @@
 
   .cover-inner{
     position:relative;z-index:1;
-    padding:32px 24px 24px;
+    padding:24px 20px 16px;
   }
 
   /* LOGO */
-  .logo-wrap{display:flex;align-items:flex-end;gap:0;margin-bottom:20px}
-  .logo-word{font-size:28px;letter-spacing:-1.5px;line-height:1}
+  .logo-wrap{display:flex;align-items:flex-end;gap:0;margin-bottom:14px}
+  .logo-word{font-size:24px;letter-spacing:-1.2px;line-height:1}
   .logo-word strong{font-weight:900;color:var(--slate)}
   .logo-word span{font-weight:400;color:var(--slate)}
   .logo-word em{color:var(--green);font-style:normal;font-weight:400}
-  .logo-tagline{font-size:10px;color:var(--muted);font-weight:500;letter-spacing:.5px;margin-top:4px}
+  .logo-tagline{font-size:10px;color:var(--muted);font-weight:500;letter-spacing:.5px;margin-top:3px}
 
   /* HERO */
   .hero-tag{
     display:inline-block;background:var(--green-light);
     color:var(--green-dark);font-size:10px;font-weight:700;
-    padding:4px 12px;border-radius:20px;letter-spacing:.8px;
-    text-transform:uppercase;margin-bottom:10px;
+    padding:3px 10px;border-radius:20px;letter-spacing:.8px;
+    text-transform:uppercase;margin-bottom:6px;
   }
-  .hero-title{font-size:25px;font-weight:900;color:var(--slate);line-height:1.15;letter-spacing:-.5px;margin-bottom:6px}
+  .hero-title{font-size:20px;font-weight:900;color:var(--slate);line-height:1.2;letter-spacing:-.4px;margin-bottom:4px}
   .hero-title em{color:var(--green);font-style:normal}
-  .hero-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+  .hero-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px}
 
   /* stats row */
   .stats{display:flex;gap:8px;margin-bottom:0}
   .stat-pill{
     flex:1;background:var(--bg);border:1.5px solid var(--border);
-    border-radius:14px;padding:10px 6px;text-align:center;
+    border-radius:12px;padding:8px 4px;text-align:center;
   }
-  .stat-num{font-size:20px;font-weight:900;color:var(--slate);line-height:1}
-  .stat-label{font-size:10px;color:var(--muted);font-weight:600;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+  .stat-num{font-size:18px;font-weight:900;color:var(--slate);line-height:1}
+  .stat-label{font-size:9px;color:var(--muted);font-weight:600;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
 
   /* MANIFESTO faixa */
   .manifesto{
     background:var(--slate);
-    padding:14px 24px;
-    display:flex;flex-direction:column;gap:3px;
+    padding:10px 20px;
+    display:flex;flex-direction:column;gap:2px;
   }
-  .manifesto-line{font-size:12px;color:#94a3b8;font-weight:500}
+  .manifesto-line{font-size:11px;color:#94a3b8;font-weight:500}
   .manifesto-line strong{color:var(--green);font-weight:800}
 
   /* ── PROGRESS BAR ── */
-  .prog-wrap{flex-shrink:0;padding:12px 20px 0;background:var(--white)}
+  .prog-wrap{padding:12px 20px 0;background:var(--white)}
   .prog-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
   .prog-text{font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.5px}
   .prog-pct{font-size:12px;font-weight:800;color:var(--green)}
   .prog-track{height:5px;background:var(--border);border-radius:20px;overflow:hidden}
   .prog-fill{height:100%;background:linear-gradient(90deg,var(--green),#34d399);border-radius:20px;transition:width .4s ease}
 
-  /* ── SCROLL ── */
-  .scroll{flex:1;overflow-y:auto;padding:14px 16px 40px}
+  /* ── LISTA ── */
+  .scroll{padding:14px 16px 40px}
 
   /* ── SECTION LABELS ── */
   .section-label{
