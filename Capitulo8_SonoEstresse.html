@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Capítulo 8 — Sono e Estresse · Menos Peso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;--green-light:#d1fae5;--green-dark:#047857;
+    --slate:#0f172a;--slate-mid:#1e293b;--slate-light:#334155;
+    --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;
+    --yellow:#f59e0b;--yellow-light:#fef3c7;
+    --red:#ef4444;--red-light:#fee2e2;
+    --blue:#3b82f6;--blue-light:#dbeafe;
+    --indigo:#4f46e5;--indigo-light:#e0e7ff;
+    --purple:#8b5cf6;--purple-light:#ede9fe;
+    --pink:#ec4899;--pink-light:#fce7f3;
+    --teal:#0d9488;--teal-light:#ccfbf1;
+    --night:#0f172a;--night-2:#1e293b;--night-3:#334155;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;background:var(--white);box-shadow:0 0 40px rgba(0,0,0,.12)}
+  header{flex-shrink:0;padding:14px 20px 10px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .cap-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+  .cap-title{font-size:13px;font-weight:600;color:var(--slate);flex:1;line-height:1.2}
+  .progress-pill{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .prog-bar{flex-shrink:0;height:3px;background:var(--border)}
+  .prog-fill{height:100%;background:var(--green);transition:width .35s ease}
+  .slides{flex:1;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;overflow-y:auto;padding:20px 20px 100px;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .3s ease,transform .3s ease}
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+  .slide.exit{opacity:0;transform:translateX(-30px)}
+  nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--white);border-top:1px solid var(--border);z-index:10}
+  .nav-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+  .btn-prev{background:var(--border);color:var(--muted)}.btn-prev:hover{background:#cbd5e1}
+  .btn-next{background:var(--green);color:#fff}.btn-next:hover{background:var(--green-dark)}.btn-next:disabled{opacity:.4;cursor:default}
+  .nav-dots{display:flex;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--green);width:18px;border-radius:3px}
+
+  .label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  h1{font-size:26px;font-weight:900;line-height:1.15;color:var(--slate)}
+  h2{font-size:20px;font-weight:800;line-height:1.2;color:var(--slate)}
+  h3{font-size:15px;font-weight:700;color:var(--slate)}
+  p{font-size:14px;line-height:1.65;color:var(--slate-light)}
+  .caption{font-size:12px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card-green{background:var(--green-light);border:1px solid #a7f3d0}
+  .card-yellow{background:var(--yellow-light);border:1px solid #fcd34d}
+  .card-red{background:var(--red-light);border:1px solid #fca5a5}
+  .card-blue{background:var(--blue-light);border:1px solid #93c5fd}
+  .card-dark{background:var(--slate);border:none}
+  .card-indigo{background:var(--indigo-light);border:1px solid #a5b4fc}
+  .card-purple{background:var(--purple-light);border:1px solid #c4b5fd}
+  .card-night{background:#0f172a;border:none;color:#fff}
+  .card-teal{background:var(--teal-light);border:1px solid #5eead4}
+
+  .alert{display:flex;gap:10px;padding:12px;border-radius:12px;align-items:flex-start}
+  .alert .ico{font-size:18px;flex-shrink:0}
+  .alert p{font-size:13px;line-height:1.5}
+
+  .index-list{display:flex;flex-direction:column;gap:8px}
+  .index-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
+  .index-item:hover{border-color:var(--green);background:var(--green-light)}
+  .index-num{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .index-label{font-size:13px;font-weight:600;color:var(--slate);flex:1}
+  .index-arrow{color:var(--muted);font-size:14px}
+
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+  .tab{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .2s;color:var(--muted);font-family:'Inter',sans-serif}
+  .tab.active{background:var(--green);border-color:var(--green);color:#fff}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
+  /* HORMONE CARDS */
+  .hormone-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hormone-card{border-radius:14px;padding:14px;text-align:center}
+  .hormone-ico{font-size:28px;display:block;margin-bottom:6px}
+  .hormone-name{font-size:12px;font-weight:800;margin-bottom:4px}
+  .hormone-effect{font-size:11px;line-height:1.4}
+  .hormone-arrow{font-size:16px;font-weight:900;margin:4px 0;display:block}
+
+  /* SLEEP QUALITY METER */
+  .sleep-meter{background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:20px;padding:24px;text-align:center;position:relative;overflow:hidden}
+  .sleep-meter::before{content:'✦';position:absolute;top:10px;right:16px;color:rgba(255,255,255,.1);font-size:40px}
+  .sleep-meter::after{content:'✦';position:absolute;bottom:10px;left:12px;color:rgba(255,255,255,.06);font-size:28px}
+  .sleep-hours{font-size:64px;font-weight:900;color:#fff;line-height:1}
+  .sleep-unit{font-size:18px;font-weight:700;color:#94a3b8}
+  .sleep-label{font-size:13px;color:#64748b;margin-top:6px}
+  .sleep-range{display:flex;gap:6px;justify-content:center;margin-top:12px}
+  .sleep-tag{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700}
+
+  /* TIMELINE NIGHT */
+  .night-timeline{display:flex;flex-direction:column;gap:0;position:relative}
+  .night-timeline::before{content:'';position:absolute;left:18px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,#6366f1,#8b5cf6,#ec4899,#f59e0b)}
+  .nt-item{display:flex;gap:14px;padding-bottom:18px;position:relative}
+  .nt-item:last-child{padding-bottom:0}
+  .nt-dot{flex-shrink:0;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:1;border:2px solid rgba(255,255,255,.1)}
+  .nt-body{flex:1;padding-top:4px}
+  .nt-time{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px}
+  .nt-title{font-size:14px;font-weight:700;color:var(--slate);margin:2px 0 3px}
+  .nt-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* CORTISOL METER */
+  .cortisol-bar{height:20px;border-radius:20px;background:linear-gradient(to right,var(--green),var(--yellow),var(--red));position:relative;overflow:hidden}
+  .cortisol-fill{height:100%;background:rgba(0,0,0,.15);border-radius:20px;transition:width .5s ease}
+  .cortisol-marker{position:absolute;top:-2px;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--slate);box-shadow:0 2px 8px rgba(0,0,0,.2);transition:left .5s ease;cursor:pointer}
+
+  /* TECHNIQUE CARDS */
+  .tech-card{border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:10px}
+  .tech-head{padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;background:#fff;transition:background .2s;user-select:none}
+  .tech-head:hover{background:var(--bg)}
+  .tech-head.open{background:var(--indigo-light)}
+  .tech-ico{font-size:24px;flex-shrink:0}
+  .tech-title{flex:1;font-size:14px;font-weight:700;color:var(--slate)}
+  .tech-tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px}
+  .tech-arrow{font-size:16px;color:var(--muted);transition:transform .25s;margin-left:4px}
+  .tech-head.open .tech-arrow{transform:rotate(90deg);color:var(--indigo)}
+  .tech-body{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 14px;background:#fff}
+  .tech-body.open{max-height:500px;padding:0 14px 14px}
+
+  /* MYTH */
+  .myth-card{border-radius:14px;overflow:hidden;margin-bottom:10px}
+  .myth-head{padding:12px 14px;font-size:13px;font-weight:700;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+  .myth-body{padding:0 14px 12px;font-size:13px;line-height:1.55}
+
+  /* STEP FLOW */
+  .step-flow{display:flex;flex-direction:column}
+  .step-item{display:flex;gap:14px;padding-bottom:18px;position:relative}
+  .step-item:last-child{padding-bottom:0}
+  .step-item:not(:last-child)::before{content:'';position:absolute;left:17px;top:36px;bottom:0;width:2px;background:var(--border)}
+  .step-num{flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;z-index:1}
+  .step-body{flex:1;padding-top:6px}
+
+  /* BREATHING EXERCISE */
+  .breath-box{background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:20px;padding:24px;text-align:center;color:#fff}
+  .breath-circle{width:120px;height:120px;border-radius:50%;border:4px solid rgba(255,255,255,.2);margin:16px auto;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#a5b4fc;cursor:pointer;transition:all .8s ease;position:relative}
+  .breath-circle.inhale{border-color:#818cf8;transform:scale(1.15);background:rgba(99,102,241,.15)}
+  .breath-circle.hold{border-color:#f59e0b;transform:scale(1.15);background:rgba(245,158,11,.1)}
+  .breath-circle.exhale{border-color:#6ee7b7;transform:scale(0.9);background:rgba(16,185,129,.1)}
+  .breath-text{font-size:22px;font-weight:900;color:#fff}
+  .breath-sub{font-size:12px;color:#94a3b8;margin-top:4px}
+  .breath-btn{margin-top:16px;padding:10px 24px;border:none;border-radius:12px;background:var(--indigo);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+  .breath-btn:hover{background:#4338ca}
+
+  /* UTILS */
+  .gap-8{display:flex;flex-direction:column;gap:8px}
+  .gap-12{display:flex;flex-direction:column;gap:12px}
+  .row{display:flex;align-items:center;gap:8px}
+  .mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+  .divider{height:1px;background:var(--border);margin:16px 0}
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+  .pill-green{background:var(--green);color:#fff}
+  .check-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-light);border-radius:10px;margin-bottom:6px}
+  .check-row .ico{font-size:15px;flex-shrink:0;margin-top:1px}
+  .check-row .txt{font-size:13px;color:var(--green-dark);font-weight:500;line-height:1.4}
+  .cross-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--red-light);border-radius:10px;margin-bottom:6px}
+  .cross-row .ico{font-size:15px;flex-shrink:0;margin-top:1px}
+  .cross-row .txt{font-size:13px;color:#991b1b;font-weight:500;line-height:1.4}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <span class="cap-badge">CAP. 8</span>
+    <span class="cap-title">Sono e estresse</span>
+    <span class="progress-pill" id="prog-text">1 / 9</span>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:11.1%"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- ═══ SLIDE 1 — ABERTURA ═══ -->
+    <div class="slide active" data-slide="0">
+      <div class="label">Capítulo 8</div>
+      <h1>Sono e estresse no tratamento</h1>
+      <p class="mt-8">Dois fatores silenciosos que podem sabotar todos os esforços — sem que você perceba. Entender como eles funcionam muda completamente a forma de cuidar do resultado.</p>
+
+      <div class="card card-indigo mt-16" style="padding:14px">
+        <div class="row" style="gap:10px">
+          <span style="font-size:22px">🧬</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--indigo)">A ideia central deste capítulo</div>
+            <div style="font-size:13px;color:var(--indigo);margin-top:4px;line-height:1.5">Dormir mal aumenta a fome, acumula gordura e desfaz o trabalho do medicamento. Estresse crônico faz o mesmo. Cuidar desses dois fatores é tão importante quanto a alimentação.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="index-list mt-12">
+        <div class="index-item" onclick="goTo(1)">
+          <div class="index-num">1</div>
+          <div class="index-label">Por que sono afeta o emagrecimento</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(2)">
+          <div class="index-num">2</div>
+          <div class="index-label">O que acontece quando dormimos mal</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(3)">
+          <div class="index-num">3</div>
+          <div class="index-label">Como melhorar o sono</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(4)">
+          <div class="index-num">4</div>
+          <div class="index-label">Como o estresse sabota o tratamento</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(5)">
+          <div class="index-num">5</div>
+          <div class="index-label">Técnicas de manejo do estresse</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(6)">
+          <div class="index-num">6</div>
+          <div class="index-label">Rotina noturna ideal</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(7)">
+          <div class="index-num">7</div>
+          <div class="index-label">Mitos sobre sono e estresse</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(8)">
+          <div class="index-num">8</div>
+          <div class="index-label">Resumo</div>
+          <div class="index-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 2 — POR QUE SONO IMPORTA ═══ -->
+    <div class="slide" data-slide="1">
+      <div class="label">Seção 1</div>
+      <h2>Por que o sono afeta o emagrecimento</h2>
+      <p class="mt-8">O sono não é apenas descanso. É quando o corpo produz hormônios, consolida a perda de gordura e recupera os músculos. Privar-se de sono é como trabalhar com o freio puxado.</p>
+
+      <div class="sleep-meter mt-16">
+        <div style="color:#64748b;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Meta de sono para adultos</div>
+        <div class="sleep-hours">7–9</div>
+        <div class="sleep-unit">horas por noite</div>
+        <div class="sleep-range mt-12">
+          <span class="sleep-tag" style="background:#fee2e2;color:#991b1b">❌ Menos de 6h</span>
+          <span class="sleep-tag" style="background:#d1fae5;color:#047857">✅ 7–9h</span>
+          <span class="sleep-tag" style="background:#fef3c7;color:#92400e">⚠️ Mais de 10h</span>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+        <div class="card card-indigo">
+          <h3 style="color:var(--indigo);margin-bottom:8px">🌙 O que o sono faz pelo tratamento</h3>
+          <div class="gap-8">
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Regula a grelina (hormônio da fome) e a leptina (saciedade) — sem sono adequado, a fome dispara mesmo com o GLP-1</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Libera GH (hormônio do crescimento) — essencial para preservar músculo e queimar gordura durante o sono</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Consolida a memória e o humor — quem dorme bem tem mais motivação para manter os hábitos</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Regula a insulina — sono ruim piora a resistência à insulina e dificulta o metabolismo da glicose</span></div>
+          </div>
+        </div>
+
+        <div class="card card-yellow">
+          <h3 style="color:#92400e;margin-bottom:6px">📊 O dado que impressiona</h3>
+          <p style="font-size:13px;color:#92400e;line-height:1.55">Estudos mostram que dormir menos de 6 horas por noite pode <strong>reduzir a perda de gordura em até 55%</strong> — mesmo que a pessoa esteja se alimentando igual e tomando o medicamento normalmente.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 3 — O QUE ACONTECE COM SONO RUIM ═══ -->
+    <div class="slide" data-slide="2">
+      <div class="label">Seção 2</div>
+      <h2>O que acontece quando dormimos mal</h2>
+      <p class="mt-8">Uma noite ruim já muda os hormônios. Semanas de sono ruim podem desfazer o esforço de um mês de tratamento.</p>
+
+      <div class="hormone-grid mt-16">
+        <div class="hormone-card" style="background:#fce7f3;border:1px solid #f9a8d4">
+          <span class="hormone-ico">😤</span>
+          <span class="hormone-arrow" style="color:#db2777">↑↑</span>
+          <div class="hormone-name" style="color:#9d174d">Grelina</div>
+          <div class="hormone-effect" style="color:#be185d">Hormônio da fome dispara — você sente mais fome mesmo sem precisar de calorias</div>
+        </div>
+        <div class="hormone-card" style="background:#fef3c7;border:1px solid #fcd34d">
+          <span class="hormone-ico">😔</span>
+          <span class="hormone-arrow" style="color:#d97706">↓↓</span>
+          <div class="hormone-name" style="color:#92400e">Leptina</div>
+          <div class="hormone-effect" style="color:#a16207">Sinal de saciedade cai — você não percebe quando está satisfeito</div>
+        </div>
+        <div class="hormone-card" style="background:#fee2e2;border:1px solid #fca5a5">
+          <span class="hormone-ico">😰</span>
+          <span class="hormone-arrow" style="color:#dc2626">↑↑</span>
+          <div class="hormone-name" style="color:#991b1b">Cortisol</div>
+          <div class="hormone-effect" style="color:#b91c1c">Estresse celular aumenta — favorece acúmulo de gordura abdominal</div>
+        </div>
+        <div class="hormone-card" style="background:var(--blue-light);border:1px solid #93c5fd">
+          <span class="hormone-ico">😤</span>
+          <span class="hormone-arrow" style="color:#2563eb">↓↓</span>
+          <div class="hormone-name" style="color:#1e40af">Insulina</div>
+          <div class="hormone-effect" style="color:#1d4ed8">Resistência à insulina aumenta — açúcar no sangue sobe, mais dificuldade de queimar gordura</div>
+        </div>
+      </div>
+
+      <div class="card card-red mt-16">
+        <h3 style="color:#991b1b;margin-bottom:10px">🔴 Em termos práticos, dormir mal faz você:</h3>
+        <div class="gap-8">
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <span style="color:#ef4444;font-size:16px;flex-shrink:0">●</span>
+            <span style="font-size:13px">Sentir <strong>300–500 calorias a mais de fome</strong> por dia — difícil resistir mesmo com GLP-1</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <span style="color:#ef4444;font-size:16px;flex-shrink:0">●</span>
+            <span style="font-size:13px">Ter mais <strong>compulsão por alimentos ultraprocessados</strong> e açúcar (o cérebro busca energia rápida)</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <span style="color:#ef4444;font-size:16px;flex-shrink:0">●</span>
+            <span style="font-size:13px"><strong>Perder mais músculo</strong> e menos gordura em relação ao peso perdido</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <span style="color:#ef4444;font-size:16px;flex-shrink:0">●</span>
+            <span style="font-size:13px">Ter <strong>menos energia</strong> para se exercitar e fazer escolhas conscientes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert card-indigo mt-8">
+        <span class="ico">💡</span>
+        <p>O GLP-1 reduz a fome — mas sono ruim aumenta a fome de forma mais intensa. Em noites ruins, os dois podem se anular. Sono de qualidade amplifica o medicamento.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 4 — COMO MELHORAR O SONO ═══ -->
+    <div class="slide" data-slide="3">
+      <div class="label">Seção 3</div>
+      <h2>Como melhorar o sono</h2>
+      <p class="mt-8">A qualidade do sono é moldável. Pequenas mudanças de comportamento têm impacto enorme na profundidade e duração do sono.</p>
+
+      <div class="tabs mt-12">
+        <button class="tab active" onclick="switchTab(this,'tab-ambiente')">🛏️ Ambiente</button>
+        <button class="tab" onclick="switchTab(this,'tab-habitos')">🔄 Hábitos</button>
+        <button class="tab" onclick="switchTab(this,'tab-evitar')">🚫 Evitar</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-ambiente">
+        <div class="gap-12">
+          <div class="card card-night">
+            <div style="color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">O quarto ideal para dormir</div>
+            <div class="gap-8">
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:rgba(255,255,255,.05);border-radius:10px">
+                <span style="font-size:18px">🌡️</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#e2e8f0">Temperatura: 18–20°C</div>
+                  <div style="font-size:12px;color:#64748b;margin-top:2px">Quartos frios induzem sono mais profundo — o corpo precisa cair a temperatura central</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:rgba(255,255,255,.05);border-radius:10px">
+                <span style="font-size:18px">🌑</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#e2e8f0">Escuridão total</div>
+                  <div style="font-size:12px;color:#64748b;margin-top:2px">Luz inibe a melatonina — use blackout ou máscara de dormir</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:rgba(255,255,255,.05);border-radius:10px">
+                <span style="font-size:18px">🔇</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#e2e8f0">Silêncio ou ruído branco</div>
+                  <div style="font-size:12px;color:#64748b;margin-top:2px">Ruídos intermitentes (notificações, TV) são os mais nocivos ao sono profundo</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:rgba(255,255,255,.05);border-radius:10px">
+                <span style="font-size:18px">📱</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#e2e8f0">Celular longe da cama</div>
+                  <div style="font-size:12px;color:#64748b;margin-top:2px">A luz azul atrasa o relógio biológico em até 2 horas — compromete sono das próximas noites</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-habitos">
+        <div class="gap-12">
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Horário fixo para dormir e acordar</strong> — mesmo nos fins de semana. O relógio biológico adora consistência</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Exposição ao sol pela manhã</strong> — 10–15 min de luz natural logo ao acordar regula o ritmo circadiano</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Atividade física regular</strong> — pessoas que se exercitam dormem em média 45 min a mais por noite</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Jantar leve</strong> — digestão pesada aquece o corpo internamente e prejudica o sono profundo</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Ritual de desaceleração</strong> — 30–60 min antes de dormir sem telas: leitura, banho morno, respiração</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Limitar cochilos</strong> — se precisar, máximo 20 min antes das 15h. Cochilo longo atrapalha o sono noturno</span></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-evitar">
+        <div class="gap-12">
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Cafeína após 14h</strong> — meia-vida de 5–7h. Um café às 15h ainda tem metade do efeito estimulante às 20h</span></div>
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Álcool</strong> — parece sedativo mas fragmenta o sono profundo. Você dorme, mas não descansa</span></div>
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Telas 1h antes de dormir</strong> — redes sociais e notícias ativam o cérebro emocionalmente, além da luz azul</span></div>
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Treino intenso após 20h</strong> — eleva adrenalina e temperatura, atrasando o início do sono</span></div>
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Dormir com fome ou muito cheio</strong> — os dois extremos prejudicam a qualidade do sono</span></div>
+          <div class="card card-yellow mt-4">
+            <div style="font-size:13px;color:#92400e;line-height:1.55">💡 Se você aplica o medicamento à noite, isso naturalmente já cria um ritual noturno. Aproveite para fazer da aplicação o início do seu processo de desaceleração para dormir.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 5 — ESTRESSE ═══ -->
+    <div class="slide" data-slide="4">
+      <div class="label">Seção 4</div>
+      <h2>Como o estresse sabota o tratamento</h2>
+      <p class="mt-8">Estresse crônico é um dos maiores inimigos do emagrecimento — e opera de forma completamente invisível.</p>
+
+      <div class="card card-red mt-16">
+        <div style="text-align:center;padding:8px 0">
+          <div style="font-size:36px;font-weight:900;color:#991b1b">Cortisol</div>
+          <div style="font-size:13px;font-weight:600;color:#991b1b;margin-top:2px">o hormônio do estresse</div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-12">
+
+        <div class="card">
+          <h3 style="margin-bottom:8px">🔬 O que o cortisol elevado faz</h3>
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num" style="background:#ef4444;font-size:12px">1</div>
+              <div class="step-body">
+                <h3>Aumenta o apetite — especialmente por açúcar e gordura</h3>
+                <p class="mt-4" style="font-size:13px">O cérebro interpreta estresse como situação de perigo e busca energia rápida. O resultado é compulsão por ultraprocessados.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num" style="background:#ef4444;font-size:12px">2</div>
+              <div class="step-body">
+                <h3>Favorece acúmulo de gordura abdominal</h3>
+                <p class="mt-4" style="font-size:13px">Receptores de cortisol são mais abundantes na região visceral. Estresse crônico literalmente direciona gordura para a barriga.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num" style="background:#ef4444;font-size:12px">3</div>
+              <div class="step-body">
+                <h3>Degrada músculo</h3>
+                <p class="mt-4" style="font-size:13px">Em estado de alarme, o corpo pode catabolizar proteína muscular para gerar glicose. Desfaz o trabalho do treino.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num" style="background:#ef4444;font-size:12px">4</div>
+              <div class="step-body">
+                <h3>Prejudica o sono — e cria um ciclo vicioso</h3>
+                <p class="mt-4" style="font-size:13px">Estresse → sono ruim → mais cortisol → mais fome → piores escolhas → mais estresse. Um ciclo que o GLP-1 sozinho não consegue quebrar.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert card-indigo mt-4">
+        <span class="ico">💡</span>
+        <p>O GLP-1 age no eixo intestino-cérebro. Estresse crônico age no mesmo eixo — em sentido oposto. Reduzir o estresse é, literalmente, potencializar o medicamento.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 6 — TÉCNICAS ═══ -->
+    <div class="slide" data-slide="5">
+      <div class="label">Seção 5</div>
+      <h2>Técnicas de manejo do estresse</h2>
+      <p class="mt-8">Nenhuma técnica elimina o estresse da vida. Mas algumas são muito eficazes para reduzir o impacto fisiológico dele no corpo.</p>
+
+      <!-- BREATHING TOOL -->
+      <div class="breath-box mt-12">
+        <div style="font-size:12px;font-weight:700;color:#a5b4fc;letter-spacing:1px;text-transform:uppercase">Respiração 4-7-8</div>
+        <div style="font-size:12px;color:#64748b;margin-top:4px">Clique no círculo para iniciar</div>
+        <div class="breath-circle" id="breath-circle" onclick="startBreath()">
+          <div>
+            <div class="breath-text" id="breath-count">▶</div>
+            <div class="breath-sub" id="breath-phase">Toque para começar</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#64748b">4 seg inspira · 7 seg segura · 8 seg expira</div>
+        <button class="breath-btn" id="breath-btn" onclick="startBreath()">Iniciar exercício</button>
+      </div>
+
+      <div class="gap-12 mt-16">
+
+        <div class="tech-card">
+          <div class="tech-head" onclick="toggleTech(this)">
+            <span class="tech-ico">🧘</span>
+            <div class="tech-title">Meditação guiada</div>
+            <span class="tech-tag" style="background:var(--purple-light);color:var(--purple)">5–10 min</span>
+            <span class="tech-arrow">›</span>
+          </div>
+          <div class="tech-body">
+            <div class="gap-8">
+              <p style="font-size:13px">Prática de 5 a 10 minutos diários já reduz cortisol de forma mensurável. Não precisa esvaziar a mente — o objetivo é observar os pensamentos sem se envolver.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Apps: Insight Timer (gratuito), Calm, Headspace</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Melhor horário: manhã ao acordar ou antes de dormir</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Efeito cumulativo — 2 semanas de prática diária já mostram resultado</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-head" onclick="toggleTech(this)">
+            <span class="tech-ico">📓</span>
+            <div class="tech-title">Journaling (escrita terapêutica)</div>
+            <span class="tech-tag" style="background:var(--teal-light);color:var(--teal)">5 min</span>
+            <span class="tech-arrow">›</span>
+          </div>
+          <div class="tech-body">
+            <div class="gap-8">
+              <p style="font-size:13px">Escrever o que está pesando libera o processamento emocional. O cérebro "fecha o arquivo" — reduzindo a ativação do sistema de alarme.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Escreva 3 coisas pelas quais é grato toda noite</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Ou despeje no papel tudo que está na cabeça — sem filtro</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Não precisa ser bonito ou organizado — só honesto</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-head" onclick="toggleTech(this)">
+            <span class="tech-ico">🌿</span>
+            <div class="tech-title">Passeio na natureza</div>
+            <span class="tech-tag" style="background:var(--green-light);color:var(--green-dark)">20–30 min</span>
+            <span class="tech-arrow">›</span>
+          </div>
+          <div class="tech-body">
+            <div class="gap-8">
+              <p style="font-size:13px">Estudos japoneses sobre "banho de floresta" mostram que 20 minutos em ambiente natural reduzem cortisol em 12% e pressão arterial em 6%. Parque ou praça funcionam também.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Combine com caminhada — dois benefícios ao mesmo tempo</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Deixe o celular no bolso — o objetivo é presença</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-head" onclick="toggleTech(this)">
+            <span class="tech-ico">🤝</span>
+            <div class="tech-title">Conexão social</div>
+            <span class="tech-tag" style="background:var(--blue-light);color:#1e40af">Variável</span>
+            <span class="tech-arrow">›</span>
+          </div>
+          <div class="tech-body">
+            <div class="gap-8">
+              <p style="font-size:13px">Isolamento social eleva cortisol cronicamente. Conversar, rir, compartilhar refeições com pessoas queridas é um poderoso regulador do sistema nervoso.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Compartilhe sua jornada com alguém de confiança</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Grupos de suporte online também têm efeito comprovado</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 7 — ROTINA NOTURNA ═══ -->
+    <div class="slide" data-slide="6">
+      <div class="label">Seção 6</div>
+      <h2>Rotina noturna ideal</h2>
+      <p class="mt-8">As 2 horas antes de dormir determinam a qualidade das próximas 8. Monte sua rotina baseada neste modelo.</p>
+
+      <div class="night-timeline mt-16">
+
+        <div class="nt-item">
+          <div class="nt-dot" style="background:#312e81">🍽️</div>
+          <div class="nt-content">
+            <div class="nt-time">2H ANTES</div>
+            <div class="nt-title">Última refeição — leve</div>
+            <div class="nt-desc">Jantar terminado. Nada pesado nas próximas horas. Digestão ativa aquece o corpo e prejudica o início do sono profundo.</div>
+          </div>
+        </div>
+
+        <div class="nt-item">
+          <div class="nt-dot" style="background:#4c1d95">📵</div>
+          <div class="nt-content">
+            <div class="nt-time">90 MIN ANTES</div>
+            <div class="nt-title">Telas desligadas</div>
+            <div class="nt-desc">Celular, computador e TV no modo descanso. Substitua por leitura física, música relaxante ou conversa tranquila.</div>
+          </div>
+        </div>
+
+        <div class="nt-item">
+          <div class="nt-dot" style="background:#5b21b6">💉</div>
+          <div class="nt-content">
+            <div class="nt-time">60 MIN ANTES</div>
+            <div class="nt-title">Aplicação do medicamento (se for à noite)</div>
+            <div class="nt-desc">Momento ideal para aplicar — você vai dormir durante o pico de ação, reduzindo a náusea. Faça como ritual consciente.</div>
+            <div style="margin-top:6px;padding:8px 10px;background:var(--yellow-light);border-radius:8px">
+              <div style="font-size:12px;font-weight:600;color:#92400e">💡 Aplicar virou parte da sua rotina de autocuidado</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nt-item">
+          <div class="nt-dot" style="background:#7c3aed">🛁</div>
+          <div class="nt-content">
+            <div class="nt-time">45 MIN ANTES</div>
+            <div class="nt-title">Banho morno</div>
+            <div class="nt-desc">A queda de temperatura corporal após o banho morno sinaliza para o cérebro que é hora de dormir. Efeito comprovado na latência do sono.</div>
+          </div>
+        </div>
+
+        <div class="nt-item">
+          <div class="nt-dot" style="background:#6d28d9">📓</div>
+          <div class="nt-content">
+            <div class="nt-time">30 MIN ANTES</div>
+            <div class="nt-title">Journaling ou leitura</div>
+            <div class="nt-desc">5 minutos escrevendo o que foi bom no dia e o que está pesando. Ou leitura de algo leve. O objetivo é desacelerar o processamento mental.</div>
+          </div>
+        </div>
+
+        <div class="nt-item">
+          <div class="nt-dot" style="background:#4c1d95">🌬️</div>
+          <div class="nt-content">
+            <div class="nt-time">10 MIN ANTES</div>
+            <div class="nt-title">Respiração 4-7-8</div>
+            <div class="nt-desc">3–5 ciclos de respiração profunda. Ativa o sistema nervoso parassimpático — o modo "descanso" do corpo. Combina muito bem com meditação guiada curta.</div>
+          </div>
+        </div>
+
+        <div class="nt-item">
+          <div class="nt-dot" style="background:#1e1b4b">😴</div>
+          <div class="nt-content">
+            <div class="nt-time">HORA DE DORMIR</div>
+            <div class="nt-title">Mesmo horário toda noite</div>
+            <div class="nt-desc">Consistência no horário de dormir é mais importante do que a duração. O relógio biológico se ajusta em 1–2 semanas.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 8 — MITOS ═══ -->
+    <div class="slide" data-slide="7">
+      <div class="label">Seção 7</div>
+      <h2>Mitos sobre sono e estresse</h2>
+      <p class="mt-8">Crenças erradas sobre sono e estresse são muito comuns — e algumas são ativamente prejudiciais.</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Dormir pouco durante a semana e compensar no fim de semana"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> O débito de sono não é totalmente compensável. Dormir 10h no sábado melhora o humor, mas não reverte os danos hormonais acumulados durante a semana. Consistência é o que funciona.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Álcool ajuda a dormir melhor"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> Álcool sedativo ≠ sono reparador. Ele suprime o sono REM (fase de recuperação profunda), aumenta despertares na segunda metade da noite e piora apneia do sono. Você dorme — mas não descansa.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Estresse é sinal de produtividade — tenho orgulho de dormir pouco"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Culturalmente comum, cientificamente errado.</strong> Privação de sono reduz performance cognitiva, criatividade e tomada de decisão. Quem dorme bem produz mais em menos horas.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Meditação é coisa esotérica e não tem base científica"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> Há centenas de estudos publicados em revistas científicas de alto impacto documentando os efeitos da meditação no cortisol, pressão arterial, qualidade do sono e inflamação.</div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)"><span>✅</span><span>"Pequenas melhorias no sono já fazem diferença"</span></div>
+          <div class="myth-body" style="color:var(--green-dark)"><strong>Verdade.</strong> Mesmo uma melhora de 30–45 min de sono por noite já mostra impacto na grelina e leptina em 2–3 semanas. Perfeito é inimigo do suficiente — pequenos avanços consistentes funcionam.</div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)"><span>✅</span><span>"O corpo tem um ritmo natural que podemos treinar"</span></div>
+          <div class="myth-body" style="color:var(--green-dark)"><strong>Verdade.</strong> O ritmo circadiano é extremamente responsivo a mudanças de comportamento. Luz solar pela manhã, horário fixo e ambiente escuro à noite reprogramam o relógio biológico em 1–2 semanas.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 9 — RESUMO ═══ -->
+    <div class="slide" data-slide="8">
+      <div class="label">Resumo do Capítulo 8</div>
+      <h2>Cuide do que não vê</h2>
+      <p class="mt-8">Sono e estresse são os fatores invisíveis que determinam se o tratamento vai ou não funcionar da forma esperada.</p>
+
+      <div class="card card-dark mt-16">
+        <div style="color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">As 6 lições deste capítulo</div>
+        <div class="gap-8">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">7–9h de sono por noite — tanto quanto a alimentação e o exercício</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Sono ruim aumenta a fome e pode anular o efeito do GLP-1</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Cortisol crônico acumula gordura abdominal — mesmo com medicamento</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Respiração, meditação e natureza reduzem cortisol de forma comprovada</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Rotina noturna consistente é mais eficaz do que qualquer suplemento de sono</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">6</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Álcool piora o sono — mesmo que pareça relaxante antes de dormir</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:8px">🏆 O que você aprendeu</h3>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div class="row"><span>✓</span><span style="font-size:13px">Por que sono e emagrecimento são inseparáveis</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">O que acontece hormonalmente com sono ruim</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Como criar um ambiente e hábitos que favorecem o sono</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Como o cortisol sabota o tratamento</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Técnicas práticas de redução de estresse</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Modelo de rotina noturna</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="border:2px solid var(--green);text-align:center;padding:20px">
+          <div style="font-size:28px;margin-bottom:8px">📊</div>
+          <h3 style="margin-bottom:6px">Próximo capítulo</h3>
+          <p>Capítulo 9 — <strong>Acompanhando sua evolução:</strong> como medir o progresso além da balança, interpretar os resultados e manter a motivação ao longo do tratamento.</p>
+          <div class="pill pill-green mt-12" style="justify-content:center;width:100%">Continuar para o Cap. 9 →</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <nav>
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="prev()">‹ Anterior</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn btn-next" id="btn-next" onclick="next()">Próximo ›</button>
+  </nav>
+
+</div>
+
+<script>
+const TOTAL=9;let current=0;
+function init(){
+  const d=document.getElementById('dots');
+  for(let i=0;i<TOTAL;i++){
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===0?' active':'');
+    dot.onclick=()=>goTo(i);d.appendChild(dot);
+  }
+  updateUI();
+}
+function goTo(n){
+  if(n<0||n>=TOTAL||n===current)return;
+  const sl=document.querySelectorAll('.slide');
+  sl[current].classList.remove('active');sl[current].classList.add('exit');
+  const p=current;current=n;
+  setTimeout(()=>sl[p].classList.remove('exit'),350);
+  sl[current].classList.add('active');sl[current].scrollTop=0;updateUI();
+}
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
+function updateUI(){
+  document.getElementById('prog-fill').style.width=((current+1)/TOTAL*100).toFixed(1)+'%';
+  document.getElementById('prog-text').textContent=(current+1)+' / '+TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('btn-prev').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('btn-next').textContent=current===TOTAL-2?'Finalizar ›':'Próximo ›';
+}
+function switchTab(btn,id){
+  const sl=btn.closest('.slide');
+  sl.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  sl.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(id).classList.add('active');
+}
+function toggleTech(head){
+  const isOpen=head.classList.contains('open');
+  document.querySelectorAll('.tech-head').forEach(h=>{h.classList.remove('open');h.nextElementSibling.classList.remove('open')});
+  if(!isOpen){head.classList.add('open');head.nextElementSibling.classList.add('open')}
+}
+
+/* BREATHING EXERCISE */
+let breathRunning=false,breathTimer=null,breathPhaseIdx=0,breathCount=0;
+const phases=[
+  {name:'Inspire',cls:'inhale',sec:4},
+  {name:'Segure',cls:'hold',sec:7},
+  {name:'Expire',cls:'exhale',sec:8}
+];
+function startBreath(){
+  if(breathRunning){stopBreath();return;}
+  breathRunning=true;
+  document.getElementById('breath-btn').textContent='Parar';
+  breathPhaseIdx=0;breathCount=0;
+  runPhase();
+}
+function runPhase(){
+  if(!breathRunning)return;
+  const ph=phases[breathPhaseIdx];
+  const circle=document.getElementById('breath-circle');
+  const countEl=document.getElementById('breath-count');
+  const phaseEl=document.getElementById('breath-phase');
+  circle.className='breath-circle '+ph.cls;
+  phaseEl.textContent=ph.name;
+  let secs=ph.sec;
+  countEl.textContent=secs;
+  breathTimer=setInterval(()=>{
+    secs--;
+    countEl.textContent=secs;
+    if(secs<=0){
+      clearInterval(breathTimer);
+      breathPhaseIdx=(breathPhaseIdx+1)%3;
+      if(breathPhaseIdx===0){breathCount++;if(breathCount>=3){stopBreath();return;}}
+      runPhase();
+    }
+  },1000);
+}
+function stopBreath(){
+  breathRunning=false;
+  clearInterval(breathTimer);
+  document.getElementById('breath-btn').textContent='Iniciar exercício';
+  const circle=document.getElementById('breath-circle');
+  circle.className='breath-circle';
+  document.getElementById('breath-count').textContent='▶';
+  document.getElementById('breath-phase').textContent='Toque para começar';
+}
+init();
+</script>
+</body>
+</html>

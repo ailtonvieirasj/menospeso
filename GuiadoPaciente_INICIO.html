@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Guia do Paciente · menospeso.</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;
+    --green-light:#d1fae5;
+    --green-dark:#047857;
+    --slate:#0f172a;
+    --slate-light:#334155;
+    --muted:#64748b;
+    --blue-light:#e0f2fe;
+    --border:#e2e8f0;
+    --bg:#f8fafc;
+    --white:#ffffff;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+  #app{
+    display:flex;flex-direction:column;height:100vh;max-width:430px;
+    margin:0 auto;background:var(--white);
+    box-shadow:0 0 60px rgba(0,0,0,.10);overflow:hidden;
+  }
+
+  /* ── CAPA ── */
+  .cover{
+    flex-shrink:0;
+    background:var(--white);
+    padding:0;position:relative;overflow:hidden;
+  }
+
+  /* textura orgânica SVG inline */
+  .cover-bg{
+    position:absolute;inset:0;pointer-events:none;z-index:0;
+  }
+
+  .cover-inner{
+    position:relative;z-index:1;
+    padding:32px 24px 24px;
+  }
+
+  /* LOGO */
+  .logo-wrap{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+  .logo-icon{
+    width:38px;height:38px;border-radius:50%;
+    border:2px solid var(--green);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .logo-icon svg{width:20px;height:20px}
+  .logo-type{line-height:1}
+  .logo-word{font-size:20px;font-weight:900;color:var(--slate);letter-spacing:-1px}
+  .logo-word span{font-weight:400;color:var(--slate)}
+  .logo-word em{color:var(--green);font-style:normal}
+  .logo-tagline{font-size:10px;color:var(--muted);font-weight:500;letter-spacing:.5px;margin-top:2px}
+
+  /* HERO */
+  .hero-tag{
+    display:inline-block;background:var(--green-light);
+    color:var(--green-dark);font-size:10px;font-weight:700;
+    padding:4px 12px;border-radius:20px;letter-spacing:.8px;
+    text-transform:uppercase;margin-bottom:10px;
+  }
+  .hero-title{font-size:25px;font-weight:900;color:var(--slate);line-height:1.15;letter-spacing:-.5px;margin-bottom:6px}
+  .hero-title em{color:var(--green);font-style:normal}
+  .hero-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+
+  /* stats row */
+  .stats{display:flex;gap:8px;margin-bottom:0}
+  .stat-pill{
+    flex:1;background:var(--bg);border:1.5px solid var(--border);
+    border-radius:14px;padding:10px 6px;text-align:center;
+  }
+  .stat-num{font-size:20px;font-weight:900;color:var(--slate);line-height:1}
+  .stat-label{font-size:10px;color:var(--muted);font-weight:600;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+
+  /* MANIFESTO faixa */
+  .manifesto{
+    background:var(--slate);
+    padding:14px 24px;
+    display:flex;flex-direction:column;gap:3px;
+  }
+  .manifesto-line{font-size:12px;color:#94a3b8;font-weight:500}
+  .manifesto-line strong{color:var(--green);font-weight:800}
+
+  /* ── PROGRESS BAR ── */
+  .prog-wrap{flex-shrink:0;padding:12px 20px 0;background:var(--white)}
+  .prog-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+  .prog-text{font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.5px}
+  .prog-pct{font-size:12px;font-weight:800;color:var(--green)}
+  .prog-track{height:5px;background:var(--border);border-radius:20px;overflow:hidden}
+  .prog-fill{height:100%;background:linear-gradient(90deg,var(--green),#34d399);border-radius:20px;transition:width .4s ease}
+
+  /* ── SCROLL ── */
+  .scroll{flex:1;overflow-y:auto;padding:14px 16px 40px}
+
+  /* ── SECTION LABELS ── */
+  .section-label{
+    font-size:10px;font-weight:700;letter-spacing:1.2px;
+    text-transform:uppercase;color:var(--muted);
+    margin:16px 4px 8px;
+    padding-left:4px;border-left:2px solid var(--green);
+  }
+  .section-label:first-child{margin-top:4px}
+
+  /* ── CHAPTER CARDS ── */
+  .chapter-card{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 14px;border-radius:14px;
+    border:1.5px solid var(--border);background:#fff;
+    cursor:pointer;transition:all .2s;
+    margin-bottom:8px;text-decoration:none;
+    position:relative;overflow:hidden;
+  }
+  .chapter-card::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:transparent;border-radius:3px 0 0 3px;transition:background .2s;
+  }
+  .chapter-card:hover{border-color:var(--green);background:#f0fdf4;transform:translateX(2px)}
+  .chapter-card:hover::before{background:var(--green)}
+  .chapter-card.done{border-color:#6ee7b7;background:#f0fdf4}
+  .chapter-card.done::before{background:var(--green)}
+
+  .chap-ico{
+    flex-shrink:0;width:42px;height:42px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+  }
+  .chap-body{flex:1;min-width:0}
+  .chap-num{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-transform:uppercase}
+  .chap-title{font-size:14px;font-weight:700;color:var(--slate);margin:1px 0 2px;line-height:1.2}
+  .chap-desc{font-size:12px;color:var(--muted);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .chap-right{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+  .chap-dot{
+    width:8px;height:8px;border-radius:50%;
+    border:2px solid var(--border);background:transparent;transition:all .2s;
+  }
+  .chapter-card.done .chap-dot{background:var(--green);border-color:var(--green)}
+  .chap-arrow{color:var(--border);font-size:16px;font-weight:300;line-height:1}
+  .chapter-card:hover .chap-arrow{color:var(--green)}
+  .chapter-card.done .chap-arrow{color:var(--green)}
+
+  /* ── FOOTER CARD ── */
+  .footer-card{
+    background:linear-gradient(135deg,var(--slate) 0%,#1e293b 100%);
+    border-radius:18px;padding:20px;text-align:center;
+    margin-top:8px;
+  }
+  .footer-card p{font-size:13px;color:#94a3b8;line-height:1.6;margin-bottom:14px}
+  .footer-btn{
+    display:inline-block;background:var(--green);
+    color:#fff;font-size:13px;font-weight:700;
+    padding:11px 22px;border-radius:12px;
+    cursor:pointer;transition:all .2s;border:none;
+  }
+  .footer-btn:hover{background:var(--green-dark)}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- CAPA -->
+  <div class="cover">
+    <!-- textura orgânica de fundo -->
+    <svg class="cover-bg" viewBox="0 0 430 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="rg1" cx="80%" cy="20%" r="60%">
+          <stop offset="0%" stop-color="#d1fae5" stop-opacity=".7"/>
+          <stop offset="100%" stop-color="#d1fae5" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="rg2" cx="10%" cy="80%" r="55%">
+          <stop offset="0%" stop-color="#e0f2fe" stop-opacity=".6"/>
+          <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="430" height="210" fill="#f8fafc"/>
+      <ellipse cx="370" cy="30" rx="130" ry="100" fill="url(#rg1)"/>
+      <path d="M320 0 Q390 60 430 30 L430 0Z" fill="#d1fae5" opacity=".4"/>
+      <path d="M0 150 Q70 100 140 160 Q200 210 260 170 Q310 140 350 190 L430 180 L430 210 L0 210Z" fill="#e0f2fe" opacity=".35"/>
+      <ellipse cx="60" cy="190" rx="110" ry="70" fill="url(#rg2)"/>
+    </svg>
+
+    <div class="cover-inner">
+      <!-- LOGO -->
+      <div class="logo-wrap">
+        <div class="logo-icon">
+          <!-- leaf SVG -->
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C7 2 3 6 3 11c0 3.5 2 6.5 5 8.2V21h2v-1.5c.6.1 1.3.2 2 .2s1.4-.1 2-.2V21h2v-1.8c3-1.7 5-4.7 5-8.2 0-5-4-9-9-9z" fill="#059669" opacity=".2"/>
+            <path d="M12 3c-4.4 0-8 3.6-8 8 0 3 1.6 5.6 4 7.1V20h1v-2.2c1 .3 2 .5 3 .5s2-.2 3-.5V20h1v-1.9c2.4-1.5 4-4.1 4-7.1 0-4.4-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z" fill="#059669"/>
+            <path d="M12 6v10M9 9c1 1 2 2 3 2M15 9c-1 1-2 2-3 2" stroke="#059669" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="logo-type">
+          <div class="logo-word"><strong>menos</strong><span>peso</span><em>.</em></div>
+          <div class="logo-tagline">Saúde Digital</div>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div class="hero-tag">Guia Oficial do Paciente</div>
+      <div class="hero-title">Sua jornada de<br><em>cuidado</em> começa aqui</div>
+      <div class="hero-sub">10 capítulos para te acompanhar do início ao longo prazo — com ciência, clareza e leveza.</div>
+
+      <!-- STATS -->
+      <div class="stats">
+        <div class="stat-pill">
+          <div class="stat-num">10</div>
+          <div class="stat-label">Capítulos</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-num">90+</div>
+          <div class="stat-label">Telas</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Interativo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANIFESTO FAIXA -->
+  <div class="manifesto">
+    <div class="manifesto-line"><strong>MENOS PESO</strong> na Balança.</div>
+    <div class="manifesto-line"><strong>MENOS PESO</strong> no Bolso.</div>
+    <div class="manifesto-line"><strong>MENOS PESO</strong> na Consciência.</div>
+  </div>
+
+  <!-- PROGRESSO -->
+  <div class="prog-wrap">
+    <div class="prog-label">
+      <span class="prog-text">Progresso de leitura</span>
+      <span class="prog-pct" id="prog-pct">0%</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- ÍNDICE -->
+  <div class="scroll">
+
+    <div class="section-label">Fundamentos</div>
+
+    <a class="chapter-card" id="c1" href="Capitulo1_EntendendoAObesidade.html" onclick="markDone('c1')">
+      <div class="chap-ico" style="background:#d1fae5">🧬</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 1</div>
+        <div class="chap-title">Entendendo a obesidade</div>
+        <div class="chap-desc">A ciência por trás da doença — genética, hormônios e cérebro</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <a class="chapter-card" id="c2" href="Capitulo2_ConhecendoOMedicamento.html" onclick="markDone('c2')">
+      <div class="chap-ico" style="background:#e0f2fe">💊</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 2</div>
+        <div class="chap-title">Conhecendo seu medicamento</div>
+        <div class="chap-desc">Como o GLP-1 age no corpo e o que esperar</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <a class="chapter-card" id="c3" href="Capitulo3_PreparandoParaComecar.html" onclick="markDone('c3')">
+      <div class="chap-ico" style="background:#fef9c3">📦</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 3</div>
+        <div class="chap-title">Preparando-se para começar</div>
+        <div class="chap-desc">Materiais, rotina e organização antes da primeira dose</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <div class="section-label">Usando o medicamento</div>
+
+    <a class="chapter-card" id="c4" href="Capitulo4_AplicacaoMedicamento.html" onclick="markDone('c4')">
+      <div class="chap-ico" style="background:#fce7f3">💉</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 4</div>
+        <div class="chap-title">Passo a passo da aplicação</div>
+        <div class="chap-desc">Técnica correta do início ao descarte seguro</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <a class="chapter-card" id="c5" href="Capitulo5_EfeitosColaterais.html" onclick="markDone('c5')">
+      <div class="chap-ico" style="background:#ffedd5">🤢</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 5</div>
+        <div class="chap-title">Efeitos colaterais</div>
+        <div class="chap-desc">O que esperar, como manejar e quando buscar ajuda</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <div class="section-label">Estilo de vida</div>
+
+    <a class="chapter-card" id="c6" href="Capitulo6_Alimentacao.html" onclick="markDone('c6')">
+      <div class="chap-ico" style="background:#d1fae5">🥗</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 6</div>
+        <div class="chap-title">Alimentação no tratamento</div>
+        <div class="chap-desc">O que priorizar, evitar e como montar o prato ideal</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <a class="chapter-card" id="c7" href="Capitulo7_AtividadeFisica.html" onclick="markDone('c7')">
+      <div class="chap-ico" style="background:#ccfbf1">🏃</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 7</div>
+        <div class="chap-title">Atividade física</div>
+        <div class="chap-desc">Como o exercício potencializa o medicamento</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <a class="chapter-card" id="c8" href="Capitulo8_SonoEstresse.html" onclick="markDone('c8')">
+      <div class="chap-ico" style="background:#e0e7ff">😴</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 8</div>
+        <div class="chap-title">Sono e estresse</div>
+        <div class="chap-desc">Os fatores invisíveis que fazem toda a diferença</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <div class="section-label">Resultados e futuro</div>
+
+    <a class="chapter-card" id="c9" href="Capitulo9_AcompanhandoEvolucao.html" onclick="markDone('c9')">
+      <div class="chap-ico" style="background:#ede9fe">📊</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 9</div>
+        <div class="chap-title">Acompanhando sua evolução</div>
+        <div class="chap-desc">Como medir o progresso além da balança</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <a class="chapter-card" id="c10" href="Capitulo10_FuturoDoTratamento.html" onclick="markDone('c10')">
+      <div class="chap-ico" style="background:#d1fae5">🌅</div>
+      <div class="chap-body">
+        <div class="chap-num">Capítulo 10</div>
+        <div class="chap-title">O futuro do tratamento</div>
+        <div class="chap-desc">Como manter os resultados para sempre</div>
+      </div>
+      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
+    </a>
+
+    <!-- FOOTER -->
+    <div class="footer-card">
+      <p>Dúvidas? Nossa equipe está sempre disponível para te apoiar em cada etapa da jornada.</p>
+      <button class="footer-btn" onclick="alert('Entre em contato via WhatsApp ou na próxima consulta.')">💬 Falar com a equipe</button>
+    </div>
+
+  </div><!-- /scroll -->
+</div><!-- /app -->
+
+<script>
+const CHAPTERS=['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10'];
+
+function loadProgress(){
+  const done=CHAPTERS.filter(id=>{try{return localStorage.getItem(id)==='1'}catch(e){return false}});
+  done.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('done')});
+  updateBar(done.length);
+}
+
+function markDone(id){
+  try{localStorage.setItem(id,'1')}catch(e){}
+  const el=document.getElementById(id);
+  if(el)el.classList.add('done');
+  const done=CHAPTERS.filter(i=>{try{return localStorage.getItem(i)==='1'}catch(e){return false}}).length;
+  updateBar(done);
+}
+
+function updateBar(n){
+  const pct=Math.round(n/CHAPTERS.length*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+}
+
+loadProgress();
+</script>
+</body>
+</html>

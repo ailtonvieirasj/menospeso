@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Capítulo 7 — Atividade Física · Menos Peso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;--green-light:#d1fae5;--green-dark:#047857;
+    --slate:#0f172a;--slate-mid:#1e293b;--slate-light:#334155;
+    --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;
+    --yellow:#f59e0b;--yellow-light:#fef3c7;
+    --red:#ef4444;--red-light:#fee2e2;
+    --blue:#3b82f6;--blue-light:#dbeafe;
+    --orange:#f97316;--orange-light:#ffedd5;
+    --purple:#8b5cf6;--purple-light:#ede9fe;
+    --teal:#0d9488;--teal-light:#ccfbf1;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;background:var(--white);box-shadow:0 0 40px rgba(0,0,0,.12)}
+  header{flex-shrink:0;padding:14px 20px 10px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .cap-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+  .cap-title{font-size:13px;font-weight:600;color:var(--slate);flex:1;line-height:1.2}
+  .progress-pill{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .prog-bar{flex-shrink:0;height:3px;background:var(--border)}
+  .prog-fill{height:100%;background:var(--green);transition:width .35s ease}
+  .slides{flex:1;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;overflow-y:auto;padding:20px 20px 100px;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .3s ease,transform .3s ease}
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+  .slide.exit{opacity:0;transform:translateX(-30px)}
+  nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--white);border-top:1px solid var(--border);z-index:10}
+  .nav-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+  .btn-prev{background:var(--border);color:var(--muted)}.btn-prev:hover{background:#cbd5e1}
+  .btn-next{background:var(--green);color:#fff}.btn-next:hover{background:var(--green-dark)}.btn-next:disabled{opacity:.4;cursor:default}
+  .nav-dots{display:flex;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--green);width:18px;border-radius:3px}
+
+  .label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  h1{font-size:26px;font-weight:900;line-height:1.15;color:var(--slate)}
+  h2{font-size:20px;font-weight:800;line-height:1.2;color:var(--slate)}
+  h3{font-size:15px;font-weight:700;color:var(--slate)}
+  p{font-size:14px;line-height:1.65;color:var(--slate-light)}
+  .caption{font-size:12px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card-green{background:var(--green-light);border:1px solid #a7f3d0}
+  .card-yellow{background:var(--yellow-light);border:1px solid #fcd34d}
+  .card-red{background:var(--red-light);border:1px solid #fca5a5}
+  .card-blue{background:var(--blue-light);border:1px solid #93c5fd}
+  .card-dark{background:var(--slate);border:none}
+  .card-orange{background:var(--orange-light);border:1px solid #fdba74}
+  .card-purple{background:var(--purple-light);border:1px solid #c4b5fd}
+  .card-teal{background:var(--teal-light);border:1px solid #5eead4}
+
+  .alert{display:flex;gap:10px;padding:12px;border-radius:12px;align-items:flex-start}
+  .alert .ico{font-size:18px;flex-shrink:0}
+  .alert p{font-size:13px;line-height:1.5}
+
+  .index-list{display:flex;flex-direction:column;gap:8px}
+  .index-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
+  .index-item:hover{border-color:var(--green);background:var(--green-light)}
+  .index-num{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .index-label{font-size:13px;font-weight:600;color:var(--slate);flex:1}
+  .index-arrow{color:var(--muted);font-size:14px}
+
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+  .tab{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .2s;color:var(--muted);font-family:'Inter',sans-serif}
+  .tab.active{background:var(--green);border-color:var(--green);color:#fff}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
+  /* LEVEL SELECTOR */
+  .level-cards{display:flex;flex-direction:column;gap:8px}
+  .level-card{border:2px solid var(--border);border-radius:16px;padding:14px;cursor:pointer;transition:all .2s;background:#fff}
+  .level-card.active{border-color:var(--green);background:var(--green-light)}
+  .level-head{display:flex;align-items:center;gap:10px}
+  .level-ico{font-size:24px}
+  .level-name{font-size:14px;font-weight:700;color:var(--slate)}
+  .level-sub{font-size:12px;color:var(--muted);margin-top:1px}
+  .level-detail{margin-top:12px;display:none}
+  .level-card.active .level-detail{display:block}
+
+  /* EXERCISE TYPE CARDS */
+  .ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ex-card{border:1.5px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;transition:all .2s;background:#fff;text-align:center}
+  .ex-card.active{border-color:var(--green);background:var(--green-light)}
+  .ex-card .ico{font-size:28px;margin-bottom:6px;display:block}
+  .ex-card .name{font-size:13px;font-weight:700;color:var(--slate)}
+  .ex-card .tag{font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;display:inline-block;margin-top:4px}
+  .ex-detail{margin-top:12px}
+
+  /* WEEK PLAN */
+  .week-grid{display:flex;flex-direction:column;gap:6px}
+  .day-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:#fff}
+  .day-label{font-size:12px;font-weight:700;color:var(--muted);width:34px;flex-shrink:0}
+  .day-activity{flex:1;font-size:13px;font-weight:600;color:var(--slate)}
+  .day-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+  .badge-active{background:var(--green-light);color:var(--green-dark)}
+  .badge-rest{background:var(--border);color:var(--muted)}
+  .badge-inject{background:var(--yellow-light);color:#92400e}
+  .badge-light{background:var(--blue-light);color:#1e40af}
+
+  /* STEP FLOW */
+  .step-flow{display:flex;flex-direction:column}
+  .step-item{display:flex;gap:14px;padding-bottom:20px;position:relative}
+  .step-item:last-child{padding-bottom:0}
+  .step-item:not(:last-child)::before{content:'';position:absolute;left:17px;top:36px;bottom:0;width:2px;background:var(--border)}
+  .step-num{flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;z-index:1}
+  .step-body{flex:1;padding-top:6px}
+
+  /* MYTH */
+  .myth-card{border-radius:14px;overflow:hidden;margin-bottom:10px}
+  .myth-head{padding:12px 14px;font-size:13px;font-weight:700;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+  .myth-body{padding:0 14px 12px;font-size:13px;line-height:1.55}
+
+  /* PROGRESS RING */
+  .ring-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .ring-label{font-size:11px;font-weight:700;color:var(--muted);text-align:center}
+  .ring-val{font-size:15px;font-weight:800;color:var(--slate)}
+
+  /* UTILS */
+  .gap-8{display:flex;flex-direction:column;gap:8px}
+  .gap-12{display:flex;flex-direction:column;gap:12px}
+  .gap-16{display:flex;flex-direction:column;gap:16px}
+  .row{display:flex;align-items:center;gap:8px}
+  .mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+  .divider{height:1px;background:var(--border);margin:16px 0}
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+  .pill-green{background:var(--green);color:#fff}
+  .check-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-light);border-radius:10px;margin-bottom:6px}
+  .check-row .ico{font-size:15px;flex-shrink:0;margin-top:1px}
+  .check-row .txt{font-size:13px;color:var(--green-dark);font-weight:500;line-height:1.4}
+  .strat-card{display:flex;gap:12px;padding:14px;border-radius:14px;align-items:flex-start;border:1px solid var(--border);background:#fff;margin-bottom:8px}
+  .strat-ico{font-size:22px;flex-shrink:0}
+  .strat-title{font-size:14px;font-weight:700;color:var(--slate)}
+  .strat-desc{font-size:13px;color:var(--slate-light);margin-top:3px;line-height:1.5}
+  .num-big{font-size:48px;font-weight:900;line-height:1}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <span class="cap-badge">CAP. 7</span>
+    <span class="cap-title">Atividade física</span>
+    <span class="progress-pill" id="prog-text">1 / 9</span>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:11.1%"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- ═══ SLIDE 1 — ABERTURA ═══ -->
+    <div class="slide active" data-slide="0">
+      <div class="label">Capítulo 7</div>
+      <h1>Atividade física no tratamento</h1>
+      <p class="mt-8">Não existe nível mínimo de aptidão para começar. Qualquer movimento já é melhor do que nenhum — e o GLP-1 faz com que cada passo valha ainda mais.</p>
+
+      <div class="card card-green mt-16" style="padding:14px">
+        <div class="row" style="gap:10px">
+          <span style="font-size:22px">💪</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--green-dark)">A ideia central deste capítulo</div>
+            <div style="font-size:13px;color:var(--green-dark);margin-top:4px;line-height:1.5">O exercício não é obrigatório para o medicamento funcionar. Mas quando adicionado ao tratamento, os resultados são significativamente melhores — e mais duradouros.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="index-list mt-12">
+        <div class="index-item" onclick="goTo(1)">
+          <div class="index-num">1</div>
+          <div class="index-label">Por que exercício potencializa o GLP-1</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(2)">
+          <div class="index-num">2</div>
+          <div class="index-label">Por onde começar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(3)">
+          <div class="index-num">3</div>
+          <div class="index-label">Tipos de exercício</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(4)">
+          <div class="index-num">4</div>
+          <div class="index-label">Semana ideal de treinos</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(5)">
+          <div class="index-num">5</div>
+          <div class="index-label">Como progredir com segurança</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(6)">
+          <div class="index-num">6</div>
+          <div class="index-label">Exercício no dia da aplicação</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(7)">
+          <div class="index-num">7</div>
+          <div class="index-label">Mitos sobre exercício</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(8)">
+          <div class="index-num">8</div>
+          <div class="index-label">Resumo</div>
+          <div class="index-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 2 — POR QUE POTENCIALIZA ═══ -->
+    <div class="slide" data-slide="1">
+      <div class="label">Seção 1</div>
+      <h2>Por que exercício potencializa o GLP-1</h2>
+      <p class="mt-8">O medicamento e o exercício atuam em eixos complementares. Juntos, criam um efeito muito maior do que a soma das partes.</p>
+
+      <div class="gap-12 mt-16">
+
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:8px">🔥 Queima de gordura amplificada</h3>
+          <p style="font-size:13px;color:var(--green-dark);line-height:1.55">O GLP-1 cria um déficit calórico reduzindo a fome. O exercício cria um déficit adicional aumentando o gasto. Os dois juntos aceleram significativamente a perda de gordura corporal.</p>
+        </div>
+
+        <div class="card card-teal">
+          <h3 style="color:var(--teal);margin-bottom:8px">💪 Preservação de músculo</h3>
+          <p style="font-size:13px;color:var(--teal);line-height:1.55">Sem exercício de força, o corpo pode perder músculo junto com gordura. O treino resistido sinaliza para o corpo: <em>"preciso desse músculo"</em>. Resultado: perde gordura, mantém músculo — a composição corporal ideal.</p>
+        </div>
+
+        <div class="card card-blue">
+          <h3 style="color:#1e40af;margin-bottom:8px">⚡ Metabolismo ativo no longo prazo</h3>
+          <p style="font-size:13px;color:#1e40af;line-height:1.55">Músculo gasta mais energia em repouso do que gordura. Quem treina durante o emagrecimento sai com um metabolismo mais ativo — o que reduz o risco de recuperar o peso depois.</p>
+        </div>
+
+        <div class="card card-purple">
+          <h3 style="color:#5b21b6;margin-bottom:8px">🧠 Saúde mental e adesão</h3>
+          <p style="font-size:13px;color:#5b21b6;line-height:1.55">Exercício libera endorfinas e melhora o humor — justamente nos momentos em que o tratamento exige mais disciplina. Pacientes que se movimentam regularmente têm maior adesão ao programa.</p>
+        </div>
+
+      </div>
+
+      <div class="alert card-yellow mt-4">
+        <span class="ico">💡</span>
+        <p>Estudos mostram que pacientes que combinam GLP-1 com exercício regular perdem em média <strong>30–40% mais peso</strong> do que os que usam o medicamento sem se exercitar.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 3 — POR ONDE COMEÇAR ═══ -->
+    <div class="slide" data-slide="2">
+      <div class="label">Seção 2</div>
+      <h2>Por onde começar</h2>
+      <p class="mt-8">O ponto de partida é diferente para cada pessoa. Selecione o seu perfil atual.</p>
+
+      <div class="level-cards mt-16">
+
+        <div class="level-card active" id="lv0" onclick="selectLevel(0)">
+          <div class="level-head">
+            <span class="level-ico">🛋️</span>
+            <div>
+              <div class="level-name">Sedentário</div>
+              <div class="level-sub">Não pratico nenhuma atividade regular</div>
+            </div>
+          </div>
+          <div class="level-detail">
+            <div class="gap-8 mt-8">
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Semana 1–2:</strong> 3 caminhadas de 15 min em ritmo confortável — pode ser no bairro, shopping ou esteira</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Semana 3–4:</strong> Aumento para 20–25 min por caminhada</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Mês 2:</strong> Adicionar 2x por semana de exercício leve com peso corporal (agachamento, flexão adaptada)</span></div>
+              <div class="alert card-green mt-8" style="padding:10px">
+                <span class="ico" style="font-size:16px">🎯</span>
+                <p style="font-size:12px;color:var(--green-dark)"><strong>Meta do primeiro mês:</strong> apenas criar o hábito. Consistência vale mais do que intensidade agora.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="level-card" id="lv1" onclick="selectLevel(1)">
+          <div class="level-head">
+            <span class="level-ico">🚶</span>
+            <div>
+              <div class="level-name">Pouco ativo</div>
+              <div class="level-sub">Caminho às vezes, mas sem regularidade</div>
+            </div>
+          </div>
+          <div class="level-detail">
+            <div class="gap-8 mt-8">
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Semana 1–2:</strong> Regularizar — 4 caminhadas de 25–30 min por semana</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Semana 3–4:</strong> Incluir 1–2 sessões de musculação leve ou exercício funcional</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Mês 2:</strong> Progredir para 3 treinos de força + 2–3 caminhadas/semana</span></div>
+              <div class="alert card-green mt-8" style="padding:10px">
+                <span class="ico" style="font-size:16px">🎯</span>
+                <p style="font-size:12px;color:var(--green-dark)"><strong>Meta:</strong> transformar o movimento esporádico em rotina consistente.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="level-card" id="lv2" onclick="selectLevel(2)">
+          <div class="level-head">
+            <span class="level-ico">🏃</span>
+            <div>
+              <div class="level-name">Ativo</div>
+              <div class="level-sub">Pratico exercício pelo menos 3x por semana</div>
+            </div>
+          </div>
+          <div class="level-detail">
+            <div class="gap-8 mt-8">
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Mantenha</strong> sua rotina atual — o GLP-1 vai potencializar os resultados que você já tinha</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Atenção:</strong> nas primeiras semanas pode haver queda de energia — reduza intensidade se necessário</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Priorize</strong> proteína suficiente — o exercício com déficit calórico aumenta a necessidade</span></div>
+              <div class="alert card-blue mt-8" style="padding:10px">
+                <span class="ico" style="font-size:16px">💡</span>
+                <p style="font-size:12px;color:#1e40af">Foque na qualidade do treino, não no volume. Com menos calorias disponíveis, recuperação é chave.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 4 — TIPOS DE EXERCÍCIO ═══ -->
+    <div class="slide" data-slide="3">
+      <div class="label">Seção 3</div>
+      <h2>Tipos de exercício</h2>
+      <p class="mt-8">Cada tipo tem um papel diferente no tratamento. Toque para entender o que cada um faz por você.</p>
+
+      <div class="ex-grid mt-16" id="ex-grid">
+        <div class="ex-card active" onclick="selectEx(0)">
+          <span class="ico">🚶</span>
+          <div class="name">Caminhada</div>
+          <span class="tag" style="background:var(--green-light);color:var(--green-dark)">Essencial</span>
+        </div>
+        <div class="ex-card" onclick="selectEx(1)">
+          <span class="ico">🏋️</span>
+          <div class="name">Musculação</div>
+          <span class="tag" style="background:var(--blue-light);color:#1e40af">Prioritário</span>
+        </div>
+        <div class="ex-card" onclick="selectEx(2)">
+          <span class="ico">🏊</span>
+          <div class="name">Cardio</div>
+          <span class="tag" style="background:var(--teal-light);color:var(--teal)">Complementar</span>
+        </div>
+        <div class="ex-card" onclick="selectEx(3)">
+          <span class="ico">🧘</span>
+          <div class="name">Mobilidade</div>
+          <span class="tag" style="background:var(--purple-light);color:var(--purple)">Bônus</span>
+        </div>
+      </div>
+
+      <div class="ex-detail mt-12" id="ex-detail">
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:8px">🚶 Caminhada — o ponto de partida perfeito</h3>
+          <div class="gap-8">
+            <p style="font-size:13px;color:var(--green-dark)">O exercício mais subestimado e mais acessível. 30 minutos de caminhada em ritmo moderado queimam gordura, melhoram o humor e ajudam o intestino — especialmente útil para combater a constipação do GLP-1.</p>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Meta: 7.000–10.000 passos por dia</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Frequência ideal: todos os dias ou 5x por semana</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Não exige equipamento, academia ou condicionamento prévio</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 5 — SEMANA IDEAL ═══ -->
+    <div class="slide" data-slide="4">
+      <div class="label">Seção 4</div>
+      <h2>Semana ideal de treinos</h2>
+      <p class="mt-8">Um modelo de semana equilibrado para quem está começando no tratamento. Adapte conforme seu nível e rotina.</p>
+
+      <div class="tabs mt-12">
+        <button class="tab active" onclick="switchTab(this,'tab-iniciante')">Iniciante</button>
+        <button class="tab" onclick="switchTab(this,'tab-intermediario')">Intermediário</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-iniciante">
+        <div class="week-grid">
+          <div class="day-row" style="background:var(--green-light);border-color:#a7f3d0">
+            <div class="day-label" style="color:var(--green-dark)">SEG</div>
+            <div class="day-activity">Caminhada 20–30 min</div>
+            <span class="day-badge badge-active">Cardio</span>
+          </div>
+          <div class="day-row">
+            <div class="day-label">TER</div>
+            <div class="day-activity">Descanso ativo — alongamento leve</div>
+            <span class="day-badge badge-rest">Leve</span>
+          </div>
+          <div class="day-row" style="background:var(--green-light);border-color:#a7f3d0">
+            <div class="day-label" style="color:var(--green-dark)">QUA</div>
+            <div class="day-activity">Caminhada 20–30 min</div>
+            <span class="day-badge badge-active">Cardio</span>
+          </div>
+          <div class="day-row" style="background:var(--yellow-light);border-color:#fcd34d">
+            <div class="day-label" style="color:#92400e">QUI</div>
+            <div class="day-activity">💉 Dia da aplicação — caminhada leve (opcional)</div>
+            <span class="day-badge badge-inject">Aplicação</span>
+          </div>
+          <div class="day-row" style="background:var(--green-light);border-color:#a7f3d0">
+            <div class="day-label" style="color:var(--green-dark)">SEX</div>
+            <div class="day-activity">Caminhada 25–30 min</div>
+            <span class="day-badge badge-active">Cardio</span>
+          </div>
+          <div class="day-row">
+            <div class="day-label">SÁB</div>
+            <div class="day-activity">Atividade prazerosa — dança, bike, trilha</div>
+            <span class="day-badge badge-light">Prazer</span>
+          </div>
+          <div class="day-row">
+            <div class="day-label">DOM</div>
+            <div class="day-activity">Descanso completo</div>
+            <span class="day-badge badge-rest">Repouso</span>
+          </div>
+        </div>
+        <div class="alert card-green mt-12">
+          <span class="ico">🎯</span>
+          <p>Neste nível, o objetivo é criar o hábito de se mover. Não meça pelo cansaço — meça pela consistência.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-intermediario">
+        <div class="week-grid">
+          <div class="day-row" style="background:var(--blue-light);border-color:#93c5fd">
+            <div class="day-label" style="color:#1e40af">SEG</div>
+            <div class="day-activity">Musculação — membros superiores</div>
+            <span class="day-badge" style="background:var(--blue-light);color:#1e40af">Força</span>
+          </div>
+          <div class="day-row" style="background:var(--green-light);border-color:#a7f3d0">
+            <div class="day-label" style="color:var(--green-dark)">TER</div>
+            <div class="day-activity">Caminhada rápida ou bicicleta 30–40 min</div>
+            <span class="day-badge badge-active">Cardio</span>
+          </div>
+          <div class="day-row" style="background:var(--blue-light);border-color:#93c5fd">
+            <div class="day-label" style="color:#1e40af">QUA</div>
+            <div class="day-activity">Musculação — membros inferiores</div>
+            <span class="day-badge" style="background:var(--blue-light);color:#1e40af">Força</span>
+          </div>
+          <div class="day-row" style="background:var(--yellow-light);border-color:#fcd34d">
+            <div class="day-label" style="color:#92400e">QUI</div>
+            <div class="day-activity">💉 Aplicação — descanso ou mobilidade</div>
+            <span class="day-badge badge-inject">Aplicação</span>
+          </div>
+          <div class="day-row" style="background:var(--blue-light);border-color:#93c5fd">
+            <div class="day-label" style="color:#1e40af">SEX</div>
+            <div class="day-activity">Musculação — corpo todo</div>
+            <span class="day-badge" style="background:var(--blue-light);color:#1e40af">Força</span>
+          </div>
+          <div class="day-row" style="background:var(--green-light);border-color:#a7f3d0">
+            <div class="day-label" style="color:var(--green-dark)">SÁB</div>
+            <div class="day-activity">Cardio leve — caminhada, natação, bike</div>
+            <span class="day-badge badge-active">Cardio</span>
+          </div>
+          <div class="day-row">
+            <div class="day-label">DOM</div>
+            <div class="day-activity">Descanso completo ou alongamento</div>
+            <span class="day-badge badge-rest">Repouso</span>
+          </div>
+        </div>
+        <div class="alert card-blue mt-12">
+          <span class="ico">💡</span>
+          <p>Com déficit calórico do medicamento, a recuperação pode ser mais lenta. Durma bem e priorize proteína nos dias de treino.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 6 — COMO PROGREDIR ═══ -->
+    <div class="slide" data-slide="5">
+      <div class="label">Seção 5</div>
+      <h2>Como progredir com segurança</h2>
+      <p class="mt-8">A progressão bem planejada evita lesões e garante que você continue evoluindo mês após mês.</p>
+
+      <div class="step-flow mt-16">
+
+        <div class="step-item">
+          <div class="step-num" style="font-size:12px">M1</div>
+          <div class="step-body">
+            <h3>Mês 1 — Estabelecer o hábito</h3>
+            <p class="mt-4">Foco total em consistência. Não importa a intensidade — importa aparecer. Mesmo 15 minutos de caminhada 4x por semana já é uma vitória real nesta fase.</p>
+            <div class="card card-green mt-8" style="padding:10px">
+              <div style="font-size:12px;font-weight:600;color:var(--green-dark)">Meta: movimentar-se pelo menos 3x na semana</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num" style="font-size:12px">M2</div>
+          <div class="step-body">
+            <h3>Mês 2 — Aumentar duração</h3>
+            <p class="mt-4">Adicione 5–10 minutos em cada sessão. Se estava caminhando 20 min, vá para 25–30. Não aumente duração e intensidade ao mesmo tempo.</p>
+            <div class="card card-blue mt-8" style="padding:10px">
+              <div style="font-size:12px;font-weight:600;color:#1e40af">Meta: chegar a 30 min contínuos de atividade por sessão</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num" style="font-size:12px">M3</div>
+          <div class="step-body">
+            <h3>Mês 3 — Adicionar força</h3>
+            <p class="mt-4">Inclua exercícios com peso corporal ou musculação 2x por semana. Agachamento, flexão adaptada, afundo — movimentos funcionais que recrutam grandes grupos musculares.</p>
+            <div class="card card-teal mt-8" style="padding:10px">
+              <div style="font-size:12px;font-weight:600;color:var(--teal)">Meta: 2 sessões de força + 3 de cardio por semana</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num" style="font-size:12px">M4+</div>
+          <div class="step-body">
+            <h3>Mês 4 em diante — Intensificar progressivamente</h3>
+            <p class="mt-4">Aumente cargas ou número de séries na musculação. Intercale caminhadas normais com caminhadas em ritmo mais acelerado. Adicione uma 3ª sessão de força se sentir bem.</p>
+            <div class="card card-purple mt-8" style="padding:10px">
+              <div style="font-size:12px;font-weight:600;color:#5b21b6">Meta: 3–4 treinos por semana com progressão de carga</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert card-yellow mt-4">
+        <span class="ico">⚠️</span>
+        <p>A <strong>regra dos 10%</strong>: nunca aumente volume ou intensidade em mais de 10% por semana. Progressão rápida demais é a principal causa de lesão.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 7 — DIA DA APLICAÇÃO ═══ -->
+    <div class="slide" data-slide="6">
+      <div class="label">Seção 6</div>
+      <h2>Exercício no dia da aplicação</h2>
+      <p class="mt-8">O dia da injeção merece atenção especial. Saiba como organizar seu treino para evitar desconforto.</p>
+
+      <div class="gap-12 mt-16">
+
+        <div class="card card-yellow">
+          <h3 style="color:#92400e;margin-bottom:8px">⏰ A questão do horário</h3>
+          <p style="font-size:13px;color:#92400e;line-height:1.55">O pico de concentração do medicamento ocorre nas primeiras horas após a aplicação. Náusea e tontura são mais comuns nesse período. Treinar durante o pico pode ser desconfortável.</p>
+        </div>
+
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:10px">✅ Estratégia recomendada</h3>
+          <div class="gap-8">
+            <div class="check-row"><span class="ico">🌅</span><span class="txt"><strong>Se aplicar à noite:</strong> treine normalmente de manhã ou à tarde, antes da aplicação</span></div>
+            <div class="check-row"><span class="ico">🌙</span><span class="txt"><strong>Se aplicar de manhã:</strong> aguarde 4–6 horas e opte por atividade leve nesse dia</span></div>
+            <div class="check-row"><span class="ico">🚶</span><span class="txt"><strong>No dia da aplicação:</strong> caminhada leve é sempre segura — evite treinos de alta intensidade</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:10px">📅 Como planejar a semana</h3>
+          <div class="gap-8">
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--green-light);border-radius:10px">
+              <span style="font-size:18px">💡</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--green-dark)">Coloque o dia de descanso ou treino leve no dia da aplicação</div>
+                <div style="font-size:12px;color:var(--green-dark);margin-top:4px">Isso elimina o conflito e simplifica o planejamento da semana toda</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--blue-light);border-radius:10px">
+              <span style="font-size:18px">🏋️</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#1e40af">Reserve os treinos mais intensos para 2 dias após a aplicação</div>
+                <div style="font-size:12px;color:#1e40af;margin-top:4px">O medicamento já está mais estabilizado e o corpo tem mais energia disponível</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-red">
+          <h3 style="color:#991b1b;margin-bottom:8px">🚫 Evite no dia da aplicação</h3>
+          <div class="gap-8">
+            <div style="display:flex;gap:8px;align-items:center"><span style="color:#ef4444">✗</span><span style="font-size:13px">Treinos de alta intensidade (HIIT, sprint, CrossFit pesado)</span></div>
+            <div style="display:flex;gap:8px;align-items:center"><span style="color:#ef4444">✗</span><span style="font-size:13px">Atividades que exigem muito equilíbrio se sentir tontura</span></div>
+            <div style="display:flex;gap:8px;align-items:center"><span style="color:#ef4444">✗</span><span style="font-size:13px">Treinar com fome ou sem ter bebido água</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 8 — MITOS ═══ -->
+    <div class="slide" data-slide="7">
+      <div class="label">Seção 7</div>
+      <h2>Mitos sobre exercício</h2>
+      <p class="mt-8">Muitas crenças limitantes impedem as pessoas de começar. Vamos destruir as principais.</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Preciso ir à academia para o exercício funcionar"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> Caminhada, exercícios com peso corporal em casa, subir escadas, dançar — tudo conta. A academia amplifica os resultados, mas o movimento cotidiano já cria uma base sólida.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Quanto mais treinar, mais rápido emagreço"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso — e perigoso.</strong> Com o GLP-1 reduzindo a ingestão calórica, treinar demais pode causar fadiga severa, queda imunológica e lesões. Progredir devagar é mais eficaz a longo prazo.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Exercício na barriga emagrece a barriga"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> Não existe emagrecimento localizado. Abdominais fortalecem a musculatura do core, mas a gordura abdominal é reduzida pelo déficit calórico geral — não pelo exercício específico naquela região.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Com o medicamento não preciso me exercitar"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> O GLP-1 funciona sem exercício, mas os resultados são bem menores. Além disso, sem atividade de força, parte do peso perdido vem de músculo — o que prejudica o metabolismo futuro.</div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)"><span>✅</span><span>"Qualquer movimento já é um começo válido"</span></div>
+          <div class="myth-body" style="color:var(--green-dark)"><strong>Verdade.</strong> Uma caminhada de 10 minutos é infinitamente melhor do que nenhuma caminhada. Começar pequeno é a estratégia mais eficaz para criar um hábito que dura.</div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)"><span>✅</span><span>"Musculação é tão importante quanto cardio"</span></div>
+          <div class="myth-body" style="color:var(--green-dark)"><strong>Verdade.</strong> No contexto do GLP-1, a musculação pode ser ainda mais importante que o cardio. Ela preserva a massa muscular durante a perda de peso — o que define a qualidade do resultado final.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 9 — RESUMO ═══ -->
+    <div class="slide" data-slide="8">
+      <div class="label">Resumo do Capítulo 7</div>
+      <h2>Mova-se — no seu ritmo</h2>
+      <p class="mt-8">Não existe tamanho certo de começo. O único movimento errado é o que não acontece.</p>
+
+      <div class="card card-dark mt-16">
+        <div style="color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">As 6 lições deste capítulo</div>
+        <div class="gap-8">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Exercício + GLP-1 = resultado 30–40% maior do que medicamento sozinho</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Musculação preserva músculo — a parte mais importante do resultado</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Comece onde você está — caminhada 3x por semana já é excelente início</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">No dia da aplicação: descanso ou treino leve apenas</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Regra dos 10%: nunca aumente mais de 10% por semana</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">6</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Consistência ganha de intensidade — sempre</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:8px">🏆 O que você aprendeu</h3>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div class="row"><span>✓</span><span style="font-size:13px">Por que exercício potencializa o medicamento</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Como começar no seu nível atual</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">O papel de cada tipo de exercício</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Modelo de semana para iniciante e intermediário</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Como progredir com segurança mês a mês</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">O que fazer no dia da aplicação</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="border:2px solid var(--green);text-align:center;padding:20px">
+          <div style="font-size:28px;margin-bottom:8px">😴</div>
+          <h3 style="margin-bottom:6px">Próximo capítulo</h3>
+          <p>Capítulo 8 — <strong>Sono e estresse:</strong> por que dormir mal e viver estressado sabota o tratamento — e o que fazer sobre isso.</p>
+          <div class="pill pill-green mt-12" style="justify-content:center;width:100%">Continuar para o Cap. 8 →</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <nav>
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="prev()">‹ Anterior</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn btn-next" id="btn-next" onclick="next()">Próximo ›</button>
+  </nav>
+
+</div>
+
+<script>
+const TOTAL=9;let current=0;
+function init(){
+  const d=document.getElementById('dots');
+  for(let i=0;i<TOTAL;i++){
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===0?' active':'');
+    dot.onclick=()=>goTo(i);d.appendChild(dot);
+  }
+  updateUI();
+}
+function goTo(n){
+  if(n<0||n>=TOTAL||n===current)return;
+  const sl=document.querySelectorAll('.slide');
+  sl[current].classList.remove('active');sl[current].classList.add('exit');
+  const p=current;current=n;
+  setTimeout(()=>sl[p].classList.remove('exit'),350);
+  sl[current].classList.add('active');sl[current].scrollTop=0;updateUI();
+}
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
+function updateUI(){
+  document.getElementById('prog-fill').style.width=((current+1)/TOTAL*100).toFixed(1)+'%';
+  document.getElementById('prog-text').textContent=(current+1)+' / '+TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('btn-prev').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('btn-next').textContent=current===TOTAL-2?'Finalizar ›':'Próximo ›';
+}
+function switchTab(btn,id){
+  const sl=btn.closest('.slide');
+  sl.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  sl.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(id).classList.add('active');
+}
+function selectLevel(i){
+  document.querySelectorAll('.level-card').forEach((c,idx)=>c.classList.toggle('active',idx===i));
+}
+
+const exDetails=[
+  `<div class="card card-green"><h3 style="color:var(--green-dark);margin-bottom:8px">🚶 Caminhada — o ponto de partida perfeito</h3><div class="gap-8"><p style="font-size:13px;color:var(--green-dark)">O exercício mais subestimado e mais acessível. 30 minutos em ritmo moderado queimam gordura, melhoram o humor e combatem a constipação do GLP-1.</p><div class="check-row"><span class="ico">✓</span><span class="txt">Meta: 7.000–10.000 passos por dia</span></div><div class="check-row"><span class="ico">✓</span><span class="txt">Frequência: todos os dias ou 5x por semana</span></div><div class="check-row"><span class="ico">✓</span><span class="txt">Não exige equipamento nem condicionamento prévio</span></div></div></div>`,
+  `<div class="card card-blue"><h3 style="color:#1e40af;margin-bottom:8px">🏋️ Musculação — o mais importante a longo prazo</h3><div class="gap-8"><p style="font-size:13px;color:#1e40af">É o exercício que preserva músculo durante o emagrecimento. Sem musculação, parte do peso perdido vem de massa magra — o que prejudica o metabolismo futuro.</p><div class="check-row"><span class="ico">✓</span><span class="txt">Frequência ideal: 2–3x por semana</span></div><div class="check-row"><span class="ico">✓</span><span class="txt">Pode ser na academia, em casa ou com faixas elásticas</span></div><div class="check-row"><span class="ico">✓</span><span class="txt">Foco nos grandes grupos: pernas, costas, peito</span></div></div></div>`,
+  `<div class="card card-teal"><h3 style="color:var(--teal);margin-bottom:8px">🏊 Cardio — amplifica a queima de gordura</h3><div class="gap-8"><p style="font-size:13px;color:var(--teal)">Natação, bicicleta, dança, zumba, jump. Qualquer atividade que eleve o coração por 30+ minutos. Complementa muito bem a musculação.</p><div class="check-row"><span class="ico">✓</span><span class="txt">Frequência ideal: 2–3x por semana</span></div><div class="check-row"><span class="ico">✓</span><span class="txt">Ritmo moderado é suficiente — não precisa ser intenso</span></div><div class="check-row"><span class="ico">✓</span><span class="txt">Ótimo para saúde cardiovascular e humor</span></div></div></div>`,
+  `<div class="card card-purple"><h3 style="color:#5b21b6;margin-bottom:8px">🧘 Mobilidade — o exercício esquecido</h3><div class="gap-8"><p style="font-size:13px;color:#5b21b6">Alongamento, yoga, pilates. Melhora a postura, reduz dores e previne lesões nos outros treinos. Especialmente importante para quem passou anos sedentário.</p><div class="check-row"><span class="ico">✓</span><span class="txt">10–15 min por dia já fazem diferença</span></div><div class="check-row"><span class="ico">✓</span><span class="txt">Pode ser feito todos os dias, inclusive nos dias de descanso</span></div><div class="check-row"><span class="ico">✓</span><span class="txt">Reduz o risco de lesão nos outros exercícios</span></div></div></div>`
+];
+function selectEx(i){
+  document.querySelectorAll('.ex-card').forEach((c,idx)=>c.classList.toggle('active',idx===i));
+  document.getElementById('ex-detail').innerHTML=`<div class="ex-detail">${exDetails[i]}</div>`;
+}
+init();
+</script>
+</body>
+</html>

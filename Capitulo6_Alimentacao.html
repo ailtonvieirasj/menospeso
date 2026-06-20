@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Capítulo 6 — Alimentação · Menos Peso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;--green-light:#d1fae5;--green-dark:#047857;
+    --slate:#0f172a;--slate-mid:#1e293b;--slate-light:#334155;
+    --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;
+    --yellow:#f59e0b;--yellow-light:#fef3c7;
+    --red:#ef4444;--red-light:#fee2e2;
+    --blue:#3b82f6;--blue-light:#dbeafe;
+    --orange:#f97316;--orange-light:#ffedd5;
+    --teal:#0d9488;--teal-light:#ccfbf1;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;background:var(--white);box-shadow:0 0 40px rgba(0,0,0,.12)}
+  header{flex-shrink:0;padding:14px 20px 10px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .cap-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+  .cap-title{font-size:13px;font-weight:600;color:var(--slate);flex:1;line-height:1.2}
+  .progress-pill{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .prog-bar{flex-shrink:0;height:3px;background:var(--border)}
+  .prog-fill{height:100%;background:var(--green);transition:width .35s ease}
+  .slides{flex:1;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;overflow-y:auto;padding:20px 20px 100px;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .3s ease,transform .3s ease}
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+  .slide.exit{opacity:0;transform:translateX(-30px)}
+  nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--white);border-top:1px solid var(--border);z-index:10}
+  .nav-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+  .btn-prev{background:var(--border);color:var(--muted)}.btn-prev:hover{background:#cbd5e1}
+  .btn-next{background:var(--green);color:#fff}.btn-next:hover{background:var(--green-dark)}.btn-next:disabled{opacity:.4;cursor:default}
+  .nav-dots{display:flex;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--green);width:18px;border-radius:3px}
+
+  /* TYPE */
+  .label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  h1{font-size:26px;font-weight:900;line-height:1.15;color:var(--slate)}
+  h2{font-size:20px;font-weight:800;line-height:1.2;color:var(--slate)}
+  h3{font-size:15px;font-weight:700;color:var(--slate)}
+  p{font-size:14px;line-height:1.65;color:var(--slate-light)}
+  .caption{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* CARDS */
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card-green{background:var(--green-light);border:1px solid #a7f3d0}
+  .card-yellow{background:var(--yellow-light);border:1px solid #fcd34d}
+  .card-red{background:var(--red-light);border:1px solid #fca5a5}
+  .card-blue{background:var(--blue-light);border:1px solid #93c5fd}
+  .card-dark{background:var(--slate);border:none}
+  .card-orange{background:var(--orange-light);border:1px solid #fdba74}
+  .card-teal{background:var(--teal-light);border:1px solid #5eead4}
+
+  /* INDEX */
+  .index-list{display:flex;flex-direction:column;gap:8px}
+  .index-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
+  .index-item:hover{border-color:var(--green);background:var(--green-light)}
+  .index-num{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .index-label{font-size:13px;font-weight:600;color:var(--slate);flex:1}
+  .index-arrow{color:var(--muted);font-size:14px}
+
+  /* TABS */
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+  .tab{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .2s;color:var(--muted);font-family:'Inter',sans-serif}
+  .tab.active{background:var(--green);border-color:var(--green);color:#fff}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
+  /* ALERT */
+  .alert{display:flex;gap:10px;padding:12px;border-radius:12px;align-items:flex-start}
+  .alert .ico{font-size:18px;flex-shrink:0}
+  .alert p{font-size:13px;line-height:1.5}
+
+  /* FOOD PILL */
+  .food-grid{display:flex;flex-wrap:wrap;gap:8px}
+  .food-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid}
+  .food-pill-green{background:var(--green-light);border-color:#6ee7b7;color:var(--green-dark)}
+  .food-pill-red{background:var(--red-light);border-color:#fca5a5;color:#991b1b}
+  .food-pill-yellow{background:var(--yellow-light);border-color:#fcd34d;color:#92400e}
+
+  /* PLATE BUILDER */
+  .plate-wrap{position:relative;width:220px;height:220px;margin:0 auto}
+  .plate-circle{position:absolute;inset:0;border-radius:50%;border:4px solid var(--border);background:#fff;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+  .plate-slice{position:absolute;width:50%;height:50%;transform-origin:100% 100%}
+  .slice-protein{background:#bbf7d0;top:0;left:0;transform:rotate(0deg)}
+  .slice-veggie{background:#a7f3d0;top:0;right:0;transform:rotate(0deg) scaleX(-1)}
+  .slice-carb{background:#fef08a;bottom:0;left:0;transform:rotate(0deg)}
+  .slice-fat{background:#fed7aa;bottom:0;right:0;transform:rotate(0deg) scaleX(-1)}
+  .plate-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+  .legend-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:var(--bg);border:1px solid var(--border)}
+  .legend-dot{width:12px;height:12px;border-radius:4px;flex-shrink:0}
+  .legend-text{font-size:12px;font-weight:600;color:var(--slate)}
+  .legend-pct{font-size:11px;color:var(--muted)}
+
+  /* PIE CHART SVG */
+  .plate-svg{width:220px;height:220px;margin:0 auto;display:block}
+
+  /* MEAL CARD */
+  .meal-card{border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:10px}
+  .meal-head{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;background:#fff;user-select:none}
+  .meal-head.open{background:var(--green-light)}
+  .meal-time{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .meal-name{font-size:14px;font-weight:700;color:var(--slate)}
+  .meal-arrow{margin-left:auto;font-size:16px;color:var(--muted);transition:transform .25s}
+  .meal-head.open .meal-arrow{transform:rotate(90deg);color:var(--green)}
+  .meal-body{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 14px;background:#fff}
+  .meal-body.open{max-height:400px;padding:0 14px 14px}
+
+  /* STRATEGY CARDS */
+  .strat-card{display:flex;gap:12px;padding:14px;border-radius:14px;align-items:flex-start;border:1px solid var(--border);background:#fff;margin-bottom:8px}
+  .strat-ico{font-size:24px;flex-shrink:0}
+  .strat-title{font-size:14px;font-weight:700;color:var(--slate)}
+  .strat-desc{font-size:13px;color:var(--slate-light);margin-top:3px;line-height:1.5}
+
+  /* MYTH */
+  .myth-card{border-radius:14px;overflow:hidden;margin-bottom:10px}
+  .myth-head{padding:12px 14px;font-size:13px;font-weight:700;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+  .myth-body{padding:0 14px 12px;font-size:13px;line-height:1.55}
+
+  /* COMPARE */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .compare-col{border-radius:14px;padding:12px}
+  .compare-col h3{font-size:12px;font-weight:700;text-align:center;margin-bottom:8px}
+  .compare-col .item{font-size:12px;line-height:1.4;padding:7px 8px;border-radius:8px;background:#fff;margin-bottom:6px;text-align:center;color:var(--slate)}
+
+  /* UTILS */
+  .gap-8{display:flex;flex-direction:column;gap:8px}
+  .gap-12{display:flex;flex-direction:column;gap:12px}
+  .gap-16{display:flex;flex-direction:column;gap:16px}
+  .row{display:flex;align-items:center;gap:8px}
+  .mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+  .divider{height:1px;background:var(--border);margin:16px 0}
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+  .pill-green{background:var(--green);color:#fff}
+  .check-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-light);border-radius:10px;margin-bottom:6px}
+  .check-row .ico{font-size:15px;flex-shrink:0;margin-top:1px}
+  .check-row .txt{font-size:13px;color:var(--green-dark);font-weight:500;line-height:1.4}
+  .cross-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--red-light);border-radius:10px;margin-bottom:6px}
+  .cross-row .ico{font-size:15px;flex-shrink:0;margin-top:1px}
+  .cross-row .txt{font-size:13px;color:#991b1b;font-weight:500;line-height:1.4}
+  .num-big{font-size:48px;font-weight:900;line-height:1}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <span class="cap-badge">CAP. 6</span>
+    <span class="cap-title">Alimentação no tratamento</span>
+    <span class="progress-pill" id="prog-text">1 / 9</span>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:11.1%"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- ═══ SLIDE 1 — ABERTURA ═══ -->
+    <div class="slide active" data-slide="0">
+      <div class="label">Capítulo 6</div>
+      <h1>Alimentação no tratamento</h1>
+      <p class="mt-8">O medicamento faz a parte dele. A alimentação faz a sua. Juntos, os resultados são muito maiores do que qualquer um dos dois sozinho.</p>
+
+      <div class="card card-green mt-16" style="padding:14px">
+        <div class="row" style="gap:10px">
+          <span style="font-size:22px">🎯</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--green-dark)">A ideia central deste capítulo</div>
+            <div style="font-size:13px;color:var(--green-dark);margin-top:4px;line-height:1.5">Não se trata de dieta restritiva. Trata-se de aprender a comer melhor — com menos quantidade, mais qualidade e mais atenção.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="index-list mt-12">
+        <div class="index-item" onclick="goTo(1)">
+          <div class="index-num">1</div>
+          <div class="index-label">Por que a alimentação importa</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(2)">
+          <div class="index-num">2</div>
+          <div class="index-label">O que priorizar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(3)">
+          <div class="index-num">3</div>
+          <div class="index-label">O que evitar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(4)">
+          <div class="index-num">4</div>
+          <div class="index-label">O prato ideal</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(5)">
+          <div class="index-num">5</div>
+          <div class="index-label">Exemplos de refeições</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(6)">
+          <div class="index-num">6</div>
+          <div class="index-label">Estratégias práticas</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(7)">
+          <div class="index-num">7</div>
+          <div class="index-label">Mitos alimentares</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(8)">
+          <div class="index-num">8</div>
+          <div class="index-label">Resumo</div>
+          <div class="index-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 2 — POR QUE IMPORTA ═══ -->
+    <div class="slide" data-slide="1">
+      <div class="label">Seção 1</div>
+      <h2>Por que a alimentação importa</h2>
+      <p class="mt-8">O medicamento reduz a fome e melhora o metabolismo. Mas o que você coloca no prato ainda determina a qualidade dos seus resultados.</p>
+
+      <div class="gap-12 mt-16">
+
+        <div class="card card-blue">
+          <h3 style="color:#1e40af;margin-bottom:8px">🔬 A sinergia medicamento + alimentação</h3>
+          <p style="font-size:13px;color:#1e40af;line-height:1.55">O GLP-1 abre uma janela de oportunidade única: você come menos naturalmente. Aproveitar essa janela com escolhas de qualidade <strong>acelera a perda de gordura</strong> e <strong>preserva a massa muscular</strong>.</p>
+        </div>
+
+        <div class="gap-12">
+          <div class="strat-card" style="background:var(--green-light);border-color:#a7f3d0">
+            <span class="strat-ico">💪</span>
+            <div>
+              <div class="strat-title" style="color:var(--green-dark)">Preservar músculo</div>
+              <div class="strat-desc" style="color:var(--green-dark)">Perder peso sem perder músculo exige proteína suficiente. Quem come mal perde tanto gordura quanto músculo — e isso prejudica o metabolismo a longo prazo.</div>
+            </div>
+          </div>
+          <div class="strat-card" style="background:var(--teal-light);border-color:#5eead4">
+            <span class="strat-ico">⚡</span>
+            <div>
+              <div class="strat-title" style="color:var(--teal)">Manter energia</div>
+              <div class="strat-desc" style="color:var(--teal)">Comer pouco mas bem garante energia para a rotina. Comer pouco e mal leva a fadiga, queda de cabelo e sensação de fraqueza.</div>
+            </div>
+          </div>
+          <div class="strat-card" style="background:var(--yellow-light);border-color:#fcd34d">
+            <span class="strat-ico">🌱</span>
+            <div>
+              <div class="strat-title" style="color:#92400e">Criar hábito duradouro</div>
+              <div class="strat-desc" style="color:#92400e">O medicamento vai ser reduzido ou encerrado no futuro. Os hábitos alimentares construídos agora são o que sustenta o resultado depois.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert card-green mt-4">
+        <span class="ico">💡</span>
+        <p>Não existe uma dieta obrigatória no programa. O objetivo é comer melhor — com mais consciência, mais proteína e menos ultraprocessados.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 3 — O QUE PRIORIZAR ═══ -->
+    <div class="slide" data-slide="2">
+      <div class="label">Seção 2</div>
+      <h2>O que priorizar</h2>
+      <p class="mt-8">Três pilares fazem toda a diferença. Toque em cada um para entender o porquê.</p>
+
+      <div class="tabs mt-12">
+        <button class="tab active" onclick="switchTab(this,'tab-proteina')">🥩 Proteína</button>
+        <button class="tab" onclick="switchTab(this,'tab-fibra')">🥦 Fibras</button>
+        <button class="tab" onclick="switchTab(this,'tab-agua')">💧 Água</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-proteina">
+        <div class="gap-12">
+          <div class="card card-green">
+            <div style="text-align:center;padding:8px 0 4px">
+              <div class="num-big" style="color:var(--green)">1,2–1,6g</div>
+              <div style="font-size:13px;font-weight:600;color:var(--green-dark)">de proteína por kg de peso corporal</div>
+              <div class="caption mt-4">Meta diária recomendada durante o tratamento</div>
+            </div>
+          </div>
+          <h3>Por que proteína é o nutriente mais importante</h3>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Preserva massa muscular durante a perda de peso</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">É o nutriente mais saciante — amplifica o efeito do GLP-1</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Mantém o metabolismo ativo durante o emagrecimento</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Reduz a perda de cabelo associada ao emagrecimento rápido</span></div>
+          <div class="mt-8">
+            <h3 style="margin-bottom:8px">Boas fontes de proteína</h3>
+            <div class="food-grid">
+              <span class="food-pill food-pill-green">🐟 Peixe</span>
+              <span class="food-pill food-pill-green">🍗 Frango</span>
+              <span class="food-pill food-pill-green">🥚 Ovos</span>
+              <span class="food-pill food-pill-green">🫘 Feijão</span>
+              <span class="food-pill food-pill-green">🥛 Iogurte grego</span>
+              <span class="food-pill food-pill-green">🧀 Queijo cottage</span>
+              <span class="food-pill food-pill-green">🥩 Carne magra</span>
+              <span class="food-pill food-pill-green">🫛 Lentilha</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-fibra">
+        <div class="gap-12">
+          <div class="card card-teal">
+            <div style="text-align:center;padding:8px 0 4px">
+              <div class="num-big" style="color:var(--teal)">25–35g</div>
+              <div style="font-size:13px;font-weight:600;color:var(--teal)">de fibras por dia</div>
+              <div class="caption mt-4">Meta diária para um intestino saudável</div>
+            </div>
+          </div>
+          <h3>Por que fibras são aliadas</h3>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Previnem constipação — um dos efeitos mais comuns do GLP-1</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Alimentam a microbiota intestinal saudável</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Aumentam a saciedade sem adicionar calorias significativas</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Controlam os picos de açúcar no sangue</span></div>
+          <div class="mt-8">
+            <h3 style="margin-bottom:8px">Boas fontes de fibras</h3>
+            <div class="food-grid">
+              <span class="food-pill food-pill-green">🥦 Brócolis</span>
+              <span class="food-pill food-pill-green">🥕 Cenoura</span>
+              <span class="food-pill food-pill-green">🍎 Maçã com casca</span>
+              <span class="food-pill food-pill-green">🫘 Feijão</span>
+              <span class="food-pill food-pill-green">🌾 Aveia</span>
+              <span class="food-pill food-pill-green">🥬 Folhas verdes</span>
+              <span class="food-pill food-pill-green">🫐 Frutas vermelhas</span>
+              <span class="food-pill food-pill-green">🌱 Chia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-agua">
+        <div class="gap-12">
+          <div class="card card-blue">
+            <div style="text-align:center;padding:8px 0 4px">
+              <div class="num-big" style="color:var(--blue)">2–2,5L</div>
+              <div style="font-size:13px;font-weight:600;color:#1e40af">de água por dia</div>
+              <div class="caption mt-4">Distribuídos ao longo de todo o dia</div>
+            </div>
+          </div>
+          <h3>Água é mais importante do que parece</h3>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Combate a constipação causada pelo GLP-1</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Reduz a intensidade da náusea</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Ajuda os rins a processar o metabolismo acelerado</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt">Mantém a pele hidratada durante o emagrecimento</span></div>
+          <div class="card card-yellow mt-4">
+            <div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:6px">💡 Dica prática</div>
+            <p style="font-size:13px;color:#92400e">Beba entre as refeições, não durante. Beber durante a refeição acelera o esvaziamento gástrico e pode aumentar a fome antes da hora.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 4 — O QUE EVITAR ═══ -->
+    <div class="slide" data-slide="3">
+      <div class="label">Seção 3</div>
+      <h2>O que evitar</h2>
+      <p class="mt-8">Não se trata de proibição total — se trata de entender o que atrapalha o tratamento e o que piora os efeitos colaterais.</p>
+
+      <div class="gap-12 mt-12">
+
+        <div class="card card-red">
+          <h3 style="color:#991b1b;margin-bottom:10px">🚫 Evitar sempre — amplificam os efeitos colaterais</h3>
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Frituras e gorduras saturadas:</strong> tornam a náusea muito pior — o estômago já está mais lento e não precisa de mais trabalho</span></div>
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Refeições muito grandes:</strong> com o GLP-1, o estômago sinaliza lotação com bem menos — respeite isso</span></div>
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Álcool:</strong> potencializa a náusea, é calórico, afeta o fígado e o sono — triple problemático</span></div>
+          <div class="cross-row"><span class="ico">✗</span><span class="txt"><strong>Refrigerantes e bebidas gaseificadas:</strong> causam distensão abdominal e desconforto</span></div>
+        </div>
+
+        <div class="card card-yellow">
+          <h3 style="color:#92400e;margin-bottom:10px">⚠️ Reduzir bastante — sabotam os resultados</h3>
+          <div style="background:#fff;border-radius:10px;padding:10px;margin-bottom:8px">
+            <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:6px">Ultraprocessados</div>
+            <div class="food-grid">
+              <span class="food-pill food-pill-red">🍟 Batata frita</span>
+              <span class="food-pill food-pill-red">🍪 Biscoitos recheados</span>
+              <span class="food-pill food-pill-red">🌭 Embutidos</span>
+              <span class="food-pill food-pill-red">🍫 Chocolates industriais</span>
+              <span class="food-pill food-pill-red">🍕 Fast food</span>
+              <span class="food-pill food-pill-red">🧃 Sucos em caixinha</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:#92400e;line-height:1.5">Ultraprocessados são projetados para driblar a saciedade. Mesmo com GLP-1, eles podem estimular o consumo além da necessidade calórica.</div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:10px">💡 A regra dos 80/20</h3>
+          <p>Não precisa ser perfeito. Se 80% das suas escolhas forem boas, os 20% restantes não comprometem o tratamento. <strong>Rigidez demais leva ao abandono.</strong> Consistência ganha de perfeição.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 5 — O PRATO IDEAL ═══ -->
+    <div class="slide" data-slide="4">
+      <div class="label">Seção 4</div>
+      <h2>O prato ideal</h2>
+      <p class="mt-8">Uma forma visual e simples de montar qualquer refeição sem contar calorias ou pesar alimentos.</p>
+
+      <!-- SVG Plate -->
+      <div style="margin:20px 0">
+        <svg class="plate-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- prato -->
+          <circle cx="110" cy="110" r="106" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="4"/>
+          <!-- metade proteína (25%) - quarto inferior esquerdo -->
+          <path d="M110,110 L110,4 A106,106 0 0,0 4,110 Z" fill="#bbf7d0"/>
+          <!-- metade legumes (50%) - metade direita -->
+          <path d="M110,110 L110,4 A106,106 0 0,1 216,110 A106,106 0 0,1 110,216 Z" fill="#6ee7b7"/>
+          <!-- carboidratos (25%) - quarto inferior esquerdo -->
+          <path d="M110,110 L4,110 A106,106 0 0,0 110,216 Z" fill="#fef08a"/>
+          <!-- linhas divisórias -->
+          <line x1="110" y1="4" x2="110" y2="216" stroke="white" stroke-width="3"/>
+          <line x1="4" y1="110" x2="110" y2="110" stroke="white" stroke-width="3"/>
+          <!-- labels -->
+          <text x="155" y="75" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#065f46">Vegetais</text>
+          <text x="155" y="88" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#047857">50%</text>
+          <text x="155" y="155" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#065f46">Proteína</text>
+          <text x="155" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#047857">25%</text>
+          <text x="65" y="165" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#92400e">Carboidrato</text>
+          <text x="65" y="178" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#a16207">25%</text>
+        </svg>
+      </div>
+
+      <div class="gap-12">
+        <div class="card card-green">
+          <div class="row" style="gap:10px;margin-bottom:8px">
+            <div style="width:14px;height:14px;border-radius:4px;background:#6ee7b7;flex-shrink:0"></div>
+            <h3 style="color:var(--green-dark)">Metade do prato: vegetais</h3>
+          </div>
+          <p style="font-size:13px;color:var(--green-dark)">Folhas, legumes, verduras. Crus ou cozidos. Quanto mais coloridos, melhor. São poucos em calorias, ricos em fibras e vitaminas.</p>
+          <div class="food-grid mt-8">
+            <span class="food-pill food-pill-green">🥦 Brócolis</span>
+            <span class="food-pill food-pill-green">🥗 Salada</span>
+            <span class="food-pill food-pill-green">🍅 Tomate</span>
+            <span class="food-pill food-pill-green">🥕 Cenoura</span>
+            <span class="food-pill food-pill-green">🥒 Abobrinha</span>
+            <span class="food-pill food-pill-green">🫑 Pimentão</span>
+          </div>
+        </div>
+
+        <div class="card" style="border-color:#bbf7d0;background:#f0fdf4">
+          <div class="row" style="gap:10px;margin-bottom:8px">
+            <div style="width:14px;height:14px;border-radius:4px;background:#bbf7d0;flex-shrink:0"></div>
+            <h3>Um quarto: proteína</h3>
+          </div>
+          <p style="font-size:13px;color:var(--slate-light)">A porção mais importante. Priorize fontes magras e variadas.</p>
+          <div class="food-grid mt-8">
+            <span class="food-pill food-pill-green">🍗 Frango</span>
+            <span class="food-pill food-pill-green">🐟 Peixe</span>
+            <span class="food-pill food-pill-green">🥚 Ovos</span>
+            <span class="food-pill food-pill-green">🫘 Feijão</span>
+          </div>
+        </div>
+
+        <div class="card" style="border-color:#fef08a;background:#fefce8">
+          <div class="row" style="gap:10px;margin-bottom:8px">
+            <div style="width:14px;height:14px;border-radius:4px;background:#fef08a;flex-shrink:0"></div>
+            <h3>Um quarto: carboidrato</h3>
+          </div>
+          <p style="font-size:13px;color:var(--slate-light)">Prefira integrais e naturais. Não precisam ser eliminados — precisam ser dosados.</p>
+          <div class="food-grid mt-8">
+            <span class="food-pill food-pill-yellow">🍚 Arroz integral</span>
+            <span class="food-pill food-pill-yellow">🥔 Batata doce</span>
+            <span class="food-pill food-pill-yellow">🌾 Aveia</span>
+            <span class="food-pill food-pill-yellow">🍞 Pão integral</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 6 — EXEMPLOS DE REFEIÇÕES ═══ -->
+    <div class="slide" data-slide="5">
+      <div class="label">Seção 5</div>
+      <h2>Exemplos de refeições</h2>
+      <p class="mt-8">Sugestões práticas para cada momento do dia. Toque para expandir cada refeição.</p>
+
+      <div class="mt-12">
+
+        <div class="meal-card">
+          <div class="meal-head" onclick="toggleMeal(this)">
+            <span style="font-size:20px">🌅</span>
+            <div>
+              <div class="meal-time">Café da manhã</div>
+              <div class="meal-name">Começar com proteína</div>
+            </div>
+            <span class="meal-arrow">›</span>
+          </div>
+          <div class="meal-body">
+            <div class="gap-8">
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 1:</strong> 2 ovos mexidos + 1 fatia de pão integral + café sem açúcar</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 2:</strong> Iogurte grego natural + frutas vermelhas + 1 col. sopa de chia</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 3:</strong> Vitamina de proteína + 1 fruta + punhado de castanhas</span></div>
+              <div class="caption mt-4">💡 Evite café da manhã somente com carboidratos — garante mais saciedade pela manhã</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meal-card">
+          <div class="meal-head" onclick="toggleMeal(this)">
+            <span style="font-size:20px">☀️</span>
+            <div>
+              <div class="meal-time">Almoço</div>
+              <div class="meal-name">Prato colorido e variado</div>
+            </div>
+            <span class="meal-arrow">›</span>
+          </div>
+          <div class="meal-body">
+            <div class="gap-8">
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 1:</strong> Frango grelhado + arroz integral + feijão + salada variada com azeite</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 2:</strong> Salmão assado + batata doce + brócolis no vapor com limão</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 3:</strong> Omelete de legumes + salada grande + fruta de sobremesa</span></div>
+              <div class="caption mt-4">💡 Comece sempre pelos vegetais — chegará mais satisfeito no carboidrato e na proteína</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meal-card">
+          <div class="meal-head" onclick="toggleMeal(this)">
+            <span style="font-size:20px">🍎</span>
+            <div>
+              <div class="meal-time">Lanche da tarde</div>
+              <div class="meal-name">Leve e nutritivo</div>
+            </div>
+            <span class="meal-arrow">›</span>
+          </div>
+          <div class="meal-body">
+            <div class="gap-8">
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 1:</strong> 1 fruta + punhado de castanhas ou amendoim</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 2:</strong> Iogurte grego com mel e granola</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 3:</strong> Queijo cottage com torrada integral</span></div>
+              <div class="caption mt-4">💡 Com o GLP-1 muitos pacientes nem sentem fome no lanche — tudo bem pular se não tiver fome</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meal-card">
+          <div class="meal-head" onclick="toggleMeal(this)">
+            <span style="font-size:20px">🌙</span>
+            <div>
+              <div class="meal-time">Jantar</div>
+              <div class="meal-name">Leve, rico em proteína</div>
+            </div>
+            <span class="meal-arrow">›</span>
+          </div>
+          <div class="meal-body">
+            <div class="gap-8">
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 1:</strong> Sopa de legumes com frango desfiado</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 2:</strong> Omelete de 3 ovos + salada verde grande</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Opção 3:</strong> Peixe assado + legumes no forno</span></div>
+              <div class="caption mt-4">💡 Jantar mais leve é ideal — especialmente no dia da aplicação</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert card-blue mt-8">
+        <span class="ico">💡</span>
+        <p>Não existe cardápio perfeito. O melhor cardápio é aquele que você consegue manter. Use esses exemplos como referência, não como regra.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 7 — ESTRATÉGIAS PRÁTICAS ═══ -->
+    <div class="slide" data-slide="6">
+      <div class="label">Seção 6</div>
+      <h2>Estratégias práticas</h2>
+      <p class="mt-8">Pequenos comportamentos à mesa que mudam muito o resultado do tratamento.</p>
+
+      <div class="gap-12 mt-12">
+
+        <div class="strat-card">
+          <span class="strat-ico">🐢</span>
+          <div>
+            <div class="strat-title">Coma devagar — ponha o garfo no prato</div>
+            <div class="strat-desc">O GLP-1 já retarda o esvaziamento gástrico. Comer rápido enganam o cérebro — você come mais do que o necessário antes do sinal de saciedade chegar. Meta: pelo menos 20 minutos por refeição.</div>
+          </div>
+        </div>
+
+        <div class="strat-card">
+          <span class="strat-ico">🍽️</span>
+          <div>
+            <div class="strat-title">Use pratos menores</div>
+            <div class="strat-desc">Prato menor = porção menor que parece cheia. Funciona muito bem com o GLP-1 porque a saciedade vem mais cedo — você não precisa encher o prato para se sentir satisfeito.</div>
+          </div>
+        </div>
+
+        <div class="strat-card">
+          <span class="strat-ico">📱</span>
+          <div>
+            <div class="strat-title">Coma sem telas</div>
+            <div class="strat-desc">Comer assistindo séries ou no celular desconecta você dos sinais de saciedade. Sem distrações, você percebe mais rápido quando está satisfeito — e come menos naturalmente.</div>
+          </div>
+        </div>
+
+        <div class="strat-card">
+          <span class="strat-ico">🥗</span>
+          <div>
+            <div class="strat-title">Comece pelo vegetal</div>
+            <div class="strat-desc">Comer o vegetal primeiro ocupa espaço no estômago com alimento de baixa caloria. Quando chegar na proteína e no carboidrato, você está mais satisfeito e come uma porção menor.</div>
+          </div>
+        </div>
+
+        <div class="strat-card">
+          <span class="strat-ico">🛒</span>
+          <div>
+            <div class="strat-title">Monte a geladeira para o sucesso</div>
+            <div class="strat-desc">Mantenha na geladeira opções prontas para o caso de fome: ovos cozidos, frango desfiado, frutas cortadas, iogurte grego. Fome + geladeira vazia = má escolha.</div>
+          </div>
+        </div>
+
+        <div class="strat-card">
+          <span class="strat-ico">⏰</span>
+          <div>
+            <div class="strat-title">Respeite os horários</div>
+            <div class="strat-desc">Mesmo com pouca fome, não pule refeições por mais de 6 horas. Jejuns longos involuntários podem causar fraqueza e levar a compulsões pontuais quando a fome finalmente bater.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 8 — MITOS ═══ -->
+    <div class="slide" data-slide="7">
+      <div class="label">Seção 7</div>
+      <h2>Mitos alimentares</h2>
+      <p class="mt-8">A internet está cheia de informação errada sobre alimentação e emagrecimento. Vamos esclarecer os principais.</p>
+
+      <div class="gap-10 mt-12" style="display:flex;flex-direction:column;gap:10px">
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Preciso cortar carboidrato para emagrecer"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> Carboidratos não são o inimigo. O problema é o excesso e a qualidade. Arroz, batata-doce e aveia são carboidratos nutritivos que têm lugar no prato. O que deve diminuir são os ultraprocessados, açúcares e refinados.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Comer à noite engorda"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> O que engorda é o excesso calórico ao longo do dia — não o horário. Um jantar leve à noite não prejudica o tratamento. O que prejudica é beliscar ultraprocessados o dia todo.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Com o medicamento posso comer qualquer coisa"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> O GLP-1 reduz o apetite, mas não neutraliza os efeitos de uma alimentação ruim. Quem come mal com o medicamento perde menos peso, sente mais efeitos colaterais e recupera o peso mais rápido ao encerrar.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Devo pular refeições para emagrecer mais rápido"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Perigoso.</strong> Pular refeições propositalmente pode levar a episódios de hipoglicemia, perda de músculo e compulsão compensatória. Coma em horários regulares mesmo com menos fome.</div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)"><span>✅</span><span>"Qualidade vale mais do que quantidade de calorias"</span></div>
+          <div class="myth-body" style="color:var(--green-dark)"><strong>Em grande parte, verdade.</strong> Com o GLP-1 reduzindo a fome, o foco deve ser escolher alimentos nutritivos com as calorias que você vai consumir — não contar calorias obsessivamente.</div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)"><span>✅</span><span>"Proteína no café da manhã melhora o dia todo"</span></div>
+          <div class="myth-body" style="color:var(--green-dark)"><strong>Verdade.</strong> Começar o dia com proteína estabiliza o açúcar no sangue, reduz a fome nas horas seguintes e melhora o humor e a concentração. Uma das mudanças com maior impacto.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 9 — RESUMO ═══ -->
+    <div class="slide" data-slide="8">
+      <div class="label">Resumo do Capítulo 6</div>
+      <h2>Comer melhor, não menos</h2>
+      <p class="mt-8">Com o GLP-1 reduzindo a fome, cada garfada conta mais do que antes. Escolha bem.</p>
+
+      <div class="card card-dark mt-16">
+        <div style="color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">As 6 regras de ouro</div>
+        <div class="gap-8">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Proteína em todas as refeições — é o nutriente mais importante</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Metade do prato sempre de vegetais</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Coma devagar e sem tela — saciedade chega mais rápido</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Evite frituras e álcool — pioram muito os efeitos colaterais</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">2 litros de água por dia — aliada em tudo</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">6</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">80/20 — consistência vence perfeição</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:8px">🏆 O que você aprendeu</h3>
+          <div class="gap-8" style="gap:4px;display:flex;flex-direction:column">
+            <div class="row"><span>✓</span><span style="font-size:13px">Por que alimentação e medicamento se potencializam</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Proteína, fibras e água — os três pilares</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">O que evitar e por quê</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Como montar o prato ideal</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Exemplos práticos de cada refeição</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Mitos desmascarados</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="border:2px solid var(--green);text-align:center;padding:20px">
+          <div style="font-size:28px;margin-bottom:8px">🏃</div>
+          <h3 style="margin-bottom:6px">Próximo capítulo</h3>
+          <p>Capítulo 7 — <strong>Atividade física:</strong> como o exercício potencializa o GLP-1, por onde começar e como progredir com segurança.</p>
+          <div class="pill pill-green mt-12" style="justify-content:center;width:100%">Continuar para o Cap. 7 →</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <nav>
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="prev()">‹ Anterior</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn btn-next" id="btn-next" onclick="next()">Próximo ›</button>
+  </nav>
+
+</div>
+
+<script>
+const TOTAL=9;let current=0;
+function init(){
+  const d=document.getElementById('dots');
+  for(let i=0;i<TOTAL;i++){
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===0?' active':'');
+    dot.onclick=()=>goTo(i);d.appendChild(dot);
+  }
+  updateUI();
+}
+function goTo(n){
+  if(n<0||n>=TOTAL||n===current)return;
+  const sl=document.querySelectorAll('.slide');
+  sl[current].classList.remove('active');sl[current].classList.add('exit');
+  const prev=current;current=n;
+  setTimeout(()=>sl[prev].classList.remove('exit'),350);
+  sl[current].classList.add('active');sl[current].scrollTop=0;updateUI();
+}
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
+function updateUI(){
+  document.getElementById('prog-fill').style.width=((current+1)/TOTAL*100).toFixed(1)+'%';
+  document.getElementById('prog-text').textContent=(current+1)+' / '+TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('btn-prev').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('btn-next').textContent=current===TOTAL-2?'Finalizar ›':'Próximo ›';
+}
+function switchTab(btn,id){
+  const sl=btn.closest('.slide');
+  sl.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  sl.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(id).classList.add('active');
+}
+function toggleMeal(head){
+  const isOpen=head.classList.contains('open');
+  document.querySelectorAll('.meal-head').forEach(h=>{h.classList.remove('open');h.nextElementSibling.classList.remove('open')});
+  if(!isOpen){head.classList.add('open');head.nextElementSibling.classList.add('open')}
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Capítulo 5 — Efeitos Colaterais · Menos Peso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;--green-light:#d1fae5;--green-dark:#047857;
+    --slate:#0f172a;--slate-mid:#1e293b;--slate-light:#334155;
+    --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;
+    --yellow:#f59e0b;--yellow-light:#fef3c7;
+    --red:#ef4444;--red-light:#fee2e2;
+    --blue:#3b82f6;--blue-light:#dbeafe;
+    --purple:#8b5cf6;--purple-light:#ede9fe;
+    --orange:#f97316;--orange-light:#ffedd5;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+
+  /* ── SHELL ── */
+  #app{
+    display:flex;flex-direction:column;height:100vh;max-width:430px;
+    margin:0 auto;background:var(--white);position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,.12);
+  }
+
+  /* ── HEADER ── */
+  header{
+    flex-shrink:0;padding:14px 20px 10px;
+    background:var(--white);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  .cap-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+  .cap-title{font-size:13px;font-weight:600;color:var(--slate);flex:1;line-height:1.2}
+  .progress-pill{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+
+  /* ── PROGRESS BAR ── */
+  .prog-bar{flex-shrink:0;height:3px;background:var(--border)}
+  .prog-fill{height:100%;background:var(--green);transition:width .35s ease}
+
+  /* ── SLIDES ── */
+  .slides{flex:1;overflow:hidden;position:relative}
+  .slide{
+    position:absolute;inset:0;overflow-y:auto;padding:20px 20px 100px;
+    opacity:0;pointer-events:none;transform:translateX(30px);
+    transition:opacity .3s ease,transform .3s ease;
+  }
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+  .slide.exit{opacity:0;transform:translateX(-30px)}
+
+  /* ── NAV ── */
+  nav{
+    flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+    padding:12px 20px;background:var(--white);border-top:1px solid var(--border);
+    position:relative;z-index:10;
+  }
+  .nav-btn{
+    display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;
+    border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;
+    transition:all .2s;font-family:'Inter',sans-serif;
+  }
+  .btn-prev{background:var(--border);color:var(--muted)}
+  .btn-prev:hover{background:#cbd5e1}
+  .btn-next{background:var(--green);color:#fff}
+  .btn-next:hover{background:var(--green-dark)}
+  .btn-next:disabled{opacity:.4;cursor:default}
+  .nav-dots{display:flex;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--green);width:18px;border-radius:3px}
+
+  /* ── TYPOGRAPHY ── */
+  .label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  h1{font-size:26px;font-weight:900;line-height:1.15;color:var(--slate)}
+  h2{font-size:20px;font-weight:800;line-height:1.2;color:var(--slate)}
+  h3{font-size:15px;font-weight:700;color:var(--slate)}
+  p{font-size:14px;line-height:1.65;color:var(--slate-light)}
+  .caption{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* ── CARDS ── */
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card-green{background:var(--green-light);border:1px solid #a7f3d0}
+  .card-yellow{background:var(--yellow-light);border:1px solid #fcd34d}
+  .card-red{background:var(--red-light);border:1px solid #fca5a5}
+  .card-dark{background:var(--slate);border:none;color:#fff}
+  .card-blue{background:var(--blue-light);border:1px solid #93c5fd}
+  .card-purple{background:var(--purple-light);border:1px solid #c4b5fd}
+  .card-orange{background:var(--orange-light);border:1px solid #fdba74}
+
+  /* ── ALERT ── */
+  .alert{display:flex;gap:10px;padding:12px;border-radius:12px;align-items:flex-start}
+  .alert .ico{font-size:18px;flex-shrink:0}
+  .alert p{font-size:13px;line-height:1.5}
+
+  /* ── INDEX ── */
+  .index-list{display:flex;flex-direction:column;gap:8px}
+  .index-item{
+    display:flex;align-items:center;gap:12px;padding:12px 14px;
+    background:var(--bg);border:1px solid var(--border);border-radius:12px;
+    cursor:pointer;transition:all .2s;
+  }
+  .index-item:hover{border-color:var(--green);background:var(--green-light)}
+  .index-num{
+    flex-shrink:0;width:28px;height:28px;border-radius:8px;
+    background:var(--green-light);color:var(--green-dark);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;
+  }
+  .index-label{font-size:13px;font-weight:600;color:var(--slate);flex:1}
+  .index-arrow{color:var(--muted);font-size:14px}
+
+  /* ── STEP FLOW ── */
+  .step-flow{display:flex;flex-direction:column;gap:0}
+  .step-item{display:flex;gap:14px;padding-bottom:20px;position:relative}
+  .step-item:last-child{padding-bottom:0}
+  .step-item:not(:last-child)::before{
+    content:'';position:absolute;left:17px;top:36px;bottom:0;
+    width:2px;background:var(--border);
+  }
+  .step-num{
+    flex-shrink:0;width:34px;height:34px;border-radius:50%;
+    background:var(--green);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:800;z-index:1;
+  }
+  .step-body{flex:1;padding-top:6px}
+
+  /* ── ACCORDION ── */
+  .accord-item{border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:8px}
+  .accord-head{
+    display:flex;align-items:center;gap:12px;padding:14px;
+    cursor:pointer;background:#fff;transition:background .2s;
+    user-select:none;
+  }
+  .accord-head:hover{background:var(--bg)}
+  .accord-head.open{background:var(--green-light)}
+  .accord-ico{font-size:22px;flex-shrink:0}
+  .accord-title{flex:1;font-size:14px;font-weight:700;color:var(--slate)}
+  .accord-arrow{font-size:16px;color:var(--muted);transition:transform .25s}
+  .accord-head.open .accord-arrow{transform:rotate(90deg);color:var(--green)}
+  .accord-body{
+    max-height:0;overflow:hidden;
+    transition:max-height .35s ease,padding .25s;
+    padding:0 14px;background:#fff;
+  }
+  .accord-body.open{max-height:600px;padding:0 14px 14px}
+
+  /* ── SEVERITY BADGE ── */
+  .sev{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
+  .sev-common{background:#fef3c7;color:#92400e}
+  .sev-less{background:var(--blue-light);color:#1e40af}
+  .sev-rare{background:var(--purple-light);color:#5b21b6}
+  .sev-urgent{background:var(--red-light);color:#991b1b}
+
+  /* ── TIMELINE ── */
+  .timeline{display:flex;flex-direction:column;gap:0}
+  .tl-item{display:flex;gap:14px;padding-bottom:22px;position:relative}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item:not(:last-child)::before{
+    content:'';position:absolute;left:19px;top:40px;bottom:0;
+    width:2px;background:var(--border);
+  }
+  .tl-dot{
+    flex-shrink:0;width:38px;height:38px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;z-index:1;border:2px solid var(--border);background:#fff;
+  }
+  .tl-dot.done{background:var(--green-light);border-color:var(--green)}
+  .tl-dot.active{background:var(--yellow-light);border-color:var(--yellow)}
+  .tl-dot.future{background:var(--blue-light);border-color:var(--blue)}
+  .tl-content{flex:1;padding-top:4px}
+  .tl-period{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .tl-title{font-size:14px;font-weight:700;color:var(--slate);margin:2px 0 4px}
+  .tl-desc{font-size:13px;color:var(--slate-light);line-height:1.5}
+
+  /* ── TIPS GRID ── */
+  .tips-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tip-card{
+    background:var(--bg);border:1px solid var(--border);border-radius:14px;
+    padding:14px;display:flex;flex-direction:column;gap:6px;
+  }
+  .tip-card .ico{font-size:24px}
+  .tip-card .ttl{font-size:13px;font-weight:700;color:var(--slate)}
+  .tip-card .txt{font-size:12px;color:var(--muted);line-height:1.4}
+
+  /* ── TABS ── */
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+  .tab{
+    flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;
+    border:1.5px solid var(--border);background:#fff;cursor:pointer;
+    transition:all .2s;color:var(--muted);font-family:'Inter',sans-serif;
+  }
+  .tab.active{background:var(--green);border-color:var(--green);color:#fff}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
+  /* ── URGENCY CARD ── */
+  .urgency-card{
+    border-radius:16px;padding:16px;display:flex;gap:14px;align-items:flex-start;
+    margin-bottom:10px;
+  }
+  .urgency-card .ico{font-size:26px;flex-shrink:0}
+  .urgency-card .title{font-size:14px;font-weight:700;margin-bottom:4px}
+  .urgency-card .desc{font-size:13px;line-height:1.5}
+  .urgency-card .action{font-size:12px;font-weight:700;margin-top:6px;padding:6px 12px;border-radius:8px;display:inline-block}
+
+  /* ── MYTH CARD ── */
+  .myth-card{border-radius:14px;overflow:hidden;margin-bottom:10px}
+  .myth-head{padding:12px 14px;font-size:13px;font-weight:700;display:flex;gap:8px;align-items:center}
+  .myth-body{padding:0 14px 12px;font-size:13px;line-height:1.5}
+
+  /* ── UTILS ── */
+  .gap-4{display:flex;flex-direction:column;gap:4px}
+  .gap-8{display:flex;flex-direction:column;gap:8px}
+  .gap-12{display:flex;flex-direction:column;gap:12px}
+  .gap-16{display:flex;flex-direction:column;gap:16px}
+  .row{display:flex;align-items:center;gap:8px}
+  .mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+  .divider{height:1px;background:var(--border);margin:16px 0}
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+  .pill-green{background:var(--green);color:#fff}
+  .check-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-light);border-radius:10px}
+  .check-row .ico{font-size:16px;flex-shrink:0;margin-top:1px}
+  .check-row .txt{font-size:13px;color:var(--green-dark);font-weight:500;line-height:1.4}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <header>
+    <span class="cap-badge">CAP. 5</span>
+    <span class="cap-title">Efeitos colaterais</span>
+    <span class="progress-pill" id="prog-text">1 / 9</span>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:11.1%"></div></div>
+
+  <!-- SLIDES -->
+  <div class="slides" id="slides">
+
+    <!-- ═══ SLIDE 1 — ABERTURA ═══ -->
+    <div class="slide active" data-slide="0">
+      <div class="label">Capítulo 5</div>
+      <h1>Efeitos colaterais: o que esperar</h1>
+      <p class="mt-8">Conhecer os efeitos antes de senti-los é a diferença entre sustos desnecessários e uma jornada tranquila.</p>
+
+      <div class="card card-green mt-16" style="padding:14px">
+        <div class="row" style="gap:10px">
+          <span style="font-size:22px">🧠</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--green-dark)">A mensagem mais importante deste capítulo</div>
+            <div style="font-size:13px;color:var(--green-dark);margin-top:4px;line-height:1.5">A maioria dos efeitos é <strong>temporária</strong>, surge nas primeiras semanas e diminui conforme o corpo se adapta.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="index-list mt-12">
+        <div class="index-item" onclick="goTo(1)">
+          <div class="index-num">1</div>
+          <div class="index-label">Por que acontecem</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(2)">
+          <div class="index-num">2</div>
+          <div class="index-label">Efeitos mais comuns</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(3)">
+          <div class="index-num">3</div>
+          <div class="index-label">O que esperar em cada fase</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(4)">
+          <div class="index-num">4</div>
+          <div class="index-label">Como minimizar os desconfortos</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(5)">
+          <div class="index-num">5</div>
+          <div class="index-label">Efeitos raros mas importantes</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(6)">
+          <div class="index-num">6</div>
+          <div class="index-label">Quando entrar em contato</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(7)">
+          <div class="index-num">7</div>
+          <div class="index-label">Mitos e verdades</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(8)">
+          <div class="index-num">8</div>
+          <div class="index-label">Resumo</div>
+          <div class="index-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 2 — POR QUE ACONTECEM ═══ -->
+    <div class="slide" data-slide="1">
+      <div class="label">Seção 1</div>
+      <h2>Por que os efeitos acontecem</h2>
+      <p class="mt-8">Entender a causa dos efeitos ajuda a encará-los de forma mais tranquila — e até esperançosa.</p>
+
+      <div class="card card-blue mt-16">
+        <div style="font-size:13px;font-weight:700;color:#1e40af;margin-bottom:8px">💡 A lógica por trás</div>
+        <p style="font-size:13px;color:#1e40af;line-height:1.55">O GLP-1 existe naturalmente no seu intestino. O medicamento <strong>amplifica esse sinal</strong> em todo o corpo — e o organismo precisa de algumas semanas para se acostumar com essa intensidade maior.</p>
+      </div>
+
+      <div class="step-flow mt-16">
+        <div class="step-item">
+          <div class="step-num" style="background:#3b82f6;font-size:12px">🧬</div>
+          <div class="step-body">
+            <h3>O intestino avisa o cérebro</h3>
+            <p class="mt-4">O GLP-1 ativa receptores no trato digestivo que enviam sinais ao cérebro dizendo "já chega". Isso desacelera o esvaziamento do estômago — daí a sensação de saciedade e eventual náusea.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" style="background:#3b82f6;font-size:12px">⚙️</div>
+          <div class="step-body">
+            <h3>O sistema digestivo se adapta</h3>
+            <p class="mt-4">O trânsito intestinal mais lento pode causar náusea, constipação ou diarreia enquanto o corpo calibra a resposta. Esse processo leva de 2 a 8 semanas na maioria dos pacientes.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" style="background:#3b82f6;font-size:12px">📉</div>
+          <div class="step-body">
+            <h3>As doses sobem gradualmente</h3>
+            <p class="mt-4">Não é acidente que o protocolo começa em doses baixas. O escalonamento lento é justamente para dar tempo ao corpo de se adaptar antes da dose terapêutica completa.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" style="background:var(--green);font-size:12px">✅</div>
+          <div class="step-body">
+            <h3>Com o tempo, passa</h3>
+            <p class="mt-4">Estudos mostram que <strong>mais de 80% dos pacientes</strong> que apresentaram efeitos gastrointestinais no início relataram melhora significativa após as primeiras semanas.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert card-yellow mt-4">
+        <span class="ico">💛</span>
+        <p>Se o corpo está reagindo, é porque o medicamento está agindo. Os efeitos iniciais são, em certa medida, um sinal de que o GLP-1 está funcionando.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 3 — EFEITOS MAIS COMUNS ═══ -->
+    <div class="slide" data-slide="2">
+      <div class="label">Seção 2</div>
+      <h2>Efeitos mais comuns</h2>
+      <p class="mt-8">Toque em cada efeito para ver a causa, frequência e o que fazer.</p>
+
+      <div class="mt-12 gap-8">
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">🤢</span>
+            <div>
+              <div class="accord-title">Náusea</div>
+              <span class="sev sev-common">Muito comum</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>O efeito mais relatado, especialmente após aumentos de dose. O estômago esvazia mais devagar — o cérebro interpreta isso como desconforto.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Coma menos e mais devagar</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Evite alimentos gordurosos ou fritos</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Mantenha-se hidratado com pequenos goles frequentes</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Prefira aplicar à noite — dorme durante os piores momentos</span></div>
+              <div class="caption mt-4">⏱️ Geralmente melhora em 2–4 semanas</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">🚽</span>
+            <div>
+              <div class="accord-title">Diarreia</div>
+              <span class="sev sev-common">Comum</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>O intestino está reagindo às mudanças no trânsito. Mais comum no início ou após aumento de dose.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Evite cafeína, álcool e alimentos muito açucarados</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Prefira alimentos leves: arroz, banana, maçã sem casca</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Hidrate-se bastante para repor o que perde</span></div>
+              <div class="caption mt-4">⏱️ Geralmente resolve em poucos dias</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">😣</span>
+            <div>
+              <div class="accord-title">Constipação</div>
+              <span class="sev sev-common">Comum</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>O intestino mais lento pode fazer o trânsito demorar mais. Mais comum à medida que a dose aumenta.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Aumente a ingestão de água — meta: 2 a 2,5 litros/dia</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Inclua fibras: frutas, legumes, aveia</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Movimente-se: caminhadas ajudam o intestino a funcionar</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Avise o médico se durar mais de 4 dias</span></div>
+              <div class="caption mt-4">⏱️ Melhora com hidratação e fibras em dias</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">🤮</span>
+            <div>
+              <div class="accord-title">Vômito</div>
+              <span class="sev sev-less">Menos comum</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>Geralmente ocorre junto com náusea intensa, especialmente se a pessoa comeu demais ou rápido demais após a aplicação.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Após vomitar, espere 30 min antes de comer ou beber</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Comece com líquidos claros: água, chá, caldo</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Se vomitar mais de 3x ao dia, entre em contato conosco</span></div>
+              <div class="alert card-red mt-4" style="padding:8px">
+                <span class="ico" style="font-size:14px">⚠️</span>
+                <p style="font-size:12px">Vômitos frequentes podem levar à desidratação. Não ignore.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">😴</span>
+            <div>
+              <div class="accord-title">Cansaço e fadiga</div>
+              <span class="sev sev-less">Menos comum</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>O corpo está consumindo menos calorias e se adaptando à nova sinalização hormonal. Cansaço leve nas primeiras semanas é esperado.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Garanta sono de qualidade — 7 a 9 horas</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Mantenha proteína adequada na alimentação</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Hidrate-se bem — desidratação amplifica o cansaço</span></div>
+              <div class="caption mt-4">⏱️ Costuma melhorar em 2–3 semanas</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">🔥</span>
+            <div>
+              <div class="accord-title">Queimação / refluxo</div>
+              <span class="sev sev-less">Menos comum</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>O esvaziamento gástrico mais lento pode piorar sintomas de refluxo pré-existente ou criar leve azia nova.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Evite deitar logo após as refeições (aguarde 2h)</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Reduza alimentos ácidos, café e álcool</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Eleve levemente a cabeceira da cama se for recorrente</span></div>
+              <div class="caption mt-4">Avise o médico se for persistente</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 4 — FASES DO TRATAMENTO ═══ -->
+    <div class="slide" data-slide="3">
+      <div class="label">Seção 3</div>
+      <h2>O que esperar em cada fase</h2>
+      <p class="mt-8">O tratamento tem fases bem definidas. Saber o que vem a seguir ajuda a atravessar os momentos difíceis com perspectiva.</p>
+
+      <div class="timeline mt-16">
+
+        <div class="tl-item">
+          <div class="tl-dot active">🌱</div>
+          <div class="tl-content">
+            <div class="tl-period">Semanas 1–4</div>
+            <div class="tl-title">Fase de adaptação</div>
+            <div class="tl-desc">É quando os efeitos costumam ser mais intensos. O corpo ainda não conhece esse nível de GLP-1. Náusea, cansaço e mudanças intestinais são esperados.</div>
+            <div class="card card-yellow mt-8" style="padding:10px">
+              <div style="font-size:12px;font-weight:600;color:#92400e">⚡ Foco desta fase: sobreviver com conforto</div>
+              <div style="font-size:12px;color:#92400e;margin-top:4px">Refeições pequenas · Hidratação · Paciência</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot future">📈</div>
+          <div class="tl-content">
+            <div class="tl-period">Semanas 5–12</div>
+            <div class="tl-title">Fase de escalonamento</div>
+            <div class="tl-desc">A dose aumenta gradualmente conforme o médico avalia. Cada novo aumento pode trazer um leve retorno dos sintomas por alguns dias — e depois melhora novamente.</div>
+            <div class="card card-blue mt-8" style="padding:10px">
+              <div style="font-size:12px;font-weight:600;color:#1e40af">💡 Normal sentir mais desconforto nos dias após o aumento de dose</div>
+              <div style="font-size:12px;color:#1e40af;margin-top:4px">Geralmente passa em 3–5 dias</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot future">⚖️</div>
+          <div class="tl-content">
+            <div class="tl-period">Mês 3–6</div>
+            <div class="tl-title">Fase de estabilização</div>
+            <div class="tl-desc">A maioria dos pacientes relata que os efeitos diminuem muito nesta fase. O corpo se adaptou. A perda de peso costuma se tornar mais consistente e visível.</div>
+            <div class="card card-green mt-8" style="padding:10px">
+              <div style="font-size:12px;font-weight:600;color:var(--green-dark)">✅ Fase mais confortável do tratamento</div>
+              <div style="font-size:12px;color:var(--green-dark);margin-top:4px">Os efeitos colaterais tendem a se tornar raros</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot future">🏆</div>
+          <div class="tl-content">
+            <div class="tl-period">A partir do mês 6</div>
+            <div class="tl-title">Fase de manutenção</div>
+            <div class="tl-desc">Dose de manutenção ajustada. Efeitos colaterais são incomuns. O foco muda para consolidar hábitos e manter os resultados alcançados.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert card-green mt-12">
+        <span class="ico">🎯</span>
+        <p>Cada corpo é único. Alguns pacientes têm pouquíssimos efeitos desde o início. Outros sentem mais nas primeiras semanas. <strong>Não se compare</strong> — fale sempre com o médico sobre a sua experiência.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 5 — COMO MINIMIZAR ═══ -->
+    <div class="slide" data-slide="4">
+      <div class="label">Seção 4</div>
+      <h2>Como minimizar os desconfortos</h2>
+      <p class="mt-8">Pequenas mudanças de comportamento fazem grande diferença na tolerabilidade do tratamento.</p>
+
+      <div class="tabs mt-12">
+        <button class="tab active" onclick="switchTab(this,'tab-comer')">Alimentação</button>
+        <button class="tab" onclick="switchTab(this,'tab-hidra')">Hidratação</button>
+        <button class="tab" onclick="switchTab(this,'tab-aplicar')">Aplicação</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-comer">
+        <div class="gap-12">
+          <div class="tips-grid">
+            <div class="tip-card">
+              <span class="ico">🍽️</span>
+              <div class="ttl">Porções menores</div>
+              <div class="txt">Divida as refeições em 5–6 pequenas ao longo do dia</div>
+            </div>
+            <div class="tip-card">
+              <span class="ico">🐌</span>
+              <div class="ttl">Coma devagar</div>
+              <div class="txt">Mastigar bem reduz o trabalho do estômago</div>
+            </div>
+            <div class="tip-card">
+              <span class="ico">🥗</span>
+              <div class="ttl">Alimentos leves</div>
+              <div class="txt">Evite frituras, molhos gordurosos e comidas muito pesadas</div>
+            </div>
+            <div class="tip-card">
+              <span class="ico">🛑</span>
+              <div class="ttl">Pare antes de empanturrar</div>
+              <div class="txt">O sinal de saciedade demora — pare quando estiver satisfeito</div>
+            </div>
+          </div>
+          <div class="card card-red">
+            <h3 style="color:#991b1b;margin-bottom:8px;font-size:13px">🚫 Evite principalmente nas primeiras semanas</h3>
+            <div class="gap-4">
+              <div class="row"><span style="color:#ef4444">✗</span><span style="font-size:13px">Álcool — potencializa a náusea</span></div>
+              <div class="row"><span style="color:#ef4444">✗</span><span style="font-size:13px">Refrigerantes e bebidas com gás</span></div>
+              <div class="row"><span style="color:#ef4444">✗</span><span style="font-size:13px">Refeições grandes e únicas</span></div>
+              <div class="row"><span style="color:#ef4444">✗</span><span style="font-size:13px">Comer deitado ou deitar logo após comer</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-hidra">
+        <div class="gap-12">
+          <div class="card card-blue">
+            <div style="text-align:center;padding:8px 0">
+              <div style="font-size:42px;font-weight:900;color:#1e40af">2–2,5L</div>
+              <div style="font-size:13px;font-weight:600;color:#1e40af">de água por dia</div>
+              <div class="caption mt-4">Distribuídos ao longo de todo o dia</div>
+            </div>
+          </div>
+          <div class="gap-8">
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Comece o dia com um copo de água antes de qualquer coisa</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Beba entre as refeições, não durante — evita distensão</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Se sentir náusea, tente água gelada em pequenos goles</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Chás de gengibre, hortelã e camomila podem ajudar com náuseas</span></div>
+          </div>
+          <div class="alert card-yellow">
+            <span class="ico">⚠️</span>
+            <p>Urina escura ou boca seca são sinais de desidratação. Aumente a ingestão imediatamente.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-aplicar">
+        <div class="gap-12">
+          <div class="gap-8">
+            <div class="card">
+              <div class="row" style="gap:10px;margin-bottom:8px">
+                <span style="font-size:22px">🌙</span>
+                <h3>Aplique à noite</h3>
+              </div>
+              <p>Aplicar antes de dormir é a estratégia mais eficaz para minimizar náuseas. Você dorme enquanto o pico de concentração do medicamento passa.</p>
+            </div>
+            <div class="card">
+              <div class="row" style="gap:10px;margin-bottom:8px">
+                <span style="font-size:22px">🕐</span>
+                <h3>Horário consistente</h3>
+              </div>
+              <p>Aplique sempre no mesmo horário e no mesmo dia da semana. A regularidade ajuda o corpo a prever e se adaptar melhor.</p>
+            </div>
+            <div class="card">
+              <div class="row" style="gap:10px;margin-bottom:8px">
+                <span style="font-size:22px">🍽️</span>
+                <h3>Não aplique de estômago vazio</h3>
+              </div>
+              <p>Ter algo leve no estômago antes de aplicar pode reduzir a intensidade da náusea nas primeiras horas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 6 — EFEITOS RAROS ═══ -->
+    <div class="slide" data-slide="5">
+      <div class="label">Seção 5</div>
+      <h2>Efeitos raros mas importantes</h2>
+      <p class="mt-8">São incomuns, mas você precisa conhecer. Se sentir qualquer um destes sinais, entre em contato imediatamente.</p>
+
+      <div class="alert card-yellow mt-12">
+        <span class="ico">ℹ️</span>
+        <p>Raro não significa impossível. Estas informações existem para que você saiba agir — não para te assustar. Com acompanhamento médico, os riscos são muito bem monitorados.</p>
+      </div>
+
+      <div class="gap-12 mt-12">
+
+        <div class="urgency-card card-orange">
+          <span class="ico">🫁</span>
+          <div>
+            <div class="title" style="color:#9a3412">Pancreatite</div>
+            <div class="desc" style="color:#7c2d12">Dor intensa e persistente no abdômen superior, que pode irradiar para as costas. Diferente de desconforto comum — é uma dor que não passa e que piora ao se alimentar.</div>
+            <span class="action" style="background:#9a3412;color:#fff">🚨 Procure pronto-socorro imediatamente</span>
+          </div>
+        </div>
+
+        <div class="urgency-card card-purple">
+          <span class="ico">🦋</span>
+          <div>
+            <div class="title" style="color:#5b21b6">Nódulo na tireoide</div>
+            <div class="desc" style="color:#4c1d95">Caroço ou inchaço na região do pescoço, rouquidão persistente ou dificuldade para engolir.</div>
+            <span class="action" style="background:#5b21b6;color:#fff">📞 Entre em contato conosco</span>
+          </div>
+        </div>
+
+        <div class="urgency-card card-red">
+          <span class="ico">👁️</span>
+          <div>
+            <div class="title" style="color:#991b1b">Retinopatia (diabéticos)</div>
+            <div class="desc" style="color:#7f1d1d">Em pacientes diabéticos, a melhora rápida do controle glicêmico pode, raramente, agravar temporariamente problemas de retina. Alterações na visão devem ser reportadas.</div>
+            <span class="action" style="background:#991b1b;color:#fff">📞 Entre em contato conosco</span>
+          </div>
+        </div>
+
+        <div class="urgency-card card-yellow">
+          <span class="ico">💓</span>
+          <div>
+            <div class="title" style="color:#92400e">Taquicardia</div>
+            <div class="desc" style="color:#78350f">Batimentos cardíacos acelerados que surgem sem causa aparente e persistem. Pode ser uma reação ao medicamento — especialmente em doses maiores.</div>
+            <span class="action" style="background:#92400e;color:#fff">📞 Entre em contato conosco</span>
+          </div>
+        </div>
+
+        <div class="urgency-card" style="background:#f1f5f9;border:1px solid var(--border)">
+          <span class="ico">😮</span>
+          <div>
+            <div class="title">Reação alérgica</div>
+            <div class="desc" style="color:var(--slate-light)">Inchaço no rosto, lábios ou garganta, dificuldade para respirar, erupção cutânea generalizada.</div>
+            <span class="action" style="background:var(--red);color:#fff">🚨 Ligue para o SAMU (192) imediatamente</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card card-green mt-4">
+        <div style="font-size:13px;font-weight:700;color:var(--green-dark);margin-bottom:4px">🛡️ Contexto importante</div>
+        <p style="font-size:13px;color:var(--green-dark)">Estes efeitos afetam menos de 1% dos pacientes em estudos clínicos. O acompanhamento médico regular existe justamente para detectar qualquer sinal precocemente.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 7 — QUANDO ENTRAR EM CONTATO ═══ -->
+    <div class="slide" data-slide="6">
+      <div class="label">Seção 6</div>
+      <h2>Quando entrar em contato</h2>
+      <p class="mt-8">Você nunca vai estar sozinho nessa jornada. Use este guia para saber quando nos chamar.</p>
+
+      <div class="tabs mt-12">
+        <button class="tab active" onclick="switchTab(this,'tab-urgente')">🚨 Urgente</button>
+        <button class="tab" onclick="switchTab(this,'tab-logo')">📞 Em breve</button>
+        <button class="tab" onclick="switchTab(this,'tab-consulta')">💬 Na consulta</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-urgente">
+        <div class="card card-red" style="margin-bottom:10px">
+          <div style="font-size:13px;font-weight:700;color:#991b1b;margin-bottom:10px">Procure atendimento imediato se:</div>
+          <div class="gap-8">
+            <div class="row"><span style="color:#ef4444;font-size:16px">●</span><span style="font-size:13px">Dor abdominal intensa e persistente</span></div>
+            <div class="row"><span style="color:#ef4444;font-size:16px">●</span><span style="font-size:13px">Dificuldade para respirar</span></div>
+            <div class="row"><span style="color:#ef4444;font-size:16px">●</span><span style="font-size:13px">Inchaço no rosto ou garganta</span></div>
+            <div class="row"><span style="color:#ef4444;font-size:16px">●</span><span style="font-size:13px">Batimento cardíaco muito acelerado com tontura</span></div>
+            <div class="row"><span style="color:#ef4444;font-size:16px">●</span><span style="font-size:13px">Vômitos incontroláveis — sem conseguir manter líquidos</span></div>
+            <div class="row"><span style="color:#ef4444;font-size:16px">●</span><span style="font-size:13px">Sinais de reação alérgica grave</span></div>
+          </div>
+        </div>
+        <div class="card" style="text-align:center;padding:14px">
+          <div style="font-size:24px;margin-bottom:4px">🚑</div>
+          <div style="font-size:16px;font-weight:800;color:var(--slate)">SAMU: 192</div>
+          <div class="caption">ou vá diretamente ao pronto-socorro</div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-logo">
+        <div class="card card-yellow" style="margin-bottom:10px">
+          <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:10px">Entre em contato conosco nas próximas horas se:</div>
+          <div class="gap-8">
+            <div class="row"><span style="color:#f59e0b;font-size:16px">●</span><span style="font-size:13px">Vômitos 3 ou mais vezes ao dia</span></div>
+            <div class="row"><span style="color:#f59e0b;font-size:16px">●</span><span style="font-size:13px">Diarreia intensa por mais de 2 dias</span></div>
+            <div class="row"><span style="color:#f59e0b;font-size:16px">●</span><span style="font-size:13px">Não consegue beber água ou comer nada</span></div>
+            <div class="row"><span style="color:#f59e0b;font-size:16px">●</span><span style="font-size:13px">Constipação há mais de 4 dias</span></div>
+            <div class="row"><span style="color:#f59e0b;font-size:16px">●</span><span style="font-size:13px">Vermelhidão no local de aplicação que cresce</span></div>
+            <div class="row"><span style="color:#f59e0b;font-size:16px">●</span><span style="font-size:13px">Alteração na visão (pacientes diabéticos)</span></div>
+          </div>
+        </div>
+        <div class="card" style="text-align:center;padding:14px">
+          <div style="font-size:24px;margin-bottom:4px">📱</div>
+          <div style="font-size:14px;font-weight:700;color:var(--slate)">Fale via WhatsApp com nossa equipe</div>
+          <div class="caption mt-4">Respondemos em até 2 horas em dias úteis</div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-consulta">
+        <div class="card" style="margin-bottom:10px">
+          <div style="font-size:13px;font-weight:700;color:var(--slate);margin-bottom:10px">Leve para a próxima consulta:</div>
+          <div class="gap-8">
+            <div class="row"><span style="color:var(--green);font-size:16px">●</span><span style="font-size:13px">Náusea leve que continua após a 4ª semana</span></div>
+            <div class="row"><span style="color:var(--green);font-size:16px">●</span><span style="font-size:13px">Constipação recorrente mas manejável</span></div>
+            <div class="row"><span style="color:var(--green);font-size:16px">●</span><span style="font-size:13px">Cansaço que persiste após o mês 1</span></div>
+            <div class="row"><span style="color:var(--green);font-size:16px">●</span><span style="font-size:13px">Mudanças no sono ou humor</span></div>
+            <div class="row"><span style="color:var(--green);font-size:16px">●</span><span style="font-size:13px">Qualquer dúvida sobre o que está sentindo</span></div>
+          </div>
+        </div>
+        <div class="alert card-green">
+          <span class="ico">💡</span>
+          <p>Anote os sintomas com data e horário. Esse registro é valioso para o médico ajustar o protocolo.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 8 — MITOS E VERDADES ═══ -->
+    <div class="slide" data-slide="7">
+      <div class="label">Seção 7</div>
+      <h2>Mitos e verdades</h2>
+      <p class="mt-8">Muita informação errada circula sobre os efeitos dos GLP-1. Vamos esclarecer.</p>
+
+      <div class="gap-10 mt-16" style="display:flex;flex-direction:column;gap:10px">
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b">
+            <span>❌</span>
+            <span>"Os efeitos colaterais nunca passam"</span>
+          </div>
+          <div class="myth-body" style="color:#7f1d1d">
+            <strong>Falso.</strong> A grande maioria dos efeitos gastrointestinais são temporários. Estudos clínicos mostram que mais de 80% dos pacientes relatam melhora significativa após as primeiras semanas de adaptação.
+          </div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b">
+            <span>❌</span>
+            <span>"Se sentir náusea, devo parar o medicamento"</span>
+          </div>
+          <div class="myth-body" style="color:#7f1d1d">
+            <strong>Falso.</strong> Náusea leve a moderada é esperada e não é motivo para interromper. Interromper e recomeçar pode reiniciar o processo de adaptação. Sempre converse com o médico antes de qualquer decisão.
+          </div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b">
+            <span>❌</span>
+            <span>"Quem sente mais efeitos perde mais peso"</span>
+          </div>
+          <div class="myth-body" style="color:#7f1d1d">
+            <strong>Falso.</strong> Não há relação direta entre intensidade dos efeitos e eficácia. Pacientes com pouquíssimos efeitos também alcançam excelentes resultados.
+          </div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)">
+            <span>✅</span>
+            <span>"O escalonamento lento de dose reduz os efeitos"</span>
+          </div>
+          <div class="myth-body" style="color:var(--green-dark)">
+            <strong>Verdade.</strong> Esse é exatamente o motivo do protocolo começar com doses menores. Cada aumento gradual dá tempo ao corpo de se adaptar antes do próximo.
+          </div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)">
+            <span>✅</span>
+            <span>"Mudanças alimentares reduzem os desconfortos"</span>
+          </div>
+          <div class="myth-body" style="color:var(--green-dark)">
+            <strong>Verdade.</strong> Refeições menores, menos gordurosas e aplicação à noite são estratégias comprovadas para tornar os primeiros meses muito mais toleráveis.
+          </div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)">
+            <span>✅</span>
+            <span>"Posso e devo avisar o médico sobre qualquer efeito"</span>
+          </div>
+          <div class="myth-body" style="color:var(--green-dark)">
+            <strong>Verdade.</strong> Nunca hesite em reportar. O médico pode ajustar o protocolo, sugerir estratégias ou antecipar uma consulta para garantir seu conforto.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 9 — RESUMO ═══ -->
+    <div class="slide" data-slide="8">
+      <div class="label">Resumo do Capítulo 5</div>
+      <h2>Você está preparado</h2>
+      <p class="mt-8">Agora você conhece os efeitos antes de senti-los. Isso muda tudo — transforma susto em compreensão.</p>
+
+      <div class="card card-dark mt-16">
+        <div style="color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">As 5 mensagens mais importantes</div>
+        <div class="gap-8">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">A maioria dos efeitos é <strong style="color:#fff">temporária</strong> — surgem nas primeiras semanas e diminuem</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Refeições pequenas + aplicação à noite = muito mais conforto</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Hidrate-se bem — água é aliada em todos os efeitos</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Dor abdominal intensa ou vômitos incontroláveis = procure ajuda</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Nunca pare o medicamento sem falar com o médico primeiro</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:8px">🏆 O que você aprendeu</h3>
+          <div class="gap-4">
+            <div class="row"><span>✓</span><span style="font-size:13px">Por que os efeitos acontecem</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Cada efeito e como manejar</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">O que esperar fase a fase</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Estratégias para minimizar desconfortos</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Sinais de alerta e quando agir</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Mitos desmascarados</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="border:2px solid var(--green);text-align:center;padding:20px">
+          <div style="font-size:28px;margin-bottom:8px">🍽️</div>
+          <h3 style="margin-bottom:6px">Próximo capítulo</h3>
+          <p>Capítulo 6 — <strong>Alimentação no tratamento:</strong> o que comer, o que evitar e como a alimentação potencializa os resultados do GLP-1.</p>
+          <div class="pill pill-green mt-12" style="justify-content:center;width:100%">Continuar para o Cap. 6 →</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <!-- NAVEGAÇÃO -->
+  <nav>
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="prev()">‹ Anterior</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn btn-next" id="btn-next" onclick="next()">Próximo ›</button>
+  </nav>
+
+</div><!-- /app -->
+
+<script>
+const TOTAL = 9;
+let current = 0;
+
+function init(){
+  const dotsEl = document.getElementById('dots');
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.onclick=()=>goTo(i);
+    dotsEl.appendChild(d);
+  }
+  updateUI();
+}
+
+function goTo(n){
+  if(n<0||n>=TOTAL||n===current) return;
+  const slides=document.querySelectorAll('.slide');
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  const prev=current;
+  current=n;
+  setTimeout(()=>slides[prev].classList.remove('exit'),350);
+  slides[current].classList.add('active');
+  slides[current].scrollTop=0;
+  updateUI();
+}
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
+
+function updateUI(){
+  const fill=((current+1)/TOTAL*100).toFixed(1);
+  document.getElementById('prog-fill').style.width=fill+'%';
+  document.getElementById('prog-text').textContent=(current+1)+' / '+TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('btn-prev').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('btn-next').textContent=current===TOTAL-2?'Finalizar ›':'Próximo ›';
+}
+
+function toggleAccord(head){
+  const isOpen=head.classList.contains('open');
+  // fecha todos
+  document.querySelectorAll('.accord-head').forEach(h=>{
+    h.classList.remove('open');
+    h.nextElementSibling.classList.remove('open');
+  });
+  if(!isOpen){
+    head.classList.add('open');
+    head.nextElementSibling.classList.add('open');
+  }
+}
+
+function switchTab(btn,id){
+  // find container
+  const container=btn.closest('.slide');
+  container.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  container.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+init();
+</script>
+</body>
+</html>

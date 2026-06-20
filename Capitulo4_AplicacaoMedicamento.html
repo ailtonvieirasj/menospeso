@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Capítulo 4 — Aplicação do Medicamento · Menos Peso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;--green-light:#d1fae5;--green-dark:#047857;
+    --slate:#0f172a;--slate-mid:#1e293b;--slate-light:#334155;
+    --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;
+    --yellow:#f59e0b;--yellow-light:#fef3c7;
+    --red:#ef4444;--red-light:#fee2e2;
+    --blue:#3b82f6;--blue-light:#dbeafe;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+
+  /* ── SHELL ── */
+  #app{
+    display:flex;flex-direction:column;height:100vh;max-width:430px;
+    margin:0 auto;background:var(--white);position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,.12);
+  }
+
+  /* ── HEADER ── */
+  header{
+    flex-shrink:0;padding:14px 20px 10px;
+    background:var(--white);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  .cap-badge{
+    background:var(--green);color:#fff;font-size:10px;font-weight:700;
+    padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap;
+  }
+  .cap-title{font-size:13px;font-weight:600;color:var(--slate);flex:1;line-height:1.2}
+  .progress-pill{
+    font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .prog-bar{flex-shrink:0;height:3px;background:var(--border)}
+  .prog-fill{height:100%;background:var(--green);transition:width .35s ease}
+
+  /* ── SLIDES ── */
+  .slides{flex:1;overflow:hidden;position:relative}
+  .slide{
+    position:absolute;inset:0;overflow-y:auto;padding:20px 20px 100px;
+    opacity:0;pointer-events:none;transform:translateX(30px);
+    transition:opacity .3s ease,transform .3s ease;
+  }
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+  .slide.exit{opacity:0;transform:translateX(-30px)}
+
+  /* ── NAV ── */
+  nav{
+    flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+    padding:12px 20px;background:var(--white);border-top:1px solid var(--border);
+    position:relative;z-index:10;
+  }
+  .nav-btn{
+    display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;
+    border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;
+    transition:all .2s;font-family:'Inter',sans-serif;
+  }
+  .btn-prev{background:var(--border);color:var(--muted)}
+  .btn-prev:hover{background:#cbd5e1}
+  .btn-next{background:var(--green);color:#fff}
+  .btn-next:hover{background:var(--green-dark)}
+  .btn-next:disabled{opacity:.4;cursor:default}
+  .nav-dots{display:flex;gap:5px}
+  .dot{
+    width:6px;height:6px;border-radius:50%;background:var(--border);
+    cursor:pointer;transition:all .2s;
+  }
+  .dot.active{background:var(--green);width:18px;border-radius:3px}
+
+  /* ── TYPOGRAPHY ── */
+  .label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  h1{font-size:26px;font-weight:900;line-height:1.15;color:var(--slate)}
+  h2{font-size:20px;font-weight:800;line-height:1.2;color:var(--slate)}
+  h3{font-size:15px;font-weight:700;color:var(--slate)}
+  p{font-size:14px;line-height:1.65;color:var(--slate-light)}
+  .caption{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* ── CARDS ── */
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card-green{background:var(--green-light);border:1px solid #a7f3d0}
+  .card-yellow{background:var(--yellow-light);border:1px solid #fcd34d}
+  .card-red{background:var(--red-light);border:1px solid #fca5a5}
+  .card-dark{background:var(--slate);border:none;color:#fff}
+  .card-blue{background:var(--blue-light);border:1px solid #93c5fd}
+
+  /* ── STEP FLOW ── */
+  .step-flow{display:flex;flex-direction:column;gap:0}
+  .step-item{display:flex;gap:14px;padding-bottom:20px;position:relative}
+  .step-item:last-child{padding-bottom:0}
+  .step-item:not(:last-child)::before{
+    content:'';position:absolute;left:17px;top:36px;bottom:0;
+    width:2px;background:var(--border);
+  }
+  .step-num{
+    flex-shrink:0;width:34px;height:34px;border-radius:50%;
+    background:var(--green);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:800;z-index:1;
+  }
+  .step-body{flex:1;padding-top:6px}
+
+  /* ── ICON GRID ── */
+  .icon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .icon-card{
+    background:var(--bg);border:1px solid var(--border);border-radius:14px;
+    padding:14px;display:flex;flex-direction:column;align-items:center;
+    text-align:center;gap:8px;cursor:pointer;transition:all .2s;
+  }
+  .icon-card.selected{border-color:var(--green);background:var(--green-light)}
+  .icon-card .ico{font-size:28px}
+  .icon-card .lbl{font-size:12px;font-weight:600;color:var(--slate)}
+  .icon-card .sub{font-size:11px;color:var(--muted);line-height:1.4}
+
+  /* ── CHECKLIST ── */
+  .check-list{display:flex;flex-direction:column;gap:8px}
+  .check-item{
+    display:flex;align-items:flex-start;gap:12px;padding:12px;
+    background:var(--bg);border:1.5px solid var(--border);border-radius:12px;
+    cursor:pointer;transition:all .2s;user-select:none;
+  }
+  .check-item.done{background:var(--green-light);border-color:#6ee7b7}
+  .check-box{
+    flex-shrink:0;width:22px;height:22px;border-radius:6px;
+    border:2px solid var(--border);background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .2s;margin-top:1px;
+  }
+  .check-item.done .check-box{background:var(--green);border-color:var(--green);color:#fff;font-size:13px}
+  .check-text{font-size:13px;font-weight:500;color:var(--slate);line-height:1.4}
+  .check-item.done .check-text{color:var(--green-dark)}
+
+  /* ── ALERT ── */
+  .alert{display:flex;gap:10px;padding:12px;border-radius:12px;align-items:flex-start}
+  .alert .ico{font-size:18px;flex-shrink:0}
+  .alert p{font-size:13px;line-height:1.5}
+
+  /* ── TABS ── */
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+  .tab{
+    flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;
+    border:1.5px solid var(--border);background:#fff;cursor:pointer;
+    transition:all .2s;color:var(--muted);font-family:'Inter',sans-serif;
+  }
+  .tab.active{background:var(--green);border-color:var(--green);color:#fff}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
+  /* ── BADGE ── */
+  .badge{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;
+  }
+  .badge-green{background:var(--green-light);color:var(--green-dark)}
+  .badge-yellow{background:var(--yellow-light);color:#92400e}
+  .badge-red{background:var(--red-light);color:#991b1b}
+
+  /* ── COMPARE ── */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .compare-col{border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .compare-col h3{font-size:13px;font-weight:700;text-align:center}
+  .compare-col .item{font-size:12px;line-height:1.4;padding:8px;border-radius:8px;text-align:center}
+
+  /* ── INDEX ── */
+  .index-list{display:flex;flex-direction:column;gap:8px}
+  .index-item{
+    display:flex;align-items:center;gap:12px;padding:12px 14px;
+    background:var(--bg);border:1px solid var(--border);border-radius:12px;
+    cursor:pointer;transition:all .2s;
+  }
+  .index-item:hover{border-color:var(--green);background:var(--green-light)}
+  .index-num{
+    flex-shrink:0;width:28px;height:28px;border-radius:8px;
+    background:var(--green-light);color:var(--green-dark);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;
+  }
+  .index-label{font-size:13px;font-weight:600;color:var(--slate);flex:1}
+  .index-arrow{color:var(--muted);font-size:14px}
+
+  /* ── LOCATION SELECTOR ── */
+  .body-zones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .zone-card{
+    border:2px solid var(--border);border-radius:14px;padding:12px 8px;
+    text-align:center;cursor:pointer;transition:all .2s;background:#fff;
+  }
+  .zone-card.active{border-color:var(--green);background:var(--green-light)}
+  .zone-card .ico{font-size:30px;display:block;margin-bottom:6px}
+  .zone-card .name{font-size:12px;font-weight:700;color:var(--slate)}
+  .zone-card .hint{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+  .zone-detail{background:var(--green-light);border:1px solid #6ee7b7;border-radius:14px;padding:14px;margin-top:12px}
+
+  /* ── ANGLE VISUAL ── */
+  .angle-visual{
+    background:linear-gradient(135deg,#f0fdf4,#ecfdf5);
+    border:1px solid #a7f3d0;border-radius:16px;padding:20px;
+    text-align:center;
+  }
+  .angle-num{font-size:52px;font-weight:900;color:var(--green);line-height:1}
+
+  /* ── ERROR CARDS ── */
+  .error-list{display:flex;flex-direction:column;gap:10px}
+  .error-card{
+    display:flex;gap:12px;padding:14px;
+    border-radius:14px;align-items:flex-start;
+  }
+  .error-icon{font-size:22px;flex-shrink:0}
+  .error-title{font-size:13px;font-weight:700;color:var(--slate)}
+  .error-fix{font-size:12px;color:var(--green-dark);font-weight:600;margin-top:3px}
+
+  /* ── UTILS ── */
+  .gap-4{display:flex;flex-direction:column;gap:4px}
+  .gap-8{display:flex;flex-direction:column;gap:8px}
+  .gap-12{display:flex;flex-direction:column;gap:12px}
+  .gap-16{display:flex;flex-direction:column;gap:16px}
+  .row{display:flex;align-items:center;gap:8px}
+  .mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+  .divider{height:1px;background:var(--border);margin:16px 0}
+  .pill{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;
+  }
+  .pill-green{background:var(--green);color:#fff}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <header>
+    <span class="cap-badge">CAP. 4</span>
+    <span class="cap-title">Aplicando o medicamento</span>
+    <span class="progress-pill" id="prog-text">1 / 9</span>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:11.1%"></div></div>
+
+  <!-- SLIDES -->
+  <div class="slides" id="slides">
+
+    <!-- ═══ SLIDE 1 — ABERTURA / ÍNDICE ═══ -->
+    <div class="slide active" data-slide="0">
+      <div class="label">Capítulo 4</div>
+      <h1>Passo a passo da aplicação</h1>
+      <p class="mt-8">Este capítulo vai te ensinar a aplicar o medicamento com segurança, conforto e eficácia — do início ao fim.</p>
+
+      <div class="card card-green mt-16" style="padding:14px">
+        <div class="row" style="gap:10px">
+          <span style="font-size:22px">🎯</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--green-dark)">O que você vai aprender</div>
+            <div class="caption" style="margin-top:2px">Do preparo até o descarte seguro</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="index-list mt-12">
+        <div class="index-item" onclick="goTo(1)">
+          <div class="index-num">1</div>
+          <div class="index-label">O que você vai precisar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(2)">
+          <div class="index-num">2</div>
+          <div class="index-label">Onde aplicar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(3)">
+          <div class="index-num">3</div>
+          <div class="index-label">Preparando-se para aplicar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(4)">
+          <div class="index-num">4</div>
+          <div class="index-label">Passo a passo da aplicação</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(5)">
+          <div class="index-num">5</div>
+          <div class="index-label">Técnica correta</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(6)">
+          <div class="index-num">6</div>
+          <div class="index-label">Após a aplicação</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(7)">
+          <div class="index-num">7</div>
+          <div class="index-label">Erros mais comuns</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(8)">
+          <div class="index-num">8</div>
+          <div class="index-label">Resumo rápido</div>
+          <div class="index-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 2 — O QUE VOCÊ VAI PRECISAR ═══ -->
+    <div class="slide" data-slide="1">
+      <div class="label">Seção 1</div>
+      <h2>O que você vai precisar</h2>
+      <p class="mt-8">Antes de aplicar, separe tudo. Organizar com antecedência reduz o estresse e evita erros.</p>
+
+      <div class="gap-12 mt-16">
+
+        <div class="card">
+          <div class="row" style="margin-bottom:10px">
+            <span style="font-size:18px">💊</span>
+            <h3>O medicamento</h3>
+          </div>
+          <div class="gap-8">
+            <div class="check-item done" style="cursor:default">
+              <div class="check-box">✓</div>
+              <div class="check-text">Caneta autoaplicável na dose correta prescrita</div>
+            </div>
+            <div class="check-item done" style="cursor:default">
+              <div class="check-box">✓</div>
+              <div class="check-text">Retirada da geladeira <strong>30 minutos antes</strong> da aplicação</div>
+            </div>
+            <div class="check-item done" style="cursor:default">
+              <div class="check-box">✓</div>
+              <div class="check-text">Líquido límpido, sem partículas ou coloração estranha</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row" style="margin-bottom:10px">
+            <span style="font-size:18px">🧴</span>
+            <h3>Para higiene</h3>
+          </div>
+          <div class="gap-8">
+            <div class="check-item done" style="cursor:default">
+              <div class="check-box">✓</div>
+              <div class="check-text">Sabão e água — para lavar as mãos</div>
+            </div>
+            <div class="check-item done" style="cursor:default">
+              <div class="check-box">✓</div>
+              <div class="check-text">Lenço com álcool 70% — para limpar a pele</div>
+            </div>
+            <div class="check-item done" style="cursor:default">
+              <div class="check-box">✓</div>
+              <div class="check-text">Compressa de gaze ou algodão limpo</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row" style="margin-bottom:10px">
+            <span style="font-size:18px">🗑️</span>
+            <h3>Para descarte</h3>
+          </div>
+          <div class="check-item done" style="cursor:default">
+            <div class="check-box">✓</div>
+            <div class="check-text">Descarpak ou coletor rígido de perfurocortante</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert card-yellow mt-12">
+        <span class="ico">⚠️</span>
+        <p><strong>Nunca reaproveite agulhas.</strong> Cada aplicação exige uma agulha nova — agulhas reutilizadas ficam cegas, aumentam a dor e o risco de infecção.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 3 — ONDE APLICAR ═══ -->
+    <div class="slide" data-slide="2">
+      <div class="label">Seção 2</div>
+      <h2>Onde aplicar</h2>
+      <p class="mt-8">O medicamento é injetado no <strong>tecido subcutâneo</strong> — a camada de gordura logo abaixo da pele. Toque em cada região para ver as dicas.</p>
+
+      <div class="body-zones mt-16">
+        <div class="zone-card active" id="zone-0" onclick="selectZone(0)">
+          <span class="ico">🫁</span>
+          <div class="name">Abdômen</div>
+          <div class="hint">Região mais recomendada</div>
+        </div>
+        <div class="zone-card" id="zone-1" onclick="selectZone(1)">
+          <span class="ico">🦵</span>
+          <div class="name">Coxa</div>
+          <div class="hint">Boa alternativa</div>
+        </div>
+        <div class="zone-card" id="zone-2" onclick="selectZone(2)">
+          <span class="ico">💪</span>
+          <div class="name">Braço</div>
+          <div class="hint">Com ajuda de outra pessoa</div>
+        </div>
+      </div>
+
+      <div class="zone-detail" id="zone-detail">
+        <h3 style="color:var(--green-dark)">🫁 Abdômen</h3>
+        <div class="gap-8 mt-8">
+          <p>Aplique ao redor do umbigo, <strong>a pelo menos 5 cm de distância</strong> dele.</p>
+          <p>Evite cicatrizes, marcas e a linha central da barriga.</p>
+          <p>✅ <strong>Região preferida</strong> — mais fácil de alcançar, absorção previsível.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="card card-green">
+        <h3 style="color:var(--green-dark);margin-bottom:8px">🔄 Faça o rodízio</h3>
+        <p>Não aplique no mesmo ponto duas vezes seguidas. O rodízio previne lipodistrofia — endurecimento e caroços sob a pele que prejudicam a absorção.</p>
+        <div class="mt-8" style="background:#fff;border-radius:10px;padding:10px;border:1px solid #a7f3d0">
+          <div class="caption" style="font-weight:600;color:var(--green-dark);margin-bottom:4px">Exemplo de rotação semanal:</div>
+          <div class="caption">Seg → Abdômen direito · Qua → Coxa esquerda · Sex → Abdômen esquerdo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 4 — PREPARANDO-SE ═══ -->
+    <div class="slide" data-slide="3">
+      <div class="label">Seção 3</div>
+      <h2>Preparando-se para aplicar</h2>
+      <p class="mt-8">Use este checklist interativo antes de cada aplicação. Marque cada item ao concluir.</p>
+
+      <div id="prep-bar-wrap" class="mt-12" style="background:var(--border);border-radius:20px;height:8px;overflow:hidden">
+        <div id="prep-bar" style="height:100%;width:0%;background:var(--green);border-radius:20px;transition:width .3s ease"></div>
+      </div>
+      <div class="caption mt-4" id="prep-msg" style="text-align:center;font-weight:600">Marque os itens conforme for preparando</div>
+
+      <div class="check-list mt-12" id="prep-list">
+        <div class="check-item" onclick="togglePrep(this)">
+          <div class="check-box"></div>
+          <div class="check-text">✋ Lavei as mãos com água e sabão por pelo menos 20 segundos</div>
+        </div>
+        <div class="check-item" onclick="togglePrep(this)">
+          <div class="check-box"></div>
+          <div class="check-text">🌡️ O medicamento ficou fora da geladeira por 30 minutos (fica menos frio, a injeção dói menos)</div>
+        </div>
+        <div class="check-item" onclick="togglePrep(this)">
+          <div class="check-box"></div>
+          <div class="check-text">👁️ Inspecionei o medicamento — líquido limpo, sem partículas, dentro do prazo de validade</div>
+        </div>
+        <div class="check-item" onclick="togglePrep(this)">
+          <div class="check-box"></div>
+          <div class="check-text">📍 Escolhi o ponto de aplicação — diferente do da semana passada</div>
+        </div>
+        <div class="check-item" onclick="togglePrep(this)">
+          <div class="check-box"></div>
+          <div class="check-text">🧴 Limpei a pele com álcool 70% e aguardei secar completamente</div>
+        </div>
+        <div class="check-item" onclick="togglePrep(this)">
+          <div class="check-box"></div>
+          <div class="check-text">🗑️ O coletor de descarte está ao alcance da mão</div>
+        </div>
+      </div>
+
+      <div class="alert card-yellow mt-12">
+        <span class="ico">💡</span>
+        <p>Aguardar o álcool secar é essencial. Aplicar com a pele ainda úmida de álcool aumenta a ardência.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 5 — PASSO A PASSO ═══ -->
+    <div class="slide" data-slide="4">
+      <div class="label">Seção 4</div>
+      <h2>Passo a passo da aplicação</h2>
+      <p class="mt-8">Siga esta sequência toda vez. Com a prática vira automático — geralmente leva menos de 2 minutos.</p>
+
+      <div class="step-flow mt-16">
+
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Retire a tampa externa</h3>
+            <p class="mt-4">Puxe a tampa grande (externa) com movimento firme e reto. <strong>Não torça.</strong> Guarde-a — você vai precisar depois.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Retire a tampa interna</h3>
+            <p class="mt-4">Puxe a segunda tampa menor. Descarte-a. A agulha ficará exposta — evite tocar.</p>
+            <div class="alert card-yellow mt-8">
+              <span class="ico">⚠️</span>
+              <p style="font-size:12px"><strong>Não reencape</strong> a agulha interna antes da aplicação — risco de acidente.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Selecione a dose (se necessário)</h3>
+            <p class="mt-4">Algumas canetas permitem ajuste de dose. Gire o seletor até o número indicado pelo médico. <strong>Confirme antes de continuar.</strong></p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Faça uma prega na pele</h3>
+            <p class="mt-4">Com a mão não dominante, junte suavemente a pele entre os dedos polegar e indicador, formando uma prega.</p>
+            <div class="card mt-8" style="font-size:12px;color:var(--muted)">Em pessoas mais magras, a prega é essencial para garantir que a agulha não atinja o músculo.</div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Insira a agulha</h3>
+            <p class="mt-4">Posicione a caneta em <strong>ângulo de 90°</strong> sobre a prega. Pressione firmemente até sentir o clique de início.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h3>Injete e aguarde</h3>
+            <p class="mt-4">Pressione o botão até o fim. <strong>Mantenha pressionado por 10 segundos</strong> — isso garante que toda a dose foi liberada.</p>
+            <div class="card card-green mt-8">
+              <div style="font-size:13px;font-weight:600;color:var(--green-dark)">⏱️ 10 segundos faz diferença</div>
+              <div style="font-size:12px;color:var(--green-dark);margin-top:4px">Soltar cedo demais faz parte do medicamento refluxar. Conte em voz alta se precisar.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">7</div>
+          <div class="step-body">
+            <h3>Retire a caneta</h3>
+            <p class="mt-4">Retire a caneta em ângulo reto, sem inclinação. Solte a prega da pele.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">8</div>
+          <div class="step-body">
+            <h3>Descarte com segurança</h3>
+            <p class="mt-4">Reencape com a tampa <strong>externa</strong> que você guardou. Descarte imediatamente no Descarpak. <strong>Nunca na lixeira comum.</strong></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 6 — TÉCNICA CORRETA ═══ -->
+    <div class="slide" data-slide="5">
+      <div class="label">Seção 5</div>
+      <h2>Técnica correta</h2>
+      <p class="mt-8">Pequenos detalhes de técnica fazem diferença entre uma aplicação tranquila e uma desconfortável.</p>
+
+      <div class="angle-visual mt-16">
+        <div class="angle-num">90°</div>
+        <div style="font-size:14px;font-weight:700;color:var(--green-dark);margin-top:4px">Ângulo ideal de inserção</div>
+        <div class="caption mt-4">A caneta perpendicular à pele garante injeção no subcutâneo, não no músculo</div>
+      </div>
+
+      <div class="gap-12 mt-16">
+
+        <div class="card">
+          <h3 style="margin-bottom:10px">⚡ Velocidade de inserção</h3>
+          <div class="compare">
+            <div class="compare-col" style="background:var(--red-light)">
+              <h3 style="color:#991b1b;font-size:12px">❌ Devagar</h3>
+              <div class="item" style="background:#fff;font-size:12px;color:var(--slate)">Mais dor — a pele tem tempo de "resistir"</div>
+            </div>
+            <div class="compare-col" style="background:var(--green-light)">
+              <h3 style="color:var(--green-dark);font-size:12px">✅ Rápido e firme</h3>
+              <div class="item" style="background:#fff;font-size:12px;color:var(--slate)">Menos dor — atravessa rápido</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:10px">🤲 Pressão ao injetar</h3>
+          <div class="gap-8">
+            <div class="row">
+              <span class="badge badge-green">✓ Certo</span>
+              <span style="font-size:13px">Pressão constante e uniforme no botão</span>
+            </div>
+            <div class="row">
+              <span class="badge badge-red">✗ Errado</span>
+              <span style="font-size:13px">Soltar e apertar novamente no meio</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:10px">⏱️ Quanto tempo manter</h3>
+          <div class="gap-8">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--green-light);border-radius:10px">
+              <span style="font-size:22px">🔢</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--green-dark)">10 segundos após o clique final</div>
+                <div class="caption">Aguarde com a caneta firme na pele</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--blue-light);border-radius:10px">
+              <span style="font-size:22px">👆</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#1e40af">Depois: pressione o local por 5 segundos</div>
+                <div class="caption">Com gaze seca — não esfregue</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:10px">🌡️ Temperatura da caneta</h3>
+          <div class="gap-8">
+            <p>Aplicar o medicamento gelado aumenta significativamente a dor e pode causar vermelhidão no local.</p>
+            <div class="alert card-green" style="padding:10px">
+              <span class="ico">✅</span>
+              <p style="font-size:12px">30 minutos fora da geladeira antes de aplicar — sempre.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 7 — APÓS A APLICAÇÃO ═══ -->
+    <div class="slide" data-slide="6">
+      <div class="label">Seção 6</div>
+      <h2>Após a aplicação</h2>
+      <p class="mt-8">Os primeiros minutos e dias após aplicar são importantes. Saiba o que esperar e o que fazer.</p>
+
+      <div class="tabs mt-16">
+        <button class="tab active" onclick="switchTab(this,'tab-imediato')">Imediatamente</button>
+        <button class="tab" onclick="switchTab(this,'tab-horas')">Primeiras horas</button>
+        <button class="tab" onclick="switchTab(this,'tab-normal')">Normal vs. Atenção</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-imediato">
+        <div class="gap-12">
+          <div class="card">
+            <div class="step-flow">
+              <div class="step-item">
+                <div class="step-num" style="background:var(--blue);font-size:12px">1</div>
+                <div class="step-body">
+                  <h3>Pressione, não esfregue</h3>
+                  <p class="mt-4">Aplique suave pressão com gaze seca por 5–10 segundos. Esfregar pode causar hematoma.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-num" style="background:var(--blue);font-size:12px">2</div>
+                <div class="step-body">
+                  <h3>Descarte a caneta usada</h3>
+                  <p class="mt-4">Coloque no Descarpak imediatamente. Nunca deixe sobre superfícies com a agulha exposta.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-num" style="background:var(--blue);font-size:12px">3</div>
+                <div class="step-body">
+                  <h3>Registre a aplicação</h3>
+                  <p class="mt-4">Anote: data, horário, local do corpo e dose. Esse hábito facilita o acompanhamento médico.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-horas">
+        <div class="gap-12">
+          <div class="card">
+            <h3 style="margin-bottom:8px">Nas próximas horas</h3>
+            <div class="gap-8">
+              <div class="check-item done" style="cursor:default">
+                <div class="check-box">✓</div>
+                <div class="check-text">Hidrate-se bem — beba água ao longo do dia</div>
+              </div>
+              <div class="check-item done" style="cursor:default">
+                <div class="check-box">✓</div>
+                <div class="check-text">Se sentir náusea, prefira refeições leves e pequenas</div>
+              </div>
+              <div class="check-item done" style="cursor:default">
+                <div class="check-box">✓</div>
+                <div class="check-text">Evite atividade física intensa no dia da aplicação nas primeiras semanas</div>
+              </div>
+              <div class="check-item done" style="cursor:default">
+                <div class="check-box">✓</div>
+                <div class="check-text">Observe o local — pequena vermelhidão é normal</div>
+              </div>
+            </div>
+          </div>
+          <div class="alert card-blue">
+            <span class="ico">💧</span>
+            <p>A náusea costuma ser mais intensa nas primeiras horas após a aplicação. Refeições pequenas e lentas ajudam muito.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-normal">
+        <div class="compare" style="align-items:start">
+          <div class="compare-col" style="background:var(--green-light)">
+            <h3 style="color:var(--green-dark)">✅ Normal</h3>
+            <div class="item" style="background:#fff;color:var(--slate)">Leve vermelhidão</div>
+            <div class="item" style="background:#fff;color:var(--slate)">Coceira leve por 1–2 dias</div>
+            <div class="item" style="background:#fff;color:var(--slate)">Pequeno roxo</div>
+            <div class="item" style="background:#fff;color:var(--slate)">Ardência passageira</div>
+            <div class="item" style="background:#fff;color:var(--slate)">Inchaço pequeno</div>
+          </div>
+          <div class="compare-col" style="background:var(--red-light)">
+            <h3 style="color:#991b1b">⚠️ Fale conosco</h3>
+            <div class="item" style="background:#fff;color:var(--slate)">Vermelhidão que cresce</div>
+            <div class="item" style="background:#fff;color:var(--slate)">Calor intenso local</div>
+            <div class="item" style="background:#fff;color:var(--slate)">Dor que piora</div>
+            <div class="item" style="background:#fff;color:var(--slate)">Pus ou secreção</div>
+            <div class="item" style="background:#fff;color:var(--slate)">Febre após aplicação</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 8 — ERROS MAIS COMUNS ═══ -->
+    <div class="slide" data-slide="7">
+      <div class="label">Seção 7</div>
+      <h2>Erros mais comuns</h2>
+      <p class="mt-8">Conhecer os erros antes de acontecerem é a melhor forma de evitá-los. Leia com calma.</p>
+
+      <div class="error-list mt-16">
+
+        <div class="error-card card">
+          <div class="error-icon">❄️</div>
+          <div>
+            <div class="error-title">Aplicar o medicamento gelado</div>
+            <div class="error-fix">✓ Solução: retirar da geladeira 30 min antes</div>
+            <div class="caption mt-4">Aumenta a dor e pode causar reação local</div>
+          </div>
+        </div>
+
+        <div class="error-card card">
+          <div class="error-icon">💨</div>
+          <div>
+            <div class="error-title">Soltar o botão antes de 10 segundos</div>
+            <div class="error-fix">✓ Solução: contar em voz alta até 10</div>
+            <div class="caption mt-4">Parte da dose fica na caneta — você recebe menos medicamento</div>
+          </div>
+        </div>
+
+        <div class="error-card card">
+          <div class="error-icon">📍</div>
+          <div>
+            <div class="error-title">Aplicar sempre no mesmo ponto</div>
+            <div class="error-fix">✓ Solução: fazer rodízio semanal dos locais</div>
+            <div class="caption mt-4">Causa lipodistrofia — caroços que prejudicam a absorção</div>
+          </div>
+        </div>
+
+        <div class="error-card card">
+          <div class="error-icon">🧴</div>
+          <div>
+            <div class="error-title">Não aguardar o álcool secar</div>
+            <div class="error-fix">✓ Solução: aguardar 10–15 segundos</div>
+            <div class="caption mt-4">Provoca ardência intensa na hora da injeção</div>
+          </div>
+        </div>
+
+        <div class="error-card card">
+          <div class="error-icon">🔄</div>
+          <div>
+            <div class="error-title">Reutilizar agulhas</div>
+            <div class="error-fix">✓ Solução: agulha nova a cada aplicação</div>
+            <div class="caption mt-4">Agulha usada fica cega — mais dor e risco de infecção</div>
+          </div>
+        </div>
+
+        <div class="error-card card">
+          <div class="error-icon">📐</div>
+          <div>
+            <div class="error-title">Aplicar em ângulo errado</div>
+            <div class="error-fix">✓ Solução: sempre 90° em relação à pele</div>
+            <div class="caption mt-4">Ângulo incorreto pode atingir músculo — mais dor e absorção diferente</div>
+          </div>
+        </div>
+
+        <div class="error-card card">
+          <div class="error-icon">🗑️</div>
+          <div>
+            <div class="error-title">Jogar na lixeira comum</div>
+            <div class="error-fix">✓ Solução: sempre usar o Descarpak</div>
+            <div class="caption mt-4">É obrigação legal — risco de acidente para quem manuseia o lixo</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 9 — RESUMO ═══ -->
+    <div class="slide" data-slide="8">
+      <div class="label">Resumo do Capítulo 4</div>
+      <h2>Você está pronto</h2>
+      <p class="mt-8">Aplicar com técnica correta é um hábito que se forma rápido. Nos primeiros dias pode parecer difícil — com o tempo fica natural.</p>
+
+      <div class="card card-dark mt-16">
+        <div style="color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Os 8 passos em resumo</div>
+        <div class="gap-8">
+          <div style="display:flex;gap:10px;align-items:center">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0">1</span>
+            <span style="font-size:13px;color:#e2e8f0">Retire a tampa externa</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0">2</span>
+            <span style="font-size:13px;color:#e2e8f0">Retire a tampa interna</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0">3</span>
+            <span style="font-size:13px;color:#e2e8f0">Confirme a dose selecionada</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0">4</span>
+            <span style="font-size:13px;color:#e2e8f0">Faça a prega na pele</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0">5</span>
+            <span style="font-size:13px;color:#e2e8f0">Insira a agulha em 90°</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0">6</span>
+            <span style="font-size:13px;color:#e2e8f0">Injete e aguarde 10 segundos</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0">7</span>
+            <span style="font-size:13px;color:#e2e8f0">Retire a caneta em ângulo reto</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0">8</span>
+            <span style="font-size:13px;color:#e2e8f0">Descarte no Descarpak</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:6px">🏆 O que você aprendeu</h3>
+          <div class="gap-4">
+            <div class="row"><span>✓</span><span style="font-size:13px">Materiais necessários</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Locais corretos e rodízio</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Passo a passo completo</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Técnica correta de aplicação</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Cuidados pós-aplicação</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Erros a evitar</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="border:2px solid var(--green);text-align:center;padding:20px">
+          <div style="font-size:28px;margin-bottom:8px">💬</div>
+          <h3 style="margin-bottom:6px">Próximo capítulo</h3>
+          <p>Capítulo 5 — <strong>Efeitos colaterais:</strong> o que esperar, quando se preocupar e como se preparar para cada fase do tratamento.</p>
+          <div class="pill pill-green mt-12" style="justify-content:center;width:100%">Continuar para o Cap. 5 →</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <!-- NAVEGAÇÃO -->
+  <nav>
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="prev()">‹ Anterior</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn btn-next" id="btn-next" onclick="next()">Próximo ›</button>
+  </nav>
+
+</div><!-- /app -->
+
+<script>
+const TOTAL = 9;
+let current = 0;
+
+/* ── INIT ── */
+function init(){
+  const dotsEl = document.getElementById('dots');
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('div');
+    d.className = 'dot'+(i===0?' active':'');
+    d.onclick = ()=>goTo(i);
+    dotsEl.appendChild(d);
+  }
+  updateUI();
+}
+
+/* ── NAVIGATION ── */
+function goTo(n){
+  if(n<0||n>=TOTAL||n===current) return;
+  const slides = document.querySelectorAll('.slide');
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  setTimeout(()=>slides[current>n?n+1:current].classList.remove('exit'),350);
+  current=n;
+  slides[current].classList.add('active');
+  slides[current].scrollTop=0;
+  updateUI();
+}
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
+
+function updateUI(){
+  const fill = ((current+1)/TOTAL*100).toFixed(1);
+  document.getElementById('prog-fill').style.width=fill+'%';
+  document.getElementById('prog-text').textContent=(current+1)+' / '+TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active',i===current);
+  });
+  document.getElementById('btn-prev').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('btn-next').textContent=current===TOTAL-2?'Finalizar ›':'Próximo ›';
+}
+
+/* ── ZONE SELECTOR ── */
+const zones=[
+  {name:'🫁 Abdômen',detail:'<h3 style="color:var(--green-dark)">🫁 Abdômen</h3><div class="gap-8 mt-8"><p>Aplique ao redor do umbigo, <strong>a pelo menos 5 cm de distância</strong> dele.</p><p>Evite cicatrizes, marcas e a linha central da barriga.</p><p>✅ <strong>Região preferida</strong> — mais fácil de alcançar, absorção previsível.</p></div>'},
+  {name:'🦵 Coxa',detail:'<h3 style="color:var(--green-dark)">🦵 Coxa</h3><div class="gap-8 mt-8"><p>Use a <strong>parte frontal e externa</strong> das coxas — entre o joelho e a virilha.</p><p>Evite a parte interna (mais sensível) e a área muito próxima ao joelho.</p><p>✅ Boa alternativa quando o abdômen está irritado ou com hematoma.</p></div>'},
+  {name:'💪 Braço',detail:'<h3 style="color:var(--green-dark)">💪 Braço</h3><div class="gap-8 mt-8"><p>Use a <strong>parte de trás do braço</strong> — região do tríceps.</p><p>Esta região é mais difícil de acessar sozinho.</p><p>⚠️ Ideal apenas quando outra pessoa pode ajudar com a aplicação.</p></div>'},
+];
+function selectZone(i){
+  document.querySelectorAll('.zone-card').forEach((z,idx)=>z.classList.toggle('active',idx===i));
+  document.getElementById('zone-detail').innerHTML='<div class="zone-detail">'+zones[i].detail+'</div>';
+}
+
+/* ── PREP CHECKLIST ── */
+function togglePrep(el){
+  el.classList.toggle('done');
+  el.querySelector('.check-box').textContent=el.classList.contains('done')?'✓':'';
+  const items=document.querySelectorAll('#prep-list .check-item');
+  const done=[...items].filter(i=>i.classList.contains('done')).length;
+  const pct=Math.round(done/items.length*100);
+  document.getElementById('prep-bar').style.width=pct+'%';
+  document.getElementById('prep-msg').textContent=
+    pct===100?'✅ Tudo pronto! Pode aplicar.':
+    pct===0?'Marque os itens conforme for preparando':
+    `${done} de ${items.length} itens concluídos`;
+  document.getElementById('prep-msg').style.color=pct===100?'var(--green)':'var(--muted)';
+}
+
+/* ── TABS ── */
+function switchTab(btn,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+init();
+</script>
+</body>
+</html>

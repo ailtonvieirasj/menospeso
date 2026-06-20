@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Capítulo 10 — O Futuro do Tratamento · Menos Peso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;--green-light:#d1fae5;--green-dark:#047857;
+    --slate:#0f172a;--slate-mid:#1e293b;--slate-light:#334155;
+    --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;
+    --yellow:#f59e0b;--yellow-light:#fef3c7;
+    --red:#ef4444;--red-light:#fee2e2;
+    --blue:#3b82f6;--blue-light:#dbeafe;
+    --indigo:#4f46e5;--indigo-light:#e0e7ff;
+    --purple:#8b5cf6;--purple-light:#ede9fe;
+    --teal:#0d9488;--teal-light:#ccfbf1;
+    --orange:#f97316;--orange-light:#ffedd5;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;background:var(--white);box-shadow:0 0 40px rgba(0,0,0,.12)}
+  header{flex-shrink:0;padding:14px 20px 10px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .cap-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+  .cap-title{font-size:13px;font-weight:600;color:var(--slate);flex:1;line-height:1.2}
+  .progress-pill{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .prog-bar{flex-shrink:0;height:3px;background:var(--border)}
+  .prog-fill{height:100%;background:var(--green);transition:width .35s ease}
+  .slides{flex:1;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;overflow-y:auto;padding:20px 20px 100px;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .3s ease,transform .3s ease}
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+  .slide.exit{opacity:0;transform:translateX(-30px)}
+  nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--white);border-top:1px solid var(--border);z-index:10}
+  .nav-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+  .btn-prev{background:var(--border);color:var(--muted)}.btn-prev:hover{background:#cbd5e1}
+  .btn-next{background:var(--green);color:#fff}.btn-next:hover{background:var(--green-dark)}.btn-next:disabled{opacity:.4;cursor:default}
+  .nav-dots{display:flex;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--green);width:18px;border-radius:3px}
+
+  .label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  h1{font-size:26px;font-weight:900;line-height:1.15;color:var(--slate)}
+  h2{font-size:20px;font-weight:800;line-height:1.2;color:var(--slate)}
+  h3{font-size:15px;font-weight:700;color:var(--slate)}
+  p{font-size:14px;line-height:1.65;color:var(--slate-light)}
+  .caption{font-size:12px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card-green{background:var(--green-light);border:1px solid #a7f3d0}
+  .card-yellow{background:var(--yellow-light);border:1px solid #fcd34d}
+  .card-red{background:var(--red-light);border:1px solid #fca5a5}
+  .card-blue{background:var(--blue-light);border:1px solid #93c5fd}
+  .card-dark{background:var(--slate);border:none}
+  .card-indigo{background:var(--indigo-light);border:1px solid #a5b4fc}
+  .card-purple{background:var(--purple-light);border:1px solid #c4b5fd}
+  .card-teal{background:var(--teal-light);border:1px solid #5eead4}
+  .card-orange{background:var(--orange-light);border:1px solid #fdba74}
+
+  .alert{display:flex;gap:10px;padding:12px;border-radius:12px;align-items:flex-start}
+  .alert .ico{font-size:18px;flex-shrink:0}
+  .alert p{font-size:13px;line-height:1.5}
+
+  .index-list{display:flex;flex-direction:column;gap:8px}
+  .index-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
+  .index-item:hover{border-color:var(--green);background:var(--green-light)}
+  .index-num{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .index-label{font-size:13px;font-weight:600;color:var(--slate);flex:1}
+  .index-arrow{color:var(--muted);font-size:14px}
+
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+  .tab{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .2s;color:var(--muted);font-family:'Inter',sans-serif}
+  .tab.active{background:var(--green);border-color:var(--green);color:#fff}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
+  /* PHASE TIMELINE */
+  .phase-timeline{display:flex;flex-direction:column;gap:0}
+  .phase-item{display:flex;gap:14px;padding-bottom:24px;position:relative}
+  .phase-item:last-child{padding-bottom:0}
+  .phase-item:not(:last-child)::before{content:'';position:absolute;left:20px;top:42px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),#a7f3d0)}
+  .phase-dot{flex-shrink:0;width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:1;border:2px solid transparent}
+  .phase-content{flex:1;padding-top:6px}
+  .phase-period{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .phase-title{font-size:15px;font-weight:800;color:var(--slate);margin:3px 0 6px}
+  .phase-desc{font-size:13px;color:var(--slate-light);line-height:1.55}
+
+  /* SCENARIO CARDS */
+  .scenario-wrap{display:flex;flex-direction:column;gap:10px}
+  .scenario{border:2px solid var(--border);border-radius:16px;padding:16px;cursor:pointer;transition:all .25s;background:#fff}
+  .scenario.active{border-color:var(--green);background:var(--green-light)}
+  .scenario-head{display:flex;align-items:center;gap:10px}
+  .scenario-ico{font-size:24px}
+  .scenario-title{font-size:14px;font-weight:700;color:var(--slate)}
+  .scenario-detail{margin-top:12px;display:none}
+  .scenario.active .scenario-detail{display:block}
+
+  /* RISK CARDS */
+  .risk-list{display:flex;flex-direction:column;gap:8px}
+  .risk-item{display:flex;gap:12px;padding:14px;border-radius:14px;align-items:flex-start}
+  .risk-ico{font-size:22px;flex-shrink:0}
+  .risk-title{font-size:13px;font-weight:700;color:var(--slate)}
+  .risk-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .risk-fix{font-size:12px;font-weight:700;margin-top:5px}
+
+  /* HABIT TRACKER */
+  .habit-tracker{display:flex;flex-direction:column;gap:8px}
+  .habit-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:#fff;border:1.5px solid var(--border)}
+  .habit-ico{font-size:20px;flex-shrink:0}
+  .habit-name{flex:1;font-size:13px;font-weight:600;color:var(--slate)}
+  .habit-tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px}
+
+  /* STEP FLOW */
+  .step-flow{display:flex;flex-direction:column}
+  .step-item{display:flex;gap:14px;padding-bottom:18px;position:relative}
+  .step-item:last-child{padding-bottom:0}
+  .step-item:not(:last-child)::before{content:'';position:absolute;left:17px;top:36px;bottom:0;width:2px;background:var(--border)}
+  .step-num{flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;z-index:1}
+  .step-body{flex:1;padding-top:6px}
+
+  /* MYTH */
+  .myth-card{border-radius:14px;overflow:hidden;margin-bottom:10px}
+  .myth-head{padding:12px 14px;font-size:13px;font-weight:700;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+  .myth-body{padding:0 14px 12px;font-size:13px;line-height:1.55}
+
+  /* FINAL CARD */
+  .final-card{
+    background:linear-gradient(135deg,#064e3b,#065f46);
+    border-radius:24px;padding:28px 24px;
+    text-align:center;position:relative;overflow:hidden;
+  }
+  .final-card::before{
+    content:'✦';position:absolute;top:14px;left:18px;
+    font-size:32px;color:rgba(255,255,255,.08);
+  }
+  .final-card::after{
+    content:'✦';position:absolute;bottom:14px;right:18px;
+    font-size:48px;color:rgba(255,255,255,.06);
+  }
+
+  /* UTILS */
+  .gap-8{display:flex;flex-direction:column;gap:8px}
+  .gap-12{display:flex;flex-direction:column;gap:12px}
+  .row{display:flex;align-items:center;gap:8px}
+  .mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+  .divider{height:1px;background:var(--border);margin:14px 0}
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+  .pill-green{background:var(--green);color:#fff}
+  .check-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-light);border-radius:10px;margin-bottom:6px}
+  .check-row .ico{font-size:15px;flex-shrink:0;margin-top:1px}
+  .check-row .txt{font-size:13px;color:var(--green-dark);font-weight:500;line-height:1.4}
+  .cross-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--red-light);border-radius:10px;margin-bottom:6px}
+  .cross-row .ico{font-size:15px;flex-shrink:0;margin-top:1px}
+  .cross-row .txt{font-size:13px;color:#991b1b;font-weight:500;line-height:1.4}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <span class="cap-badge">CAP. 10</span>
+    <span class="cap-title">O futuro do tratamento</span>
+    <span class="progress-pill" id="prog-text">1 / 9</span>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:11.1%"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- ═══ SLIDE 1 — ABERTURA ═══ -->
+    <div class="slide active" data-slide="0">
+      <div class="label">Capítulo 10 · Capítulo Final</div>
+      <h1>O futuro do seu tratamento</h1>
+      <p class="mt-8">O início foi a parte mais difícil. Agora você tem as ferramentas, o conhecimento e o suporte para construir uma vida diferente — com ou sem o medicamento.</p>
+
+      <div class="card card-green mt-16" style="padding:14px">
+        <div class="row" style="gap:10px">
+          <span style="font-size:22px">🌅</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--green-dark)">A ideia central deste capítulo</div>
+            <div style="font-size:13px;color:var(--green-dark);margin-top:4px;line-height:1.5">O medicamento é uma ferramenta poderosa — mas temporária. O que dura para sempre são os hábitos que você constrói enquanto ele está te ajudando.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="index-list mt-12">
+        <div class="index-item" onclick="goTo(1)">
+          <div class="index-num">1</div>
+          <div class="index-label">As fases do tratamento</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(2)">
+          <div class="index-num">2</div>
+          <div class="index-label">Quando e como o medicamento pode mudar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(3)">
+          <div class="index-num">3</div>
+          <div class="index-label">O que pode fazer o peso voltar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(4)">
+          <div class="index-num">4</div>
+          <div class="index-label">Os hábitos que ficam para sempre</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(5)">
+          <div class="index-num">5</div>
+          <div class="index-label">Como manter os resultados a longo prazo</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(6)">
+          <div class="index-num">6</div>
+          <div class="index-label">Mitos sobre encerrar o tratamento</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(7)">
+          <div class="index-num">7</div>
+          <div class="index-label">Uma carta para você</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(8)">
+          <div class="index-num">8</div>
+          <div class="index-label">Resumo do guia completo</div>
+          <div class="index-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 2 — FASES DO TRATAMENTO ═══ -->
+    <div class="slide" data-slide="1">
+      <div class="label">Seção 1</div>
+      <h2>As fases do tratamento</h2>
+      <p class="mt-8">O tratamento não termina de uma hora para outra. Ele evolui em fases — e cada fase tem um objetivo diferente.</p>
+
+      <div class="phase-timeline mt-16">
+
+        <div class="phase-item">
+          <div class="phase-dot" style="background:var(--green-light);border-color:var(--green)">🌱</div>
+          <div class="phase-content">
+            <div class="phase-period">Meses 1–3</div>
+            <div class="phase-title">Fase de adaptação e início</div>
+            <div class="phase-desc">O corpo aprende a trabalhar com o medicamento. Os efeitos colaterais diminuem, a fome começa a cair e os primeiros resultados aparecem. O foco é criar os novos hábitos.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-dot" style="background:var(--blue-light);border-color:var(--blue)">📈</div>
+          <div class="phase-content">
+            <div class="phase-period">Meses 3–9</div>
+            <div class="phase-title">Fase de emagrecimento ativo</div>
+            <div class="phase-desc">A perda de peso se torna mais consistente. Os hábitos estão se consolidando. O médico pode ajustar a dose para manter a progressão. É a fase mais produtiva do tratamento.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-dot" style="background:var(--yellow-light);border-color:var(--yellow)">⚖️</div>
+          <div class="phase-content">
+            <div class="phase-period">Meses 9–18</div>
+            <div class="phase-title">Fase de estabilização</div>
+            <div class="phase-desc">O peso se aproxima da meta. O foco muda de emagrecer para manter. A dose pode ser reduzida gradualmente. Os hábitos precisam estar sólidos para sustentar o resultado.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-dot" style="background:var(--purple-light);border-color:var(--purple)">🏆</div>
+          <div class="phase-content">
+            <div class="phase-period">A partir do mês 18</div>
+            <div class="phase-title">Fase de manutenção</div>
+            <div class="phase-desc">O resultado está consolidado. Alguns pacientes continuam com dose baixa de manutenção. Outros encerram o medicamento e sustentam tudo pelos hábitos. Cada caso é avaliado individualmente.</div>
+            <div class="card card-green mt-8" style="padding:10px">
+              <div style="font-size:12px;font-weight:700;color:var(--green-dark)">💡 Não existe prazo fixo</div>
+              <div style="font-size:12px;color:var(--green-dark);margin-top:3px">O tempo de tratamento é definido pelo seu médico com base na sua resposta, objetivos e saúde. Não compare com outros pacientes.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 3 — QUANDO O MEDICAMENTO MUDA ═══ -->
+    <div class="slide" data-slide="2">
+      <div class="label">Seção 2</div>
+      <h2>Quando e como o medicamento pode mudar</h2>
+      <p class="mt-8">Em algum momento do tratamento, o médico pode sugerir mudanças na dose ou no uso do medicamento. Entender essas possibilidades tira o susto quando acontecer.</p>
+
+      <div class="scenario-wrap mt-16">
+
+        <div class="scenario active" id="sc0" onclick="selectScenario(0)">
+          <div class="scenario-head">
+            <span class="scenario-ico">⬆️</span>
+            <div class="scenario-title">Aumento de dose</div>
+          </div>
+          <div class="scenario-detail">
+            <div class="gap-8 mt-8">
+              <p style="font-size:13px">Acontece quando o emagrecimento desacelera e o médico avalia que há espaço para aumentar a eficácia. O escalonamento é sempre gradual para minimizar efeitos.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Normal no início do tratamento a cada 4 semanas</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Espere um possível retorno leve de náusea nos primeiros dias</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Passa em 3–5 dias — exatamente como na dose anterior</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="sc1" onclick="selectScenario(1)">
+          <div class="scenario-head">
+            <span class="scenario-ico">⬇️</span>
+            <div class="scenario-title">Redução de dose</div>
+          </div>
+          <div class="scenario-detail">
+            <div class="gap-8 mt-8">
+              <p style="font-size:13px">Pode acontecer quando a meta foi atingida, os hábitos estão consolidados ou quando há necessidade de ajuste por efeitos colaterais.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">A redução é sempre gradual — nunca abrupta</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">A fome pode voltar um pouco — é esperado e manejável</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Os hábitos construídos são a sua rede de segurança</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="sc2" onclick="selectScenario(2)">
+          <div class="scenario-head">
+            <span class="scenario-ico">🔄</span>
+            <div class="scenario-title">Troca de medicamento</div>
+          </div>
+          <div class="scenario-detail">
+            <div class="gap-8 mt-8">
+              <p style="font-size:13px">O médico pode indicar trocar de semaglutida para tirzepatida ou outro análogo se a resposta não estiver sendo suficiente ou se houver questões de tolerabilidade.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Não significa que o tratamento falhou — é otimização</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Cada medicamento tem perfil de ação diferente</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">O período de adaptação recomeça — prepare-se</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="sc3" onclick="selectScenario(3)">
+          <div class="scenario-head">
+            <span class="scenario-ico">⏸️</span>
+            <div class="scenario-title">Pausar ou encerrar</div>
+          </div>
+          <div class="scenario-detail">
+            <div class="gap-8 mt-8">
+              <p style="font-size:13px">Pode ser avaliado quando a meta foi alcançada e os hábitos estão bem estabelecidos. O encerramento é sempre uma decisão médica compartilhada — nunca unilateral.</p>
+              <div class="alert card-red mt-4">
+                <span class="ico">⚠️</span>
+                <p style="font-size:12px"><strong>Nunca pare o medicamento sem combinar com o médico.</strong> A parada abrupta pode causar retorno rápido do apetite e do peso.</p>
+              </div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">O encerramento ideal é gradual e monitorado</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Os hábitos alimentares e de exercício precisam estar sólidos antes</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 4 — O QUE FAZ O PESO VOLTAR ═══ -->
+    <div class="slide" data-slide="3">
+      <div class="label">Seção 3</div>
+      <h2>O que pode fazer o peso voltar</h2>
+      <p class="mt-8">Conhecer os riscos com antecedência é a melhor forma de evitá-los. Sem susto — apenas informação.</p>
+
+      <div class="alert card-blue mt-12">
+        <span class="ico">💡</span>
+        <p>O peso voltando após o encerramento do medicamento não é falha — é biologia. A obesidade é uma doença crônica e o corpo vai continuar defendendo o peso anterior. O que combate isso são os hábitos.</p>
+      </div>
+
+      <div class="risk-list mt-12">
+
+        <div class="risk-item" style="background:var(--red-light);border-radius:14px">
+          <span class="risk-ico">🍽️</span>
+          <div>
+            <div class="risk-title">Voltar aos hábitos alimentares antigos</div>
+            <div class="risk-desc">Sem o GLP-1 reduzindo a fome, a tendência natural é aumentar as porções e a frequência. Sem novos hábitos sólidos, o padrão anterior retorna.</div>
+            <div class="risk-fix" style="color:var(--green-dark)">✓ Prevenção: manter as estratégias alimentares deste guia como estilo de vida</div>
+          </div>
+        </div>
+
+        <div class="risk-item" style="background:var(--orange-light);border-radius:14px">
+          <span class="risk-ico">🛋️</span>
+          <div>
+            <div class="risk-title">Abandonar o exercício</div>
+            <div class="risk-desc">O músculo construído durante o tratamento é o motor do metabolismo. Sem exercício de força regular, ele diminui e o metabolismo desacelera.</div>
+            <div class="risk-fix" style="color:var(--green-dark)">✓ Prevenção: 2–3 treinos de força por semana como hábito permanente</div>
+          </div>
+        </div>
+
+        <div class="risk-item" style="background:var(--yellow-light);border-radius:14px">
+          <span class="risk-ico">😰</span>
+          <div>
+            <div class="risk-title">Estresse crônico não manejado</div>
+            <div class="risk-desc">Cortisol elevado por estresse não controlado é uma das causas mais subestimadas de reganho de peso após o tratamento.</div>
+            <div class="risk-fix" style="color:var(--green-dark)">✓ Prevenção: manter práticas de sono e manejo do estresse</div>
+          </div>
+        </div>
+
+        <div class="risk-item" style="background:var(--indigo-light);border-radius:14px">
+          <span class="risk-ico">😴</span>
+          <div>
+            <div class="risk-title">Sono mal cuidado</div>
+            <div class="risk-desc">Sem o medicamento ajudando a controlar a fome, a privação de sono tem impacto ainda maior — grelina dispara e as escolhas pioram.</div>
+            <div class="risk-fix" style="color:var(--green-dark)">✓ Prevenção: priorizar 7–9h de sono como pilar de saúde permanente</div>
+          </div>
+        </div>
+
+        <div class="risk-item" style="background:var(--purple-light);border-radius:14px">
+          <span class="risk-ico">👁️</span>
+          <div>
+            <div class="risk-title">Parar de acompanhar</div>
+            <div class="risk-desc">Sem consultas e sem medidas, os pequenos deslizes passam despercebidos até virar grande reganho. A consciência contínua é uma ferramenta de manutenção.</div>
+            <div class="risk-fix" style="color:var(--green-dark)">✓ Prevenção: consultas de acompanhamento mesmo após encerrar o medicamento</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 5 — OS HÁBITOS QUE FICAM ═══ -->
+    <div class="slide" data-slide="4">
+      <div class="label">Seção 4</div>
+      <h2>Os hábitos que ficam para sempre</h2>
+      <p class="mt-8">O medicamento tem duração. Os hábitos, não. Estes são os que mais impactam o resultado a longo prazo.</p>
+
+      <div class="habit-tracker mt-16">
+
+        <div class="habit-row" style="background:var(--green-light);border-color:#6ee7b7">
+          <span class="habit-ico">🥩</span>
+          <div class="habit-name">Proteína em toda refeição</div>
+          <span class="habit-tag" style="background:var(--green);color:#fff">Essencial</span>
+        </div>
+
+        <div class="habit-row" style="background:var(--green-light);border-color:#6ee7b7">
+          <span class="habit-ico">🥦</span>
+          <div class="habit-name">Metade do prato: vegetais</div>
+          <span class="habit-tag" style="background:var(--green);color:#fff">Essencial</span>
+        </div>
+
+        <div class="habit-row" style="background:var(--green-light);border-color:#6ee7b7">
+          <span class="habit-ico">🏋️</span>
+          <div class="habit-name">Musculação 2–3x por semana</div>
+          <span class="habit-tag" style="background:var(--green);color:#fff">Essencial</span>
+        </div>
+
+        <div class="habit-row" style="background:var(--green-light);border-color:#6ee7b7">
+          <span class="habit-ico">😴</span>
+          <div class="habit-name">7–9h de sono por noite</div>
+          <span class="habit-tag" style="background:var(--green);color:#fff">Essencial</span>
+        </div>
+
+        <div class="habit-row" style="background:var(--blue-light);border-color:#93c5fd">
+          <span class="habit-ico">💧</span>
+          <div class="habit-name">2 litros de água por dia</div>
+          <span class="habit-tag" style="background:var(--blue);color:#fff">Importante</span>
+        </div>
+
+        <div class="habit-row" style="background:var(--blue-light);border-color:#93c5fd">
+          <span class="habit-ico">🐢</span>
+          <div class="habit-name">Comer devagar, sem telas</div>
+          <span class="habit-tag" style="background:var(--blue);color:#fff">Importante</span>
+        </div>
+
+        <div class="habit-row" style="background:var(--blue-light);border-color:#93c5fd">
+          <span class="habit-ico">🧘</span>
+          <div class="habit-name">Prática diária de redução do estresse</div>
+          <span class="habit-tag" style="background:var(--blue);color:#fff">Importante</span>
+        </div>
+
+        <div class="habit-row" style="background:var(--yellow-light);border-color:#fcd34d">
+          <span class="habit-ico">📏</span>
+          <div class="habit-name">Medir circunferência mensalmente</div>
+          <span class="habit-tag" style="background:var(--yellow);color:#fff">Manutenção</span>
+        </div>
+
+        <div class="habit-row" style="background:var(--yellow-light);border-color:#fcd34d">
+          <span class="habit-ico">🩺</span>
+          <div class="habit-name">Consultas de acompanhamento</div>
+          <span class="habit-tag" style="background:var(--yellow);color:#fff">Manutenção</span>
+        </div>
+
+      </div>
+
+      <div class="alert card-green mt-12">
+        <span class="ico">💡</span>
+        <p>Você não precisa ser perfeito em todos eles todos os dias. Ser consistente em 80% do tempo, na maioria desses hábitos, é suficiente para manter os resultados a longo prazo.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 6 — MANUTENÇÃO A LONGO PRAZO ═══ -->
+    <div class="slide" data-slide="5">
+      <div class="label">Seção 5</div>
+      <h2>Como manter os resultados a longo prazo</h2>
+      <p class="mt-8">Manutenção não é ausência de esforço — é esforço diferente. Menos intenso, mais consciente e muito mais prazeroso.</p>
+
+      <div class="tabs mt-12">
+        <button class="tab active" onclick="switchTab(this,'tab-rotina')">📅 Rotina</button>
+        <button class="tab" onclick="switchTab(this,'tab-sinais')">🚨 Sinais</button>
+        <button class="tab" onclick="switchTab(this,'tab-flexibil')">😌 Equilíbrio</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-rotina">
+        <div class="gap-12">
+          <div class="card">
+            <h3 style="margin-bottom:10px">📋 A rotina de manutenção</h3>
+            <div class="step-flow">
+              <div class="step-item">
+                <div class="step-num" style="font-size:12px">📅</div>
+                <div class="step-body">
+                  <h3>Pesagem semanal</h3>
+                  <p class="mt-4" style="font-size:13px">Continue pesando 1x por semana no mesmo dia e horário. A tendência ao longo do tempo é o seu indicador mais confiável.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-num" style="font-size:12px">📏</div>
+                <div class="step-body">
+                  <h3>Medidas mensais</h3>
+                  <p class="mt-4" style="font-size:13px">Medir a cintura todo mês demora 2 minutos e revela tendências antes que virem problema.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-num" style="font-size:12px">🩺</div>
+                <div class="step-body">
+                  <h3>Consultas a cada 3 meses</h3>
+                  <p class="mt-4" style="font-size:13px">Mesmo sem medicamento, o acompanhamento médico periódico é o que detecta tendências de reganho antes que virem problema maior.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-num" style="font-size:12px">🏋️</div>
+                <div class="step-body">
+                  <h3>Exercício contínuo</h3>
+                  <p class="mt-4" style="font-size:13px">Não é preciso treinar todos os dias. 2–3 sessões de força por semana + movimento diário é o suficiente para manutenção.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-sinais">
+        <div class="gap-12">
+          <div class="card card-yellow">
+            <h3 style="color:#92400e;margin-bottom:10px">⚠️ Sinais de que algo precisa de atenção</h3>
+            <div class="gap-8">
+              <div style="display:flex;gap:10px;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+                <span style="color:#f59e0b;font-size:18px">●</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#92400e">Ganho de 3kg ou mais em 30 dias</div>
+                  <div style="font-size:12px;color:#a16207;margin-top:2px">Entre em contato conosco — pode ser retenção de água, mas vale investigar</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+                <span style="color:#f59e0b;font-size:18px">●</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#92400e">Fome voltando com muita força</div>
+                  <div style="font-size:12px;color:#a16207;margin-top:2px">Pode ser sinal de que o medicamento foi reduzido rápido demais</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+                <span style="color:#f59e0b;font-size:18px">●</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#92400e">Sentindo que está "perdendo o controle"</div>
+                  <div style="font-size:12px;color:#a16207;margin-top:2px">É o momento de reforçar as estratégias — não de entrar em pânico</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+                <span style="color:#f59e0b;font-size:18px">●</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#92400e">Roupa começando a apertar novamente</div>
+                  <div style="font-size:12px;color:#a16207;margin-top:2px">A fita métrica detecta antes da balança — use-a a seu favor</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert card-green">
+            <span class="ico">💡</span>
+            <p>Detectar cedo é muito mais fácil do que corrigir tarde. Não espere o problema crescer para pedir ajuda.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-flexibil">
+        <div class="gap-12">
+          <div class="card card-green">
+            <h3 style="color:var(--green-dark);margin-bottom:8px">😌 A regra da vida real</h3>
+            <p style="font-size:13px;color:var(--green-dark);line-height:1.55">Manutenção não é dieta permanente. É uma forma diferente de viver — com mais consciência, sem extremos.</p>
+          </div>
+          <div class="gap-8">
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Você vai comer pizza de vez em quando — e tudo bem</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Vai ter semanas sem treino — compense na seguinte, não no mesmo dia</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">Vai ter momentos de estresse em que a alimentação piora — e passa</span></div>
+            <div class="check-row"><span class="ico">✓</span><span class="txt">O que conta é o padrão de meses — não o dia de hoje</span></div>
+          </div>
+          <div class="card card-indigo">
+            <h3 style="color:var(--indigo);margin-bottom:6px">🎯 A filosofia da manutenção</h3>
+            <p style="font-size:13px;color:var(--indigo);line-height:1.55">Não é sobre nunca escorregar. É sobre escorregar menos, perceber mais rápido e voltar mais facilmente do que antes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 7 — MITOS ═══ -->
+    <div class="slide" data-slide="6">
+      <div class="label">Seção 6</div>
+      <h2>Mitos sobre encerrar o tratamento</h2>
+      <p class="mt-8">Muitas dúvidas e medos surgem quando o assunto é encerrar ou reduzir o medicamento. Vamos esclarecer os principais.</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Se parar o medicamento, tudo que perdi volta rapidinho"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Depende dos hábitos.</strong> Pacientes que saem do tratamento com hábitos sólidos de alimentação, exercício e sono conseguem manter boa parte do resultado. O que volta quando não há hábitos é o comportamento anterior — não a biologia à toa.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Preciso usar o medicamento para sempre ou não funciona"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso como regra.</strong> Para alguns pacientes com obesidade severa, uso prolongado pode ser indicado. Para outros, um ciclo de tratamento com encerramento gradual é suficiente. Cada caso é único.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Parar o medicamento é sinal de fraqueza ou desistência"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> Encerrar o medicamento no momento certo, com os hábitos consolidados, é parte do plano de tratamento bem-sucedido. Não é desistir — é graduar.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Posso parar quando eu quiser — é só medicamento"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Perigoso.</strong> Parar abruptamente causa retorno rápido e intenso da fome, podendo gerar reganho acelerado. O encerramento deve ser sempre gradual e acompanhado pelo médico.</div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)"><span>✅</span><span>"O verdadeiro resultado é o que fica quando o medicamento acaba"</span></div>
+          <div class="myth-body" style="color:var(--green-dark)"><strong>Verdade.</strong> O medicamento foi a ferramenta que criou a janela de oportunidade. Os hábitos construídos nessa janela são o que define o resultado permanente. É exatamente por isso que esse guia existe.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 8 — CARTA ═══ -->
+    <div class="slide" data-slide="7">
+      <div class="label">Uma carta para você</div>
+      <h2 style="line-height:1.3">Você chegou até aqui.</h2>
+
+      <div class="final-card mt-16">
+        <div style="font-size:32px;margin-bottom:16px">💚</div>
+        <div style="font-size:14px;color:#a7f3d0;line-height:1.8;text-align:left">
+          <p style="color:#d1fae5;margin-bottom:12px">Ler este guia até o fim diz muito sobre você. Diz que você levou a sério. Que quis entender o que estava acontecendo no seu corpo. Que decidiu que desta vez seria diferente.</p>
+          <p style="color:#d1fae5;margin-bottom:12px">Obesidade é uma doença complexa. Não é fraqueza, não é falta de esforço, não é falta de força de vontade. E o tratamento também não é simples — exige coragem, paciência e consistência.</p>
+          <p style="color:#d1fae5;margin-bottom:12px">O medicamento vai ajudar seu corpo. Este guia vai ajudar sua mente. Mas quem vai fazer a diferença, no fim, é você — com cada escolha pequena que pareça invisível mas que vai somando.</p>
+          <p style="color:#6ee7b7;font-weight:700">Estamos aqui com você. Em toda consulta, em toda dúvida, em todo momento difícil. Você não está fazendo isso sozinho.</p>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)">
+          <div style="font-size:12px;color:#6ee7b7;font-weight:700;letter-spacing:.5px">COM CARINHO,</div>
+          <div style="font-size:18px;font-weight:900;color:#fff;margin-top:4px">Equipe Menos Peso</div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:8px">📱 Você nunca estará sozinho</h3>
+          <div class="gap-8">
+            <div style="display:flex;gap:10px;align-items:center;padding:10px;background:#fff;border-radius:10px;border:1px solid #a7f3d0">
+              <span style="font-size:20px">💬</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--green-dark)">WhatsApp da equipe</div>
+                <div style="font-size:12px;color:var(--muted)">Para dúvidas, efeitos colaterais e suporte</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;padding:10px;background:#fff;border-radius:10px;border:1px solid #a7f3d0">
+              <span style="font-size:20px">📅</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--green-dark)">Consultas regulares</div>
+                <div style="font-size:12px;color:var(--muted)">Acompanhamento médico contínuo durante todo o tratamento</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;padding:10px;background:#fff;border-radius:10px;border:1px solid #a7f3d0">
+              <span style="font-size:20px">📚</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--green-dark)">Este guia — sempre disponível</div>
+                <div style="font-size:12px;color:var(--muted)">Volte quantas vezes precisar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 9 — RESUMO FINAL DO GUIA ═══ -->
+    <div class="slide" data-slide="8">
+      <div class="label">Encerramento do Guia</div>
+      <h2>Tudo que você aprendeu</h2>
+      <p class="mt-8">10 capítulos. Uma jornada completa. Aqui está o mapa do que você construiu.</p>
+
+      <div class="card card-dark mt-12">
+        <div style="color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">Os 10 capítulos do seu guia</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Entendendo a obesidade — a ciência por trás da doença</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Conhecendo seu medicamento — como o GLP-1 age no corpo</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Preparando-se para começar — materiais, rotina e organização</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Aplicando o medicamento — passo a passo completo</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Efeitos colaterais — o que esperar e como manejar</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">6</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Alimentação — o que priorizar, evitar e como montar o prato</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">7</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Atividade física — como o exercício potencializa o medicamento</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">8</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Sono e estresse — os fatores invisíveis que fazem toda diferença</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">9</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">Acompanhando a evolução — além da balança</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">10</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.4">O futuro — como manter os resultados para sempre</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:10px">🌟 As 5 verdades do tratamento</h3>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:#fff;border-radius:10px;border:1px solid #a7f3d0">
+              <span style="font-size:18px">1️⃣</span>
+              <span style="font-size:13px;color:var(--green-dark);font-weight:600">Obesidade é doença — não é fraqueza de caráter</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:#fff;border-radius:10px;border:1px solid #a7f3d0">
+              <span style="font-size:18px">2️⃣</span>
+              <span style="font-size:13px;color:var(--green-dark);font-weight:600">O medicamento é uma ferramenta — os hábitos são o resultado</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:#fff;border-radius:10px;border:1px solid #a7f3d0">
+              <span style="font-size:18px">3️⃣</span>
+              <span style="font-size:13px;color:var(--green-dark);font-weight:600">Consistência vence perfeição — sempre</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:#fff;border-radius:10px;border:1px solid #a7f3d0">
+              <span style="font-size:18px">4️⃣</span>
+              <span style="font-size:13px;color:var(--green-dark);font-weight:600">O progresso real tem muitas formas — a balança é apenas uma</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:#fff;border-radius:10px;border:1px solid #a7f3d0">
+              <span style="font-size:18px">5️⃣</span>
+              <span style="font-size:13px;color:var(--green-dark);font-weight:600">Você nunca está sozinho nessa jornada</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#064e3b,#065f46);border-radius:20px;padding:24px;text-align:center">
+          <div style="font-size:36px;margin-bottom:8px">🏁</div>
+          <div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:8px">Guia concluído</div>
+          <div style="font-size:13px;color:#a7f3d0;line-height:1.6;margin-bottom:16px">Você tem tudo que precisa para transformar esse tratamento em uma mudança real e duradoura. Agora é hora de viver.</div>
+          <div style="padding:12px 20px;background:var(--green);border-radius:12px;display:inline-block;font-size:14px;font-weight:700;color:#fff">Boa jornada — estamos com você 💚</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <nav>
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="prev()">‹ Anterior</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn btn-next" id="btn-next" onclick="next()">Próximo ›</button>
+  </nav>
+
+</div>
+
+<script>
+const TOTAL=9;let current=0;
+function init(){
+  const d=document.getElementById('dots');
+  for(let i=0;i<TOTAL;i++){
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===0?' active':'');
+    dot.onclick=()=>goTo(i);d.appendChild(dot);
+  }
+  updateUI();
+}
+function goTo(n){
+  if(n<0||n>=TOTAL||n===current)return;
+  const sl=document.querySelectorAll('.slide');
+  sl[current].classList.remove('active');sl[current].classList.add('exit');
+  const p=current;current=n;
+  setTimeout(()=>sl[p].classList.remove('exit'),350);
+  sl[current].classList.add('active');sl[current].scrollTop=0;updateUI();
+}
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
+function updateUI(){
+  document.getElementById('prog-fill').style.width=((current+1)/TOTAL*100).toFixed(1)+'%';
+  document.getElementById('prog-text').textContent=(current+1)+' / '+TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('btn-prev').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('btn-next').textContent=current===TOTAL-2?'Finalizar ›':'Próximo ›';
+}
+function switchTab(btn,id){
+  const sl=btn.closest('.slide');
+  sl.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  sl.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(id).classList.add('active');
+}
+function selectScenario(i){
+  document.querySelectorAll('.scenario').forEach((s,idx)=>s.classList.toggle('active',idx===i));
+}
+init();
+</script>
+</body>
+</html>

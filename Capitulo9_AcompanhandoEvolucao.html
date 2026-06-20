@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Capítulo 9 — Acompanhando sua Evolução · Menos Peso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#059669;--green-light:#d1fae5;--green-dark:#047857;
+    --slate:#0f172a;--slate-mid:#1e293b;--slate-light:#334155;
+    --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;
+    --yellow:#f59e0b;--yellow-light:#fef3c7;
+    --red:#ef4444;--red-light:#fee2e2;
+    --blue:#3b82f6;--blue-light:#dbeafe;
+    --indigo:#4f46e5;--indigo-light:#e0e7ff;
+    --purple:#8b5cf6;--purple-light:#ede9fe;
+    --teal:#0d9488;--teal-light:#ccfbf1;
+    --orange:#f97316;--orange-light:#ffedd5;
+    --rose:#f43f5e;--rose-light:#ffe4e6;
+  }
+  html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;background:var(--white);box-shadow:0 0 40px rgba(0,0,0,.12)}
+  header{flex-shrink:0;padding:14px 20px 10px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .cap-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+  .cap-title{font-size:13px;font-weight:600;color:var(--slate);flex:1;line-height:1.2}
+  .progress-pill{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .prog-bar{flex-shrink:0;height:3px;background:var(--border)}
+  .prog-fill{height:100%;background:var(--green);transition:width .35s ease}
+  .slides{flex:1;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;overflow-y:auto;padding:20px 20px 100px;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .3s ease,transform .3s ease}
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+  .slide.exit{opacity:0;transform:translateX(-30px)}
+  nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--white);border-top:1px solid var(--border);z-index:10}
+  .nav-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+  .btn-prev{background:var(--border);color:var(--muted)}.btn-prev:hover{background:#cbd5e1}
+  .btn-next{background:var(--green);color:#fff}.btn-next:hover{background:var(--green-dark)}.btn-next:disabled{opacity:.4;cursor:default}
+  .nav-dots{display:flex;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--green);width:18px;border-radius:3px}
+
+  .label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  h1{font-size:26px;font-weight:900;line-height:1.15;color:var(--slate)}
+  h2{font-size:20px;font-weight:800;line-height:1.2;color:var(--slate)}
+  h3{font-size:15px;font-weight:700;color:var(--slate)}
+  p{font-size:14px;line-height:1.65;color:var(--slate-light)}
+  .caption{font-size:12px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card-green{background:var(--green-light);border:1px solid #a7f3d0}
+  .card-yellow{background:var(--yellow-light);border:1px solid #fcd34d}
+  .card-red{background:var(--red-light);border:1px solid #fca5a5}
+  .card-blue{background:var(--blue-light);border:1px solid #93c5fd}
+  .card-dark{background:var(--slate);border:none}
+  .card-indigo{background:var(--indigo-light);border:1px solid #a5b4fc}
+  .card-purple{background:var(--purple-light);border:1px solid #c4b5fd}
+  .card-teal{background:var(--teal-light);border:1px solid #5eead4}
+  .card-orange{background:var(--orange-light);border:1px solid #fdba74}
+  .card-rose{background:var(--rose-light);border:1px solid #fda4af}
+
+  .alert{display:flex;gap:10px;padding:12px;border-radius:12px;align-items:flex-start}
+  .alert .ico{font-size:18px;flex-shrink:0}
+  .alert p{font-size:13px;line-height:1.5}
+
+  .index-list{display:flex;flex-direction:column;gap:8px}
+  .index-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
+  .index-item:hover{border-color:var(--green);background:var(--green-light)}
+  .index-num{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .index-label{font-size:13px;font-weight:600;color:var(--slate);flex:1}
+  .index-arrow{color:var(--muted);font-size:14px}
+
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+  .tab{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .2s;color:var(--muted);font-family:'Inter',sans-serif}
+  .tab.active{background:var(--green);border-color:var(--green);color:#fff}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
+  /* METRIC CARDS */
+  .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .metric-card{border-radius:16px;padding:16px;text-align:center;border:2px solid transparent;cursor:pointer;transition:all .2s}
+  .metric-card.primary{border-color:var(--green);background:var(--green-light)}
+  .metric-card.secondary{border-color:var(--border);background:#fff}
+  .metric-card.secondary:hover{border-color:var(--green);background:var(--green-light)}
+  .metric-ico{font-size:28px;display:block;margin-bottom:6px}
+  .metric-name{font-size:12px;font-weight:800;color:var(--slate)}
+  .metric-detail{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3}
+  .metric-badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;margin-top:6px}
+
+  /* SCALE VISUAL */
+  .scale-visual{
+    background:linear-gradient(135deg,#f0fdf4,#ecfdf5);
+    border:2px solid #6ee7b7;border-radius:20px;
+    padding:20px;text-align:center;position:relative;overflow:hidden;
+  }
+  .scale-cross{
+    position:absolute;top:12px;right:14px;font-size:28px;
+    font-weight:900;color:#fca5a5;line-height:1;
+  }
+  .scale-num{font-size:56px;font-weight:900;color:var(--green);line-height:1}
+  .scale-label{font-size:13px;color:var(--green-dark);font-weight:600;margin-top:4px}
+  .scale-note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+
+  /* WEIGHT CHART (SVG) */
+  .chart-wrap{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:16px;overflow:hidden}
+
+  /* ACCORDION */
+  .accord-item{border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:8px}
+  .accord-head{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;background:#fff;user-select:none;transition:background .2s}
+  .accord-head:hover{background:var(--bg)}
+  .accord-head.open{background:var(--green-light)}
+  .accord-ico{font-size:22px;flex-shrink:0}
+  .accord-title{flex:1;font-size:14px;font-weight:700;color:var(--slate)}
+  .accord-arrow{font-size:16px;color:var(--muted);transition:transform .25s}
+  .accord-head.open .accord-arrow{transform:rotate(90deg);color:var(--green)}
+  .accord-body{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 14px;background:#fff}
+  .accord-body.open{max-height:600px;padding:0 14px 14px}
+
+  /* PLATEAU WAVE */
+  .plateau-chart{padding:12px 0}
+
+  /* MILESTONE CARDS */
+  .milestone-list{display:flex;flex-direction:column;gap:8px}
+  .milestone-item{
+    display:flex;align-items:center;gap:12px;padding:14px;
+    border-radius:14px;border:2px solid var(--border);background:#fff;
+    cursor:pointer;transition:all .25s;user-select:none;
+  }
+  .milestone-item.achieved{border-color:var(--green);background:var(--green-light)}
+  .milestone-ico{font-size:24px;flex-shrink:0}
+  .milestone-text{flex:1}
+  .milestone-title{font-size:13px;font-weight:700;color:var(--slate)}
+  .milestone-item.achieved .milestone-title{color:var(--green-dark)}
+  .milestone-sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .milestone-check{width:24px;height:24px;border-radius:8px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:13px}
+  .milestone-item.achieved .milestone-check{background:var(--green);border-color:var(--green);color:#fff}
+
+  /* MOTIVATION GAUGE */
+  .gauge-wrap{display:flex;flex-direction:column;gap:12px}
+  .gauge-item{display:flex;flex-direction:column;gap:4px}
+  .gauge-label{display:flex;justify-content:space-between;align-items:center}
+  .gauge-name{font-size:13px;font-weight:600;color:var(--slate)}
+  .gauge-val{font-size:12px;font-weight:700;color:var(--green)}
+  .gauge-track{height:10px;background:var(--border);border-radius:20px;overflow:hidden}
+  .gauge-fill{height:100%;border-radius:20px;transition:width 1s ease}
+
+  /* MYTH */
+  .myth-card{border-radius:14px;overflow:hidden;margin-bottom:10px}
+  .myth-head{padding:12px 14px;font-size:13px;font-weight:700;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+  .myth-body{padding:0 14px 12px;font-size:13px;line-height:1.55}
+
+  /* STEP FLOW */
+  .step-flow{display:flex;flex-direction:column}
+  .step-item{display:flex;gap:14px;padding-bottom:18px;position:relative}
+  .step-item:last-child{padding-bottom:0}
+  .step-item:not(:last-child)::before{content:'';position:absolute;left:17px;top:36px;bottom:0;width:2px;background:var(--border)}
+  .step-num{flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;z-index:1}
+  .step-body{flex:1;padding-top:6px}
+
+  /* UTILS */
+  .gap-8{display:flex;flex-direction:column;gap:8px}
+  .gap-12{display:flex;flex-direction:column;gap:12px}
+  .row{display:flex;align-items:center;gap:8px}
+  .mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+  .divider{height:1px;background:var(--border);margin:14px 0}
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+  .pill-green{background:var(--green);color:#fff}
+  .check-row{display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-light);border-radius:10px;margin-bottom:6px}
+  .check-row .ico{font-size:15px;flex-shrink:0;margin-top:1px}
+  .check-row .txt{font-size:13px;color:var(--green-dark);font-weight:500;line-height:1.4}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <span class="cap-badge">CAP. 9</span>
+    <span class="cap-title">Acompanhando sua evolução</span>
+    <span class="progress-pill" id="prog-text">1 / 9</span>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:11.1%"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- ═══ SLIDE 1 — ABERTURA ═══ -->
+    <div class="slide active" data-slide="0">
+      <div class="label">Capítulo 9</div>
+      <h1>Acompanhando sua evolução</h1>
+      <p class="mt-8">Medir o progresso corretamente é tão importante quanto fazer o tratamento. Quem mede só o peso frequentemente desiste — quem mede tudo continua.</p>
+
+      <div class="card card-green mt-16" style="padding:14px">
+        <div class="row" style="gap:10px">
+          <span style="font-size:22px">📊</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--green-dark)">A ideia central deste capítulo</div>
+            <div style="font-size:13px;color:var(--green-dark);margin-top:4px;line-height:1.5">A balança conta apenas uma parte da história. O verdadeiro progresso tem pelo menos 5 dimensões — e algumas delas são mais importantes do que o número que você vê toda manhã.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="index-list mt-12">
+        <div class="index-item" onclick="goTo(1)">
+          <div class="index-num">1</div>
+          <div class="index-label">Por que a balança mente</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(2)">
+          <div class="index-num">2</div>
+          <div class="index-label">As 5 formas de medir o progresso</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(3)">
+          <div class="index-num">3</div>
+          <div class="index-label">Como usar a balança de forma saudável</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(4)">
+          <div class="index-num">4</div>
+          <div class="index-label">Platôs: por que acontecem e o que fazer</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(5)">
+          <div class="index-num">5</div>
+          <div class="index-label">Como manter a motivação</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(6)">
+          <div class="index-num">6</div>
+          <div class="index-label">Marcos para celebrar</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(7)">
+          <div class="index-num">7</div>
+          <div class="index-label">Mitos sobre progresso</div>
+          <div class="index-arrow">›</div>
+        </div>
+        <div class="index-item" onclick="goTo(8)">
+          <div class="index-num">8</div>
+          <div class="index-label">Resumo</div>
+          <div class="index-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 2 — POR QUE A BALANÇA MENTE ═══ -->
+    <div class="slide" data-slide="1">
+      <div class="label">Seção 1</div>
+      <h2>Por que a balança mente</h2>
+      <p class="mt-8">O número na balança não representa gordura. Representa a soma de gordura, músculo, osso, água, alimentos em digestão e muito mais.</p>
+
+      <div class="scale-visual mt-16">
+        <div class="scale-cross">✗</div>
+        <div style="color:var(--muted);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">O que a balança mede</div>
+        <div class="scale-num">Tudo</div>
+        <div class="scale-label">não só gordura</div>
+        <div class="scale-note">Gordura · Músculo · Água · Ossos<br>Alimentos em digestão · Glicogênio</div>
+      </div>
+
+      <div class="gap-12 mt-16">
+
+        <div class="card card-yellow">
+          <h3 style="color:#92400e;margin-bottom:8px">⚡ Variações normais num único dia</h3>
+          <div class="gap-8">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+              <span style="font-size:13px;font-weight:600">Ao acordar (antes de comer)</span>
+              <span style="font-size:14px;font-weight:900;color:var(--green)">Menor</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+              <span style="font-size:13px;font-weight:600">Após refeição principal</span>
+              <span style="font-size:14px;font-weight:900;color:var(--red)">+0,5 a 1kg</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+              <span style="font-size:13px;font-weight:600">Período menstrual (mulheres)</span>
+              <span style="font-size:14px;font-weight:900;color:var(--red)">+1 a 3kg</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+              <span style="font-size:13px;font-weight:600">Após treino intenso</span>
+              <span style="font-size:14px;font-weight:900;color:var(--red)">+0,5 a 1,5kg</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fff;border-radius:10px;border:1px solid #fcd34d">
+              <span style="font-size:13px;font-weight:600">Após refeição salgada</span>
+              <span style="font-size:14px;font-weight:900;color:var(--red)">+0,5 a 2kg</span>
+            </div>
+          </div>
+          <p style="font-size:12px;color:#92400e;margin-top:10px;line-height:1.5">Nenhuma dessas variações representa ganho de gordura real. São água, conteúdo intestinal e glicogênio muscular.</p>
+        </div>
+
+        <div class="card card-red">
+          <h3 style="color:#991b1b;margin-bottom:8px">🧠 O perigo da pesagem diária</h3>
+          <p style="font-size:13px;color:#991b1b;line-height:1.55">Verificar o peso todo dia em tratamentos de emagrecimento está associado a <strong>maior ansiedade, piora do humor e abandono do programa</strong>. A variação normal do dia a dia é interpretada como falha — quando na verdade é apenas fisiologia.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 3 — AS 5 FORMAS ═══ -->
+    <div class="slide" data-slide="2">
+      <div class="label">Seção 2</div>
+      <h2>As 5 formas de medir o progresso</h2>
+      <p class="mt-8">Use todas as cinco. Quando a balança parar de cair, outra métrica provavelmente estará evoluindo.</p>
+
+      <div class="gap-12 mt-12">
+
+        <div class="accord-item">
+          <div class="accord-head open" onclick="toggleAccord(this)" id="acc0">
+            <span class="accord-ico">⚖️</span>
+            <div>
+              <div class="accord-title">Peso corporal</div>
+              <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--green-light);color:var(--green-dark)">Referência, não foco</span>
+            </div>
+            <span class="accord-arrow" style="transform:rotate(90deg);color:var(--green)">›</span>
+          </div>
+          <div class="accord-body open">
+            <div class="gap-8">
+              <p>O peso é útil como tendência — não como leitura diária. O que importa é a média semanal ao longo de meses, não o número de hoje.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Pese-se 1x por semana, sempre no mesmo horário e condições</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Compare médias mensais, não dias individuais</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Guarde registros — a tendência de meses é o que conta</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">📏</span>
+            <div>
+              <div class="accord-title">Medidas corporais</div>
+              <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--blue-light);color:#1e40af">Muito revelador</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>A fita métrica frequentemente mostra progresso quando a balança não mostra. Isso acontece porque pode estar perdendo gordura e ganhando músculo simultaneamente.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Cintura:</strong> medir na altura do umbigo — o mais importante</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Quadril, coxas e braços:</strong> secundários mas reveladores</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Meça a cada 2 semanas, sempre no mesmo horário</span></div>
+              <div class="alert card-green mt-4" style="padding:8px">
+                <span class="ico" style="font-size:14px">💡</span>
+                <p style="font-size:12px;color:var(--green-dark)">A circunferência da cintura é melhor indicador de risco cardiovascular do que o peso total.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">📸</span>
+            <div>
+              <div class="accord-title">Fotos de progresso</div>
+              <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--purple-light);color:var(--purple)">Impacto emocional</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>Fotos mostram mudanças de composição corporal e postura que a balança nunca vai revelar. E o impacto visual de comparar mês 1 com mês 3 é extremamente motivador.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Tire 1 foto a cada 4 semanas, sempre no mesmo horário e roupa</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Mesma posição: frente, lateral e costas</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Você não precisa compartilhar — é para uso pessoal</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Guarde em álbum privado — comparar meses depois é revelador</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">💪</span>
+            <div>
+              <div class="accord-title">Performance física</div>
+              <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--teal-light);color:var(--teal)">Muito subestimado</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>Conseguir subir um lance de escada sem falta de ar. Caminhar 30 minutos quando antes eram 10. Dormir melhor, ter mais energia no dia. Esses são progressos concretos e mensuráveis.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Quantos minutos consigo caminhar sem parar?</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Quantos agachamentos consigo fazer?</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Qual a minha frequência cardíaca em repouso?</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Nível de energia ao longo do dia (de 1 a 10)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            <span class="accord-ico">😊</span>
+            <div>
+              <div class="accord-title">Qualidade de vida</div>
+              <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--rose-light);color:var(--rose)">O mais importante</span>
+            </div>
+            <span class="accord-arrow">›</span>
+          </div>
+          <div class="accord-body">
+            <div class="gap-8">
+              <p>Como você se sente? Como está o humor, o sono, a autoestima, a disposição para a vida? Esses são os indicadores que realmente importam — e que nenhuma balança consegue medir.</p>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Roupa que não cabia começa a vestir</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Dores articulares diminuindo</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Acordar com mais disposição</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Relacionamento melhorado com a comida</span></div>
+              <div class="check-row"><span class="ico">✓</span><span class="txt">Autoestima e confiança aumentando</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 4 — BALANÇA SAUDÁVEL ═══ -->
+    <div class="slide" data-slide="3">
+      <div class="label">Seção 3</div>
+      <h2>Como usar a balança de forma saudável</h2>
+      <p class="mt-8">A balança não é inimiga — mas precisa ser usada do jeito certo para não se tornar uma fonte de ansiedade desnecessária.</p>
+
+      <!-- Mini SVG chart showing trend vs daily noise -->
+      <div class="chart-wrap mt-16">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;text-align:center">Peso diário vs. tendência real</div>
+        <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+          <!-- grid lines -->
+          <line x1="0" y1="30" x2="340" y2="30" stroke="#f1f5f9" stroke-width="1"/>
+          <line x1="0" y1="60" x2="340" y2="60" stroke="#f1f5f9" stroke-width="1"/>
+          <line x1="0" y1="90" x2="340" y2="90" stroke="#f1f5f9" stroke-width="1"/>
+          <!-- daily weight (noisy) -->
+          <polyline points="10,45 30,38 50,55 70,42 90,60 110,35 130,50 150,30 170,48 190,25 210,40 230,20 250,38 270,18 290,32 310,15 330,28" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-linejoin="round"/>
+          <!-- trend line (smooth) -->
+          <polyline points="10,48 50,46 90,44 130,40 170,36 210,30 250,24 290,18 330,14" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- dots on trend -->
+          <circle cx="10" cy="48" r="4" fill="#059669"/>
+          <circle cx="330" cy="14" r="4" fill="#059669"/>
+          <!-- labels -->
+          <text x="14" y="68" font-family="Inter,sans-serif" font-size="9" fill="#94a3b8">Mês 1</text>
+          <text x="310" y="68" font-family="Inter,sans-serif" font-size="9" fill="#94a3b8">Mês 3</text>
+          <text x="200" y="100" font-family="Inter,sans-serif" font-size="9" fill="#94a3b8">— variação diária</text>
+          <text x="200" y="112" font-family="Inter,sans-serif" font-size="9" fill="#059669">— tendência real</text>
+          <line x1="188" y1="97" x2="198" y2="97" stroke="#e2e8f0" stroke-width="2"/>
+          <line x1="188" y1="109" x2="198" y2="109" stroke="#059669" stroke-width="2"/>
+        </svg>
+      </div>
+
+      <div class="gap-12 mt-16">
+
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:10px">✅ O protocolo ideal de pesagem</h3>
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num" style="font-size:18px;background:var(--green-dark)">1×</div>
+              <div class="step-body">
+                <h3>Uma vez por semana</h3>
+                <p class="mt-4" style="font-size:13px">Escolha um dia fixo (ex: toda segunda-feira) e pese apenas nesse dia. Reduza exposição às variações diárias naturais.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num" style="font-size:12px">🕖</div>
+              <div class="step-body">
+                <h3>Sempre no mesmo horário</h3>
+                <p class="mt-4" style="font-size:13px">De manhã, em jejum, após ir ao banheiro e antes de beber água. Essas condições eliminam variáveis e tornam a comparação válida.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num" style="font-size:12px">📈</div>
+              <div class="step-body">
+                <h3>Olhe para a tendência, não para o número</h3>
+                <p class="mt-4" style="font-size:13px">Compare a média das últimas 4 semanas. Se a tendência é de queda, o tratamento está funcionando — mesmo que a semana atual pareça estável.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-yellow">
+          <h3 style="color:#92400e;margin-bottom:8px">⚠️ Sinais de relação doentia com a balança</h3>
+          <div class="gap-8">
+            <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#f59e0b">●</span><span style="font-size:13px">Humor do dia inteiro determinado pelo número de hoje</span></div>
+            <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#f59e0b">●</span><span style="font-size:13px">Pesagem mais de uma vez ao dia</span></div>
+            <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#f59e0b">●</span><span style="font-size:13px">Ansiedade intensa antes de subir na balança</span></div>
+            <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#f59e0b">●</span><span style="font-size:13px">Comparar-se com outras pessoas em tratamento</span></div>
+          </div>
+          <div class="alert card-green mt-8" style="padding:8px">
+            <span class="ico" style="font-size:14px">💡</span>
+            <p style="font-size:12px;color:var(--green-dark)">Se a balança está gerando sofrimento, considere tirá-la de vista por algumas semanas. Foque nas medidas e na qualidade de vida.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 5 — PLATÔS ═══ -->
+    <div class="slide" data-slide="4">
+      <div class="label">Seção 4</div>
+      <h2>Platôs: por que acontecem e o que fazer</h2>
+      <p class="mt-8">Um platô não é o tratamento parando de funcionar. É o corpo fazendo exatamente o que foi programado para fazer.</p>
+
+      <div class="card card-blue mt-16">
+        <h3 style="color:#1e40af;margin-bottom:8px">🔬 O que é um platô de verdade</h3>
+        <p style="font-size:13px;color:#1e40af;line-height:1.55">Um platô real é a estabilização do peso por <strong>4 semanas ou mais</strong>, sem que haja variação de mais de 0,5kg para baixo. Uma semana parada não é platô — é fisiologia normal.</p>
+      </div>
+
+      <div class="gap-12 mt-12">
+
+        <div class="card">
+          <h3 style="margin-bottom:10px">🧬 Por que o platô acontece</h3>
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num" style="background:#3b82f6;font-size:12px">1</div>
+              <div class="step-body">
+                <h3>Adaptação metabólica</h3>
+                <p class="mt-4" style="font-size:13px">Ao perder peso, o corpo gasta menos calorias para se mover (pesa menos). O déficit calórico inicial deixa de ser déficit.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num" style="background:#3b82f6;font-size:12px">2</div>
+              <div class="step-body">
+                <h3>Retenção hídrica temporária</h3>
+                <p class="mt-4" style="font-size:13px">Especialmente após novo treino ou aumento de ingestão de proteína, os músculos retêm mais água. O peso estabiliza mas a composição corporal continua melhorando.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num" style="background:#3b82f6;font-size:12px">3</div>
+              <div class="step-body">
+                <h3>Aumento do apetite basal</h3>
+                <p class="mt-4" style="font-size:13px">O corpo defende o peso anterior aumentando sinais de fome. É quando a consistência nos hábitos faz mais diferença do que nunca.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:10px">✅ O que fazer durante um platô</h3>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Avise o médico:</strong> pode ser hora de ajustar a dose ou o protocolo</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Revise a alimentação:</strong> a ingestão calórica pode ter subido sem você perceber</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Adicione ou mude o exercício:</strong> novo estímulo quebra a adaptação</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Verifique sono e estresse:</strong> cortisol alto é causa frequente de platô</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Meça as outras métricas:</strong> talvez o corpo esteja mudando sem que o peso mude</span></div>
+        </div>
+
+        <div class="alert card-yellow">
+          <span class="ico">💛</span>
+          <p>Praticamente todo paciente enfrenta pelo menos um platô. Os que continuam — passam. Os que desistem — nunca sabem o que estava prestes a acontecer do outro lado.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 6 — MOTIVAÇÃO ═══ -->
+    <div class="slide" data-slide="5">
+      <div class="label">Seção 5</div>
+      <h2>Como manter a motivação</h2>
+      <p class="mt-8">Motivação oscila — isso é normal. O que separa quem chega do quem não chega não é ter motivação sempre. É saber o que fazer quando ela cai.</p>
+
+      <div class="tabs mt-12">
+        <button class="tab active" onclick="switchTab(this,'tab-mente')">🧠 Mental</button>
+        <button class="tab" onclick="switchTab(this,'tab-pratico')">⚙️ Prático</button>
+        <button class="tab" onclick="switchTab(this,'tab-crisis')">🆘 Em crise</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-mente">
+        <div class="gap-12">
+          <div class="card">
+            <h3 style="margin-bottom:10px">🎯 Relembre seu porquê</h3>
+            <p style="font-size:13px;line-height:1.55">Não o porquê estético — o porquê profundo. Brincar com os filhos sem cansaço. Ter mais anos de vida saudável. Não depender de remédio para pressão. Quando a motivação cair, volte a esse porquê.</p>
+            <div class="card card-indigo mt-10">
+              <div style="font-size:12px;font-weight:700;color:var(--indigo);margin-bottom:6px">💡 Escreva seu porquê e cole onde vai ver todo dia</div>
+              <div style="font-size:12px;color:var(--indigo)">Espelho do banheiro, tela de bloqueio do celular, geladeira — onde for mais impactante para você.</div>
+            </div>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom:10px">📅 Foque no próximo passo</h3>
+            <p style="font-size:13px;line-height:1.55">Não pense em chegar ao peso final. Pense apenas na próxima aplicação, na próxima refeição, no próximo treino. Progresso é uma sequência de próximos passos.</p>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom:10px">🙏 Pratique autocompaixão</h3>
+            <p style="font-size:13px;line-height:1.55">Um dia ruim não define o tratamento. Uma semana difícil não apaga os meses de progresso. Trate-se com a gentileza que você teria com um amigo na mesma situação.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-pratico">
+        <div class="gap-12">
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Registre seus não-ganhos de peso:</strong> cada dia que você manteve é uma vitória</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Foto de antes e agora:</strong> compare meses passados para ver até onde já foi</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Veja sua roupa antiga:</strong> o que não cabia — como está agora?</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Liste sintomas que melhoraram:</strong> pressão, dores, fôlego, disposição</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Planeie uma recompensa não alimentar</span> para o próximo marco atingido</span></div>
+          <div class="check-row"><span class="ico">✓</span><span class="txt"><strong>Compartilhe com alguém:</strong> ter uma testemunha do progresso aumenta a adesão</span></div>
+          <div class="alert card-green mt-4">
+            <span class="ico">💡</span>
+            <p>Contar para alguém de confiança que está no tratamento cria responsabilidade social — um dos preditores mais fortes de adesão a longo prazo.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-crisis">
+        <div class="gap-12">
+          <div class="card card-red">
+            <h3 style="color:#991b1b;margin-bottom:10px">🆘 Quando a vontade de desistir aparecer</h3>
+            <div class="step-flow">
+              <div class="step-item">
+                <div class="step-num" style="background:#ef4444;font-size:12px">1</div>
+                <div class="step-body"><h3>Não tome decisões no pior momento</h3><p class="mt-4" style="font-size:13px">Espere 48 horas antes de qualquer mudança ou decisão de parar. O estado emocional agudo passa.</p></div>
+              </div>
+              <div class="step-item">
+                <div class="step-num" style="background:#ef4444;font-size:12px">2</div>
+                <div class="step-body"><h3>Entre em contato com a equipe</h3><p class="mt-4" style="font-size:13px">Estamos aqui exatamente para esses momentos. Não precisa passar por isso sozinho.</p></div>
+              </div>
+              <div class="step-item">
+                <div class="step-num" style="background:#ef4444;font-size:12px">3</div>
+                <div class="step-body"><h3>Reveja o quanto já foi</h3><p class="mt-4" style="font-size:13px">Abra as fotos, as medidas, os registros. A distância percorrida é maior do que parece no momento de crise.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 7 — MARCOS ═══ -->
+    <div class="slide" data-slide="6">
+      <div class="label">Seção 6</div>
+      <h2>Marcos para celebrar</h2>
+      <p class="mt-8">Cada marco merece reconhecimento. Marque os que você já alcançou — e use os próximos como motivação.</p>
+
+      <div class="alert card-indigo mt-12">
+        <span class="ico">🎉</span>
+        <p>Celebrar marcos é fisiologicamente importante. Dopamina liberada ao conquistar uma meta reforça o comportamento que levou até ela.</p>
+      </div>
+
+      <div class="milestone-list mt-12" id="milestone-list">
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">💉</span>
+          <div class="milestone-text">
+            <div class="milestone-title">Primeira aplicação realizada</div>
+            <div class="milestone-sub">O começo de tudo — coragem de dar o primeiro passo</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">📅</span>
+          <div class="milestone-text">
+            <div class="milestone-title">1 mês de tratamento completo</div>
+            <div class="milestone-sub">Consistência na fase mais difícil — a adaptação</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">🐟</span>
+          <div class="milestone-text">
+            <div class="milestone-title">Primeiro hábito alimentar novo</div>
+            <div class="milestone-sub">Uma mudança que vai durar além do medicamento</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">🚶</span>
+          <div class="milestone-text">
+            <div class="milestone-title">Primeiro treino ou caminhada regular</div>
+            <div class="milestone-sub">O movimento que mudou a relação com o corpo</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">👗</span>
+          <div class="milestone-text">
+            <div class="milestone-title">Primeira roupa que voltou a vestir</div>
+            <div class="milestone-sub">O progresso que você pode sentir no corpo</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">📉</span>
+          <div class="milestone-text">
+            <div class="milestone-title">Primeiro platô superado</div>
+            <div class="milestone-sub">Provando que persistência vence a biologia</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">🎯</span>
+          <div class="milestone-text">
+            <div class="milestone-title">5% do peso inicial perdido</div>
+            <div class="milestone-sub">O limiar clínico de melhora metabólica significativa</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">🏆</span>
+          <div class="milestone-text">
+            <div class="milestone-title">3 meses de tratamento completo</div>
+            <div class="milestone-sub">A fase em que os resultados ficam mais visíveis e os hábitos, sólidos</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">😴</span>
+          <div class="milestone-text">
+            <div class="milestone-title">Primeiro mês dormindo melhor</div>
+            <div class="milestone-sub">Sono como indicador de que tudo está se ajustando</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+        <div class="milestone-item" onclick="toggleMilestone(this)">
+          <span class="milestone-ico">❤️</span>
+          <div class="milestone-text">
+            <div class="milestone-title">Exame de saúde com resultado melhorado</div>
+            <div class="milestone-sub">Quando a saúde interna confirma o que o espelho já mostrava</div>
+          </div>
+          <div class="milestone-check"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 8 — MITOS ═══ -->
+    <div class="slide" data-slide="7">
+      <div class="label">Seção 7</div>
+      <h2>Mitos sobre progresso</h2>
+      <p class="mt-8">Expectativas erradas são a maior causa de abandono. Esclarecer esses mitos pode salvar o seu tratamento.</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Preciso perder peso toda semana para o tratamento estar funcionando"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> A perda de peso não é linear. Semanas de manutenção, ou até leve aumento, são normais e esperadas. O que importa é a tendência de meses — não de semanas.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Fulano perdeu mais do que eu — algo está errado comigo"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> Cada metabolismo responde de forma diferente. Genética, histórico de dietas, composição corporal inicial, sono, estresse — tudo influencia. Comparar-se com outros é a comparação mais inútil que existe.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Se não cheguei ao peso ideal em X meses, o medicamento não funciona para mim"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> O GLP-1 tem curva de resposta progressiva. Os melhores resultados costumam aparecer entre o 3º e o 6º mês. Decisões prematuras de abandono são a maior tragédia dos tratamentos de obesidade.</div>
+        </div>
+
+        <div class="myth-card card-red">
+          <div class="myth-head" style="color:#991b1b"><span>❌</span><span>"Perder devagar é sinal de problema"</span></div>
+          <div class="myth-body" style="color:#7f1d1d"><strong>Falso.</strong> Perda gradual (0,5 a 1kg/semana) é fisiologicamente mais saudável e mais sustentável. Perda muito rápida geralmente significa perda de músculo além da gordura.</div>
+        </div>
+
+        <div class="myth-card card-green">
+          <div class="myth-head" style="color:var(--green-dark)"><span>✅</span><span>"O progresso real é multidimensional"</span></div>
+          <div class="myth-body" style="color:var(--green-dark)"><strong>Verdade.</strong> Peso, medidas, fotos, performance, exames, qualidade de vida — quando todas essas métricas são acompanhadas, o progresso é quase sempre visível. Quem só mede o peso frequentemente fica cego para o que está melhorando.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SLIDE 9 — RESUMO ═══ -->
+    <div class="slide" data-slide="8">
+      <div class="label">Resumo do Capítulo 9</div>
+      <h2>Olhe para além da balança</h2>
+      <p class="mt-8">O progresso real é mais rico, mais amplo e mais generoso do que qualquer número. Você está mudando por dentro e por fora — aprenda a enxergar isso.</p>
+
+      <div class="card card-dark mt-16">
+        <div style="color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">As 6 lições deste capítulo</div>
+        <div class="gap-8">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">A balança mede tudo — não só gordura. Use-a 1x por semana</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Meça também: circunferências, fotos, performance e qualidade de vida</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Platô ≠ falha. É adaptação fisiológica — e tem solução</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Motivação oscila — construa sistemas, não dependa de vontade</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Celebre cada marco — o cérebro precisa de recompensas para continuar</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="background:var(--green);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">6</span>
+            <span style="font-size:13px;color:#e2e8f0;line-height:1.5">Comparar-se com outros é inútil — compare-se apenas com quem você era</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-12 mt-16">
+        <div class="card card-green">
+          <h3 style="color:var(--green-dark);margin-bottom:8px">🏆 O que você aprendeu</h3>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div class="row"><span>✓</span><span style="font-size:13px">Por que a balança sozinha mente</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">As 5 métricas de progresso real</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Como usar a balança sem ansiedade</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">O que é platô e como superá-lo</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Estratégias de motivação para cada fase</span></div>
+            <div class="row"><span>✓</span><span style="font-size:13px">Os marcos mais importantes do tratamento</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="border:2px solid var(--green);text-align:center;padding:20px">
+          <div style="font-size:28px;margin-bottom:8px">🌟</div>
+          <h3 style="margin-bottom:6px">Próximo capítulo</h3>
+          <p>Capítulo 10 — <strong>O futuro do seu tratamento:</strong> o que acontece após os primeiros meses, como manter os resultados, quando e como o medicamento pode ser reduzido.</p>
+          <div class="pill pill-green mt-12" style="justify-content:center;width:100%">Continuar para o Cap. 10 →</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <nav>
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="prev()">‹ Anterior</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn btn-next" id="btn-next" onclick="next()">Próximo ›</button>
+  </nav>
+
+</div>
+
+<script>
+const TOTAL=9;let current=0;
+function init(){
+  const d=document.getElementById('dots');
+  for(let i=0;i<TOTAL;i++){
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===0?' active':'');
+    dot.onclick=()=>goTo(i);d.appendChild(dot);
+  }
+  updateUI();
+  // animate gauges on load
+  setTimeout(()=>{
+    document.querySelectorAll('.gauge-fill').forEach(el=>{
+      el.style.width=el.dataset.val+'%';
+    });
+  },500);
+}
+function goTo(n){
+  if(n<0||n>=TOTAL||n===current)return;
+  const sl=document.querySelectorAll('.slide');
+  sl[current].classList.remove('active');sl[current].classList.add('exit');
+  const p=current;current=n;
+  setTimeout(()=>sl[p].classList.remove('exit'),350);
+  sl[current].classList.add('active');sl[current].scrollTop=0;updateUI();
+}
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
+function updateUI(){
+  document.getElementById('prog-fill').style.width=((current+1)/TOTAL*100).toFixed(1)+'%';
+  document.getElementById('prog-text').textContent=(current+1)+' / '+TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('btn-prev').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('btn-next').textContent=current===TOTAL-2?'Finalizar ›':'Próximo ›';
+}
+function switchTab(btn,id){
+  const sl=btn.closest('.slide');
+  sl.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  sl.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(id).classList.add('active');
+}
+function toggleAccord(head){
+  const isOpen=head.classList.contains('open');
+  document.querySelectorAll('.accord-head').forEach(h=>{
+    h.classList.remove('open');
+    const arrow=h.querySelector('.accord-arrow');
+    if(arrow){arrow.style.transform='';arrow.style.color='';}
+    h.nextElementSibling.classList.remove('open');
+  });
+  if(!isOpen){
+    head.classList.add('open');
+    const arrow=head.querySelector('.accord-arrow');
+    if(arrow){arrow.style.transform='rotate(90deg)';arrow.style.color='var(--green)';}
+    head.nextElementSibling.classList.add('open');
+  }
+}
+function toggleMilestone(el){
+  el.classList.toggle('achieved');
+  const check=el.querySelector('.milestone-check');
+  check.textContent=el.classList.contains('achieved')?'✓':'';
+}
+init();
+</script>
+</body>
+</html>
