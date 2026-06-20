@@ -2,387 +2,1928 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Guia do Paciente · menospeso.</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>menospeso. â Sistema ClÃ­nico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  :root{
-    --green:#059669;
-    --green-light:#d1fae5;
-    --green-dark:#047857;
-    --slate:#0f172a;
-    --slate-light:#334155;
-    --muted:#64748b;
-    --blue-light:#e0f2fe;
-    --border:#e2e8f0;
-    --bg:#f8fafc;
-    --white:#ffffff;
-  }
-  html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate)}
-  #app{
-    max-width:430px;margin:0 auto;background:var(--white);
-    min-height:100vh;
-    box-shadow:0 0 60px rgba(0,0,0,.10);
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f8fc;--sidebar:#0F172A;--sidebar-text:#94a3b8;--card:#fff;
+  --border:#e5e7eb;--text:#0F172A;--muted:#6b7280;
+  --accent:#059669;--accent-light:#D1FAE5;
+  --ok:#059669;--ok-light:#D1FAE5;
+  --warn:#d97706;--warn-light:#fffbeb;
+  --err:#dc2626;--err-light:#fef2f2;
+  --mblue:#E0F2FE;
+  --sw:220px;
+}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+#app{display:flex;min-height:100vh}
 
-  /* ── CAPA ── */
-  .cover{
-    background:var(--white);
-    padding:0;position:relative;overflow:hidden;
-  }
+/* SIDEBAR */
+#sidebar{width:var(--sw);background:var(--sidebar);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+.sb-logo{padding:16px 16px 14px;border-bottom:1px solid #1e293b}
+.sb-logo .logo-mark{font-size:17px;letter-spacing:-0.5px;line-height:1}
+.sb-logo .logo-menos{font-weight:800;color:#fff}
+.sb-logo .logo-peso{font-weight:400;color:#fff}
+.sb-logo .logo-dot{font-weight:400;color:#059669}
+.sb-logo .logo-sub{font-size:10px;color:var(--sidebar-text);margin-top:4px;display:block;font-weight:400;letter-spacing:.02em}
+.sb-patient{padding:10px 16px;background:#1e293b;border-bottom:1px solid #334155}
+.sb-patient .pname{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-patient .pcpf{font-size:11px;color:var(--sidebar-text)}
+.sb-nav{padding:6px 0;flex:1}
+.nav-sec{font-size:10px;font-weight:600;color:#4b5563;text-transform:uppercase;letter-spacing:.08em;padding:10px 16px 3px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;color:var(--sidebar-text);font-size:13px;transition:.15s;border-left:3px solid transparent}
+.nav-item:hover{background:#1e293b;color:#fff}
+.nav-item.active{background:#05966920;color:#34d399;border-left-color:#059669}
+.nav-item .ic{width:16px;text-align:center;flex-shrink:0}
+.nb{margin-left:auto;background:#dc2626;color:#fff;font-size:10px;padding:1px 5px;border-radius:10px}
+.sb-foot{padding:10px 16px;border-top:1px solid #1e293b;font-size:10px;color:#475569}
 
-  /* textura orgânica SVG inline */
-  .cover-bg{
-    position:absolute;inset:0;pointer-events:none;z-index:0;
-  }
+/* MAIN */
+#main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:15px;font-weight:600;flex:1}
+#content{padding:24px;flex:1}
+#content.no-pad{padding:0}
 
-  .cover-inner{
-    position:relative;z-index:1;
-    padding:24px 20px 16px;
-  }
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
+.card-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
 
-  /* LOGO */
-  .logo-wrap{display:flex;align-items:flex-end;gap:0;margin-bottom:14px}
-  .logo-word{font-size:24px;letter-spacing:-1.2px;line-height:1}
-  .logo-word strong{font-weight:900;color:var(--slate)}
-  .logo-word span{font-weight:400;color:var(--slate)}
-  .logo-word em{color:var(--green);font-style:normal;font-weight:400}
-  .logo-tagline{font-size:10px;color:var(--muted);font-weight:500;letter-spacing:.5px;margin-top:3px}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 
-  /* HERO */
-  .hero-tag{
-    display:inline-block;background:var(--green-light);
-    color:var(--green-dark);font-size:10px;font-weight:700;
-    padding:3px 10px;border-radius:20px;letter-spacing:.8px;
-    text-transform:uppercase;margin-bottom:6px;
-  }
-  .hero-title{font-size:20px;font-weight:900;color:var(--slate);line-height:1.2;letter-spacing:-.4px;margin-bottom:4px}
-  .hero-title em{color:var(--green);font-style:normal}
-  .hero-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+/* STATS */
+.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px}
+.stat-l{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.stat-v{font-size:22px;font-weight:700;margin-top:4px;line-height:1}
+.stat-s{font-size:12px;color:var(--muted);margin-top:3px}
+.stat.green{background:var(--ok-light);border-color:#bbf7d0}.stat.green .stat-v{color:var(--ok)}
 
-  /* stats row */
-  .stats{display:flex;gap:8px;margin-bottom:0}
-  .stat-pill{
-    flex:1;background:var(--bg);border:1.5px solid var(--border);
-    border-radius:12px;padding:8px 4px;text-align:center;
-  }
-  .stat-num{font-size:18px;font-weight:900;color:var(--slate);line-height:1}
-  .stat-label{font-size:9px;color:var(--muted);font-weight:600;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+/* FORMS */
+.fg{margin-bottom:14px}
+.fr{display:grid;gap:14px}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:1fr 1fr 1fr}
+label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px}
+input,select,textarea{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--text);background:#fff;outline:none;transition:.15s;font-family:inherit}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(5,150,105,.12)}
+textarea{resize:vertical;min-height:72px}
+input:disabled{background:#f9fafb;color:var(--muted)}
 
-  /* MANIFESTO faixa */
-  .manifesto{
-    background:var(--slate);
-    padding:10px 20px;
-    display:flex;flex-direction:column;gap:2px;
-  }
-  .manifesto-line{font-size:11px;color:#94a3b8;font-weight:500}
-  .manifesto-line strong{color:var(--green);font-weight:800}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:.15s;text-decoration:none;white-space:nowrap}
+.btn:hover{opacity:.9}
+.bp{background:var(--accent);color:#fff}
+.bs{background:#f3f4f6;color:var(--text);border:1px solid var(--border)}
+.bg{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.bg:hover{background:var(--accent-light)}
+.bsm{padding:5px 10px;font-size:12px}
+.blg{padding:12px 22px;font-size:14px}
+.brow{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
 
-  /* ── PROGRESS BAR ── */
-  .prog-wrap{padding:12px 20px 0;background:var(--white)}
-  .prog-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
-  .prog-text{font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.5px}
-  .prog-pct{font-size:12px;font-weight:800;color:var(--green)}
-  .prog-track{height:5px;background:var(--border);border-radius:20px;overflow:hidden}
-  .prog-fill{height:100%;background:linear-gradient(90deg,var(--green),#34d399);border-radius:20px;transition:width .4s ease}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500}
+.bg-gray{background:#f3f4f6;color:#6b7280}
+.bg-blue{background:#dbeafe;color:#1d4ed8}
+.bg-yellow{background:#fef9c3;color:#a16207}
+.bg-green{background:#dcfce7;color:#16a34a}
+.bg-red{background:#fee2e2;color:#dc2626}
+.bg-orange{background:#fed7aa;color:#c2410c}
 
-  /* ── LISTA ── */
-  .scroll{padding:14px 16px 40px}
+/* ALERT */
+.alert{padding:11px 14px;border-radius:6px;font-size:13px;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px}
+.a-warn{background:var(--warn-light);border:1px solid #fcd34d;color:#92400e}
+.a-info{background:var(--accent-light);border:1px solid #6ee7b7;color:#065f46}
 
-  /* ── SECTION LABELS ── */
-  .section-label{
-    font-size:10px;font-weight:700;letter-spacing:1.2px;
-    text-transform:uppercase;color:var(--muted);
-    margin:16px 4px 8px;
-    padding-left:4px;border-left:2px solid var(--green);
-  }
-  .section-label:first-child{margin-top:4px}
+/* TABS */
+.tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:18px}
+.tab{padding:9px 14px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-  /* ── CHAPTER CARDS ── */
-  .chapter-card{
-    display:flex;align-items:center;gap:12px;
-    padding:12px 14px;border-radius:14px;
-    border:1.5px solid var(--border);background:#fff;
-    cursor:pointer;transition:all .2s;
-    margin-bottom:8px;text-decoration:none;
-    position:relative;overflow:hidden;
-  }
-  .chapter-card::before{
-    content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-    background:transparent;border-radius:3px 0 0 3px;transition:background .2s;
-  }
-  .chapter-card:hover{border-color:var(--green);background:#f0fdf4;transform:translateX(2px)}
-  .chapter-card:hover::before{background:var(--green)}
-  .chapter-card.done{border-color:#6ee7b7;background:#f0fdf4}
-  .chapter-card.done::before{background:var(--green)}
+/* TIMELINE */
+.tl-item{display:flex;gap:10px;padding-bottom:18px;position:relative}
+.tl-item::before{content:'';position:absolute;left:14px;top:28px;bottom:0;width:2px;background:var(--border)}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:28px;height:28px;border-radius:50%;background:var(--accent-light);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;color:var(--accent)}
+.tl-body{flex:1;padding-top:3px}
+.tl-title{font-size:13px;font-weight:500}
+.tl-date{font-size:11px;color:var(--muted);margin-top:3px}
 
-  .chap-ico{
-    flex-shrink:0;width:42px;height:42px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:20px;
-  }
-  .chap-body{flex:1;min-width:0}
-  .chap-num{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-transform:uppercase}
-  .chap-title{font-size:14px;font-weight:700;color:var(--slate);margin:1px 0 2px;line-height:1.2}
-  .chap-desc{font-size:12px;color:var(--muted);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* FILE */
+.dropzone{border:2px dashed var(--border);border-radius:8px;padding:36px;text-align:center;cursor:pointer;transition:.2s}
+.dropzone:hover,.dropzone.dz-over{border-color:var(--accent);background:var(--accent-light)}
+.dz-ico{font-size:32px;margin-bottom:8px}
+.dz-txt{font-size:13px;color:var(--muted)}
+.fi{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--border);border-radius:6px;margin-top:8px}
+.fi-name{font-size:13px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fi-meta{font-size:11px;color:var(--muted);flex-shrink:0}
 
-  .chap-right{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
-  .chap-dot{
-    width:8px;height:8px;border-radius:50%;
-    border:2px solid var(--border);background:transparent;transition:all .2s;
-  }
-  .chapter-card.done .chap-dot{background:var(--green);border-color:var(--green)}
-  .chap-arrow{color:var(--border);font-size:16px;font-weight:300;line-height:1}
-  .chapter-card:hover .chap-arrow{color:var(--green)}
-  .chapter-card.done .chap-arrow{color:var(--green)}
+/* Q-LIST */
+.qi{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:7px;margin-bottom:7px;background:var(--card)}
+.qi-name{font-size:13px;font-weight:500;flex:1}
 
-  /* ── FOOTER CARD ── */
-  .footer-card{
-    background:linear-gradient(135deg,var(--slate) 0%,#1e293b 100%);
-    border-radius:18px;padding:20px;text-align:center;
-    margin-top:8px;
-  }
-  .footer-card p{font-size:13px;color:#94a3b8;line-height:1.6;margin-bottom:14px}
-  .footer-btns{display:flex;flex-direction:column;gap:8px}
-  .footer-btn{
-    display:flex;align-items:center;justify-content:center;gap:8px;
-    background:var(--green);
-    color:#fff;font-size:13px;font-weight:700;
-    padding:11px 22px;border-radius:12px;
-    cursor:pointer;transition:all .2s;border:none;
-    text-decoration:none;width:100%;
-  }
-  .footer-btn:hover{background:var(--green-dark)}
-  .footer-btn.secondary{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2)}
-  .footer-btn.secondary:hover{background:rgba(255,255,255,.2)}
+/* EVOLUÃÃO */
+.ev-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.ev-head{padding:12px 16px;background:#f9fafb;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.ev-body{padding:16px;border-top:1px solid var(--border)}
+.ev-sec{margin-bottom:12px}
+.ev-sec-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:3px}
+.ev-text{font-size:13px;line-height:1.6}
+
+/* SOAP */
+.soap-l{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+
+/* SEARCH */
+.search-wrap{min-height:calc(100vh - 0px);display:flex;align-items:center;justify-content:center;padding:24px}
+.search-box{width:100%;max-width:460px}
+.sr{margin-top:10px;padding:13px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--border);background:var(--card);transition:.15s}
+.sr:hover{border-color:var(--accent);background:var(--accent-light)}
+.sr-name{font-weight:600;font-size:14px}
+.sr-info{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* RESUMO CLÃNICO */
+.resumo-box{background:#f0f5ff;border:1px solid #bfdbfe;border-radius:7px;padding:14px;font-size:13px;line-height:1.7}
+
+/* PENDÃNCIAS */
+.pend-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+.pend-item:last-child{border:none}
+.pend-dot{width:7px;height:7px;border-radius:50%;background:var(--warn);flex-shrink:0}
+
+/* ADESÃO */
+.ad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ad-item{background:#f9fafb;border:1px solid var(--border);border-radius:7px;padding:12px}
+.ad-l{font-size:11px;color:var(--muted);margin-bottom:6px}
+.ad-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.ad-fill{height:100%;background:var(--accent);border-radius:3px;transition:.3s}
+.ad-v{font-size:13px;font-weight:600;margin-top:5px}
+
+/* MISC */
+hr.div{border:none;border-top:1px solid var(--border);margin:18px 0}
+.hidden{display:none!important}
+.row{display:flex;align-items:center;gap:10px}
+.sb{justify-content:space-between}
+.muted{color:var(--muted);font-size:13px}
+.mt{margin-top:16px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-size:15px;font-weight:600}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* CIDADE AUTOCOMPLETE */
+.cidade-wrap{position:relative}
+.cidade-dropdown{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--accent);border-top:none;border-radius:0 0 7px 7px;max-height:220px;overflow-y:auto;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.cidade-opt{padding:8px 12px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.cidade-opt:hover,.cidade-opt.selected{background:var(--accent-light)}
+.cidade-opt .uf{font-size:11px;font-weight:600;color:var(--muted);background:#f3f4f6;padding:1px 5px;border-radius:4px}
+.cidade-loading{padding:10px 12px;font-size:12px;color:var(--muted);font-style:italic}
+
+/* TOAST */
+#toast{position:fixed;bottom:22px;right:22px;background:#111827;color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+
+/* SYNC STATUS */
+.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.sync-ok{background:#16a34a}.sync-syncing{background:#d97706;animation:pulse .8s infinite}
+.sync-err{background:#dc2626}.sync-off{background:#4b5563}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sync-bar{display:flex;align-items:center;gap:6px;font-size:11px;color:#6b7280;margin-top:6px;padding-top:6px;border-top:1px solid #1f2937}
+
+/* CONFIG */
+.config-section{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
+.config-section h3{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--accent);color:#fff;border-radius:50%;font-size:11px;font-weight:700;flex-shrink:0}
+.setup-step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.5}
+.setup-step:last-child{border:none}
+code{background:#f3f4f6;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;color:#1d4ed8}
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- CAPA -->
-  <div class="cover">
-    <!-- textura orgânica de fundo -->
-    <svg class="cover-bg" viewBox="0 0 430 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <radialGradient id="rg1" cx="80%" cy="20%" r="60%">
-          <stop offset="0%" stop-color="#d1fae5" stop-opacity=".7"/>
-          <stop offset="100%" stop-color="#d1fae5" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="rg2" cx="10%" cy="80%" r="55%">
-          <stop offset="0%" stop-color="#e0f2fe" stop-opacity=".6"/>
-          <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <rect width="430" height="210" fill="#f8fafc"/>
-      <ellipse cx="370" cy="30" rx="130" ry="100" fill="url(#rg1)"/>
-      <path d="M320 0 Q390 60 430 30 L430 0Z" fill="#d1fae5" opacity=".4"/>
-      <path d="M0 150 Q70 100 140 160 Q200 210 260 170 Q310 140 350 190 L430 180 L430 210 L0 210Z" fill="#e0f2fe" opacity=".35"/>
-      <ellipse cx="60" cy="190" rx="110" ry="70" fill="url(#rg2)"/>
-    </svg>
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="sb-logo">
+    <div class="logo-mark"><span class="logo-menos">menos</span><span class="logo-peso">peso</span><span class="logo-dot">.</span></div>
+    <span class="logo-sub">Sistema ClÃ­nico</span>
+  </div>
+  <div id="sb-patient" class="sb-patient hidden"></div>
+  <nav class="sb-nav">
+    <div class="nav-sec">Sistema</div>
+    <div class="nav-item" id="ni-search" onclick="go('search')"><span class="ic">ð</span>Buscar Paciente</div>
+    <div id="patient-nav" class="hidden">
+      <div class="nav-sec">Paciente</div>
+      <div class="nav-item" id="ni-dashboard" onclick="go('dashboard')"><span class="ic">ð</span>Dashboard</div>
+      <div class="nav-item" id="ni-cadastro" onclick="go('cadastro')"><span class="ic">ð¤</span>Cadastro</div>
+      <div class="nav-item" id="ni-questionarios" onclick="go('questionarios')"><span class="ic">ð</span>QuestionÃ¡rios</div>
+      <div class="nav-item" id="ni-exames" onclick="go('exames')"><span class="ic">ð§ª</span>Exames</div>
+      <div class="nav-item" id="ni-timeline" onclick="go('timeline')"><span class="ic">ð</span>Timeline</div>
+      <div class="nav-item" id="ni-evolucoes" onclick="go('evolucoes')"><span class="ic">ð</span>EvoluÃ§Ãµes</div>
+      <div class="nav-sec">ClÃ­nico</div>
+      <div class="nav-item" id="ni-adesao" onclick="go('adesao')"><span class="ic">ð¯</span>Score de AdesÃ£o</div>
+      <div class="nav-item" id="ni-relatorios" onclick="go('relatorios')"><span class="ic">ð</span>RelatÃ³rios</div>
+      <div class="nav-item" id="ni-mensagens" onclick="go('mensagens')"><span class="ic">ð¬</span>Mensagens WA</div>
+    </div>
+    <div class="nav-sec">Sistema</div>
+    <div class="nav-item" id="ni-config" onclick="go('config')"><span class="ic">âï¸</span>ConfiguraÃ§Ãµes</div>
+  </nav>
+  <div class="sb-foot">
+    <div style="font-size:10px;margin-bottom:4px;letter-spacing:-0.3px"><span style="font-weight:700;color:#94a3b8">menos</span><span style="color:#94a3b8">peso</span><span style="color:#059669">.</span><span style="color:#475569"> v1.1</span></div>
+    <div class="sync-bar">
+      <span class="sync-dot sync-off" id="sync-dot"></span>
+      <span id="sync-label">Sheets nÃ£o configurado</span>
+    </div>
+    <button onclick="SYNC.pullAll()" style="margin-top:8px;width:100%;background:#1f2937;border:1px solid #374151;color:#9ca3af;padding:5px;border-radius:5px;font-size:11px;cursor:pointer">â Sincronizar agora</button>
+  </div>
+</aside>
 
-    <div class="cover-inner">
-      <!-- LOGO -->
-      <div class="logo-wrap">
-        <div>
-          <div class="logo-word"><strong>menos</strong><span>peso</span><em>.</em></div>
-          <div class="logo-tagline">Saúde Digital</div>
-        </div>
-      </div>
-
-      <!-- HERO -->
-      <div class="hero-tag">Guia Oficial do Paciente</div>
-      <div class="hero-title">Sua jornada de<br><em>cuidado</em> começa aqui</div>
-      <div class="hero-sub">10 capítulos para te acompanhar do início ao longo prazo — com ciência, clareza e leveza.</div>
-
-      <!-- STATS -->
-      <div class="stats">
-        <div class="stat-pill">
-          <div class="stat-num">10</div>
-          <div class="stat-label">Capítulos</div>
-        </div>
-        <div class="stat-pill">
-          <div class="stat-num">90+</div>
-          <div class="stat-label">Telas</div>
-        </div>
-        <div class="stat-pill">
-          <div class="stat-num">100%</div>
-          <div class="stat-label">Interativo</div>
-        </div>
-      </div>
+<!-- MAIN -->
+<main id="main">
+  <div id="topbar" class="topbar hidden">
+    <div class="topbar-title" id="topbar-title"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn bs bsm" onclick="go('search')">â Trocar paciente</button>
+      <button class="btn bp bsm" onclick="go('evolucoes-new')">+ Nova evoluÃ§Ã£o</button>
     </div>
   </div>
+  <div id="content"></div>
+</main>
 
-  <!-- MANIFESTO FAIXA -->
-  <div class="manifesto">
-    <div class="manifesto-line"><strong>MENOS PESO</strong> na Balança.</div>
-    <div class="manifesto-line"><strong>MENOS PESO</strong> no Bolso.</div>
-    <div class="manifesto-line"><strong>MENOS PESO</strong> na Consciência.</div>
-  </div>
-
-  <!-- PROGRESSO -->
-  <div class="prog-wrap">
-    <div class="prog-label">
-      <span class="prog-text">Progresso de leitura</span>
-      <span class="prog-pct" id="prog-pct">0%</span>
-    </div>
-    <div class="prog-track">
-      <div class="prog-fill" id="prog-fill" style="width:0%"></div>
-    </div>
-  </div>
-
-  <!-- ÍNDICE -->
-  <div class="scroll">
-
-    <div class="section-label">Fundamentos</div>
-
-    <a class="chapter-card" id="c1" href="Capitulo1_EntendendoAObesidade.html" onclick="markDone('c1')">
-      <div class="chap-ico" style="background:#d1fae5">🧬</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 1</div>
-        <div class="chap-title">Entendendo a obesidade</div>
-        <div class="chap-desc">A ciência por trás da doença — genética, hormônios e cérebro</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <a class="chapter-card" id="c2" href="Capitulo2_ConhecendoOMedicamento.html" onclick="markDone('c2')">
-      <div class="chap-ico" style="background:#e0f2fe">💊</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 2</div>
-        <div class="chap-title">Conhecendo seu medicamento</div>
-        <div class="chap-desc">Como o GLP-1 age no corpo e o que esperar</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <a class="chapter-card" id="c3" href="Capitulo3_PreparandoParaComecar.html" onclick="markDone('c3')">
-      <div class="chap-ico" style="background:#fef9c3">📦</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 3</div>
-        <div class="chap-title">Preparando-se para começar</div>
-        <div class="chap-desc">Materiais, rotina e organização antes da primeira dose</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <div class="section-label">Usando o medicamento</div>
-
-    <a class="chapter-card" id="c4" href="Capitulo4_AplicacaoMedicamento.html" onclick="markDone('c4')">
-      <div class="chap-ico" style="background:#fce7f3">💉</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 4</div>
-        <div class="chap-title">Passo a passo da aplicação</div>
-        <div class="chap-desc">Técnica correta do início ao descarte seguro</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <a class="chapter-card" id="c5" href="Capitulo5_EfeitosColaterais.html" onclick="markDone('c5')">
-      <div class="chap-ico" style="background:#ffedd5">🤢</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 5</div>
-        <div class="chap-title">Efeitos colaterais</div>
-        <div class="chap-desc">O que esperar, como manejar e quando buscar ajuda</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <div class="section-label">Estilo de vida</div>
-
-    <a class="chapter-card" id="c6" href="Capitulo6_Alimentacao.html" onclick="markDone('c6')">
-      <div class="chap-ico" style="background:#d1fae5">🥗</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 6</div>
-        <div class="chap-title">Alimentação no tratamento</div>
-        <div class="chap-desc">O que priorizar, evitar e como montar o prato ideal</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <a class="chapter-card" id="c7" href="Capitulo7_AtividadeFisica.html" onclick="markDone('c7')">
-      <div class="chap-ico" style="background:#ccfbf1">🏃</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 7</div>
-        <div class="chap-title">Atividade física</div>
-        <div class="chap-desc">Como o exercício potencializa o medicamento</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <a class="chapter-card" id="c8" href="Capitulo8_SonoEstresse.html" onclick="markDone('c8')">
-      <div class="chap-ico" style="background:#e0e7ff">😴</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 8</div>
-        <div class="chap-title">Sono e estresse</div>
-        <div class="chap-desc">Os fatores invisíveis que fazem toda a diferença</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <div class="section-label">Resultados e futuro</div>
-
-    <a class="chapter-card" id="c9" href="Capitulo9_AcompanhandoEvolucao.html" onclick="markDone('c9')">
-      <div class="chap-ico" style="background:#ede9fe">📊</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 9</div>
-        <div class="chap-title">Acompanhando sua evolução</div>
-        <div class="chap-desc">Como medir o progresso além da balança</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <a class="chapter-card" id="c10" href="Capitulo10_FuturoDoTratamento.html" onclick="markDone('c10')">
-      <div class="chap-ico" style="background:#d1fae5">🌅</div>
-      <div class="chap-body">
-        <div class="chap-num">Capítulo 10</div>
-        <div class="chap-title">O futuro do tratamento</div>
-        <div class="chap-desc">Como manter os resultados para sempre</div>
-      </div>
-      <div class="chap-right"><div class="chap-dot"></div><div class="chap-arrow">›</div></div>
-    </a>
-
-    <!-- FOOTER -->
-    <div class="footer-card">
-      <p>Dúvidas? Nossa equipe está sempre disponível para te apoiar em cada etapa da jornada.</p>
-      <div class="footer-btns">
-        <a class="footer-btn" href="https://www.menospesosaudedigital.com.br" target="_blank">
-          🌐 Acessar o site
-        </a>
-        <a class="footer-btn secondary" href="https://www.instagram.com/menospeso.saudedigital" target="_blank">
-          📷 @menospeso.saudedigital
-        </a>
-      </div>
-    </div>
-
-  </div><!-- /scroll -->
-</div><!-- /app -->
+</div>
+<div id="toast"></div>
 
 <script>
-const CHAPTERS=['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10'];
+// âââââââââââââââââââââââââââââââââââââââââââââââ
+// MENOSYSTEM  â  MVP v1.0
+// Dados em localStorage, CPF como chave Ãºnica
+// âââââââââââââââââââââââââââââââââââââââââââââââ
 
-function loadProgress(){
-  const done=CHAPTERS.filter(id=>{try{return localStorage.getItem(id)==='1'}catch(e){return false}});
-  done.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('done')});
-  updateBar(done.length);
+// ââ DATA ââââââââââââââââââââââââââââââââââââââ
+const DB = {
+  KEY: 'menosys_v1',
+  all(){ try{return JSON.parse(localStorage.getItem(this.KEY)||'{}')}catch{return{}} },
+  save(data){ localStorage.setItem(this.KEY, JSON.stringify(data)) },
+  norm(cpf){ return String(cpf).replace(/\D/g,'') },
+  get(cpf){ return this.all()[this.norm(cpf)]||null },
+  put(p){
+    const d=this.all();
+    d[this.norm(p.cpf)]=p;
+    this.save(d);
+    // Sincroniza com Sheets de forma assÃ­ncrona (nÃ£o bloqueia a UI)
+    if(typeof SYNC!=='undefined') SYNC.push(p);
+  },
+  search(q){
+    const all=Object.values(this.all()), n=this.norm(q);
+    return all.filter(p=>
+      this.norm(p.cpf).startsWith(n)||
+      (p.nome||'').toLowerCase().includes(q.toLowerCase())
+    );
+  },
+  blank(cpf){
+    return {
+      cpf:this.norm(cpf),
+      nome:'',dataNascimento:'',sexoBiologico:'',genero:'',estadoCivil:'',
+      profissao:'',email:'',telefoneSms:'',whatsapp:'',contatoEmergencia:'',
+      endereco:'',cidade:'',estado:'',cep:'',
+      programaContratado:'',dataInicio:'',altura:'',pesoInicial:'',pesoAtual:'',
+      medicacaoAtual:'',doseAtual:'',resumoClinico:'',queixaPrincipal:'',objetivoTratamento:'',
+      hm:{doencas:'',cirurgias:'',internacoes:'',alergias:'',medicamentos:'',
+          antecedenteFamiliar:'',tabagismo:'',alcool:'',cannabis:'',outrasDrogas:'',
+          gestacao:'',ultimaMenstruacao:'',metodoContraceptivo:''},
+      questionarios:[
+        {id:'roda',nome:'Roda da Vida',status:'nao-enviado'},
+        {id:'comp-ali',nome:'Comportamento Alimentar',status:'nao-enviado'},
+        {id:'atv-fis',nome:'Atividade FÃ­sica',status:'nao-enviado'},
+        {id:'phq9',nome:'PHQ-9 (DepressÃ£o)',status:'nao-enviado'},
+        {id:'gad7',nome:'GAD-7 (Ansiedade)',status:'nao-enviado'},
+        {id:'sono',nome:'Sono',status:'nao-enviado'},
+        {id:'comp-ali2',nome:'CompetÃªncia Alimentar',status:'nao-enviado'},
+        {id:'culin',nome:'Habilidades CulinÃ¡rias',status:'nao-enviado'},
+      ],
+      exames:[],evolucoes:[],timeline:[],
+      adesao:{medicamentosa:'',comparecimento:''},
+      criadoEm:new Date().toISOString()
+    };
+  }
+};
+
+// ââ IBGE â AUTOCOMPLETE DE CIDADES ââââââââââââ
+const IBGE = {
+  _data: null,
+  _loading: false,
+  _callbacks: [],
+
+  async load(){
+    if(this._data) return this._data;
+    if(this._loading) return new Promise(r=>this._callbacks.push(r));
+    this._loading = true;
+    try {
+      const r = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/municipios?orderBy=nome');
+      const raw = await r.json();
+      this._data = raw.map(m=>({
+        nome: m.nome,
+        uf:   m.microrregiao.mesorregiao.UF.sigla,
+        estado: m.microrregiao.mesorregiao.UF.nome
+      }));
+    } catch(e){
+      console.warn('[IBGE] Falha ao carregar cidades:', e);
+      this._data = [];
+    }
+    this._loading = false;
+    this._callbacks.forEach(r=>r(this._data));
+    this._callbacks = [];
+    return this._data;
+  },
+
+  search(q, max=8){
+    if(!this._data||!q) return [];
+    const ql = q.toLowerCase().normalize('NFD').replace(/[Ì-Í¯]/g,'');
+    return this._data
+      .filter(m=>{
+        const mn = m.nome.toLowerCase().normalize('NFD').replace(/[Ì-Í¯]/g,'');
+        return mn.startsWith(ql) || mn.includes(ql);
+      })
+      .slice(0,max);
+  },
+
+  // Renderiza widget de autocomplete dentro de um wrapper
+  // inputId: id do input de texto
+  // onSelect(cidade, uf, estado): callback ao selecionar
+  mount(inputId, onSelect){
+    const inp = document.getElementById(inputId);
+    if(!inp) return;
+    let ddId = inputId+'-dd';
+    let activeIdx = -1;
+
+    // Carrega em background
+    this.load();
+
+    inp.addEventListener('input', ()=>{
+      const q = inp.value.trim();
+      let dd = document.getElementById(ddId);
+      if(q.length < 2){ if(dd) dd.remove(); return; }
+
+      const results = this.search(q);
+      if(!dd){
+        dd = document.createElement('div');
+        dd.id = ddId;
+        dd.className = 'cidade-dropdown';
+        inp.parentElement.appendChild(dd);
+      }
+      activeIdx = -1;
+
+      if(!this._data){
+        dd.innerHTML = '<div class="cidade-loading">Carregando cidades...</div>';
+        this.load().then(()=>inp.dispatchEvent(new Event('input')));
+        return;
+      }
+
+      if(!results.length){
+        dd.innerHTML = '<div class="cidade-loading">Nenhuma cidade encontrada</div>';
+        return;
+      }
+
+      dd.innerHTML = results.map((m,i)=>
+        `<div class="cidade-opt" data-i="${i}" data-nome="${m.nome}" data-uf="${m.uf}" data-estado="${m.estado}">
+          <span>${m.nome}</span><span class="uf">${m.uf}</span>
+        </div>`
+      ).join('');
+
+      dd.querySelectorAll('.cidade-opt').forEach(el=>{
+        el.addEventListener('mousedown', e=>{
+          e.preventDefault();
+          inp.value = el.dataset.nome;
+          onSelect(el.dataset.nome, el.dataset.uf, el.dataset.estado);
+          dd.remove();
+        });
+      });
+    });
+
+    inp.addEventListener('keydown', e=>{
+      const dd = document.getElementById(ddId);
+      if(!dd) return;
+      const opts = dd.querySelectorAll('.cidade-opt');
+      if(e.key==='ArrowDown'){ e.preventDefault(); activeIdx=Math.min(activeIdx+1,opts.length-1); opts.forEach((o,i)=>o.classList.toggle('selected',i===activeIdx)); }
+      if(e.key==='ArrowUp'){ e.preventDefault(); activeIdx=Math.max(activeIdx-1,0); opts.forEach((o,i)=>o.classList.toggle('selected',i===activeIdx)); }
+      if(e.key==='Enter'&&activeIdx>=0){ e.preventDefault(); opts[activeIdx].dispatchEvent(new MouseEvent('mousedown')); }
+      if(e.key==='Escape'){ dd.remove(); activeIdx=-1; }
+    });
+
+    inp.addEventListener('blur', ()=>setTimeout(()=>document.getElementById(ddId)?.remove(),150));
+  }
+};
+
+// ââ SYNC (Google Sheets) ââââââââââââââââââââââ
+// ConfiguraÃ§Ã£o: cole a URL do Apps Script apÃ³s implantar
+const SYNC = {
+  get url(){ return localStorage.getItem('menosys_sheets_url')||'https://script.google.com/macros/s/AKfycbzfDUlL_-nXkFtY1ty7Bu8-8VG06IPWdGyaNm88S2_Fg7QtNBAeqQnBY1_UyKT5Y5Hi/exec' },
+  set url(v){ localStorage.setItem('menosys_sheets_url',v) },
+  get key(){ return localStorage.getItem('menosys_sheets_key')||'MENOSYS_2025' },
+  set key(v){ localStorage.setItem('menosys_sheets_key',v) },
+
+  // Atualiza indicador visual
+  setStatus(s, msg){
+    const dot=document.getElementById('sync-dot');
+    const lbl=document.getElementById('sync-label');
+    if(!dot) return;
+    dot.className='sync-dot sync-'+s;
+    lbl.textContent=msg||{ok:'Sincronizado',syncing:'Sincronizandoâ¦',err:'Erro de sync',off:'Sheets nÃ£o configurado'}[s]||s;
+  },
+
+  // Verifica se estÃ¡ configurado
+  isConfigured(){ return !!this.url },
+
+  // Envia um paciente para o Sheets (fire-and-forget)
+  async push(patient){
+    if(!this.isConfigured()) return;
+    this.setStatus('syncing');
+    try {
+      const r = await fetch(this.url, {
+        method:'POST', redirect:'follow',
+        headers:{'Content-Type':'text/plain'},
+        body: JSON.stringify({ key: this.key, action:'save', patient })
+      });
+      const data = await r.json();
+      if(data.ok){
+        this.setStatus('ok');
+      } else {
+        console.error('[Sync] push error:', data.error);
+        this.setStatus('err', 'Erro: '+data.error);
+      }
+    } catch(e){
+      console.error('[Sync] push failed:', e);
+      this.setStatus('err', 'Falha na conexÃ£o');
+    }
+  },
+
+  // Busca um paciente do Sheets e atualiza localStorage
+  async pull(cpf){
+    if(!this.isConfigured()) return null;
+    try {
+      const url=`${this.url}?action=get&cpf=${cpf}&key=${encodeURIComponent(this.key)}`;
+      const r = await fetch(url, {redirect:'follow'});
+      const data = await r.json();
+      if(data.ok && data.patient){
+        DB.put(data.patient); // salva no localStorage
+        return data.patient;
+      }
+    } catch(e){ console.error('[Sync] pull failed:', e); }
+    return null;
+  },
+
+  // Importa todos os pacientes do Sheets
+  async pullAll(){
+    if(!this.isConfigured()){
+      toast('Configure a URL do Google Sheets primeiro (âï¸ ConfiguraÃ§Ãµes)');
+      return;
+    }
+    this.setStatus('syncing','Importandoâ¦');
+    try {
+      const url=`${this.url}?action=all&key=${encodeURIComponent(this.key)}`;
+      const r = await fetch(url, {redirect:'follow'});
+      const data = await r.json();
+      if(data.ok && data.patients){
+        // Deduplica por CPF: mantÃ©m o registro mais completo (com questionÃ¡rio > com nome > mais recente)
+        const map={};
+        data.patients.forEach(p=>{
+          const cpf=String(p.cpf||'').replace(/\D/g,'').padStart(11,'0');
+          if(!cpf) return;
+          p.cpf=cpf;
+          const ex=map[cpf];
+          if(!ex){ map[cpf]=p; return; }
+          const pS=(p.questionarioRespondidoEm?10:0)+(p.nome?5:0)+(p.pesoAtual?2:0)+(p.hm?1:0);
+          const eS=(ex.questionarioRespondidoEm?10:0)+(ex.nome?5:0)+(ex.pesoAtual?2:0)+(ex.hm?1:0);
+          if(pS>eS) map[cpf]=p;
+        });
+        const uniq=Object.values(map);
+        uniq.forEach(p=>DB.put(p));
+        this.setStatus('ok',`${uniq.length} paciente(s) importado(s)`);
+        toast(`â ${uniq.length} paciente(s) sincronizado(s) do Sheets`);
+        // Se estiver na busca, recarrega
+        if(V==='search') go('search');
+      } else {
+        this.setStatus('err', data.error||'Erro desconhecido');
+        toast('Erro ao importar: '+(data.error||'verifique a URL e a chave'));
+      }
+    } catch(e){
+      console.error('[Sync] pullAll failed:', e);
+      this.setStatus('err','Falha na conexÃ£o');
+      toast('Falha de conexÃ£o com o Sheets');
+    }
+  },
+
+  // Testa a conexÃ£o
+  async ping(){
+    if(!this.isConfigured()) return false;
+    try {
+      const url=`${this.url}?action=ping&key=${encodeURIComponent(this.key)}`;
+      const r = await fetch(url, {redirect:'follow'});
+      const data = await r.json();
+      return data.ok===true;
+    } catch { return false; }
+  },
+
+  // Inicializa ao carregar a pÃ¡gina
+  init(){
+    if(this.isConfigured()){
+      this.setStatus('syncing','Verificandoâ¦');
+      this.ping().then(ok=>{
+        this.setStatus(ok?'ok':'err', ok?'Conectado ao Sheets':'Sheets inacessÃ­vel');
+      });
+    }
+  }
+};
+
+// ââ TIMELINE ââââââââââââââââââââââââââââââââââ
+const TL = {
+  icons:{cadastro:'ð¤',questionario:'ð',exame:'ð§ª',evolucao:'ð',receita:'ð',
+         pedido:'ð',bioimpedancia:'âï¸',consulta:'ð©º',arquivo:'ð',sistema:'âï¸'},
+  add(p, tipo, desc){
+    if(!p.timeline) p.timeline=[];
+    p.timeline.unshift({id:Date.now(), tipo, desc, data:new Date().toISOString()});
+    DB.put(p);
+  }
+};
+
+// ââ ROUTER ââââââââââââââââââââââââââââââââââââ
+let P = null; // current patient
+let V = '';   // current view
+
+function go(view){
+  V = view;
+  const hasPt = !!P;
+
+  // Nav highlight
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  const key = view.startsWith('evolucoes') ? 'ni-evolucoes' : `ni-${view}`;
+  document.getElementById(key)?.classList.add('active');
+
+  // Show/hide
+  document.getElementById('patient-nav').classList.toggle('hidden', !hasPt);
+  document.getElementById('topbar').classList.toggle('hidden', view==='search');
+  const sbPt = document.getElementById('sb-patient');
+  sbPt.classList.toggle('hidden', !hasPt);
+  if(hasPt){
+    sbPt.innerHTML=`<div class="pname">${P.nome||'Paciente sem nome'}</div>
+      <div class="pcpf">${fmtCPF(P.cpf)}</div>`;
+  }
+
+  // Title
+  const titles={dashboard:'Dashboard',cadastro:'Cadastro',questionarios:'QuestionÃ¡rios',
+    exames:'Exames',timeline:'Timeline',evolucoes:'EvoluÃ§Ãµes','evolucoes-new':'Nova EvoluÃ§Ã£o',
+    adesao:'Score de AdesÃ£o',relatorios:'RelatÃ³rios',mensagens:'Mensagens WhatsApp',config:'ConfiguraÃ§Ãµes'};
+  document.getElementById('topbar-title').textContent = titles[view]||'';
+
+  const ct = document.getElementById('content');
+  ct.className = view==='search' ? 'no-pad' : '';
+  ct.innerHTML = '';
+
+  const vs={search:vSearch,dashboard:vDash,cadastro:vCadastro,
+    questionarios:vQs,exames:vExames,timeline:vTL,
+    evolucoes:vEvs,'evolucoes-new':vNovaEv,adesao:vAdesao,relatorios:vRelat,
+    mensagens:vMensagens,config:vConfig};
+  (vs[view]||vSearch)(ct);
 }
 
-function markDone(id){
-  try{localStorage.setItem(id,'1')}catch(e){}
-  const el=document.getElementById(id);
-  if(el)el.classList.add('done');
-  const done=CHAPTERS.filter(i=>{try{return localStorage.getItem(i)==='1'}catch(e){return false}}).length;
-  updateBar(done);
+// ââ HELPERS âââââââââââââââââââââââââââââââââââ
+function fmtCPF(c){ c=String(c).replace(/\D/g,''); return c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4') }
+function maskCPF(inp){
+  let v=inp.value.replace(/\D/g,'').slice(0,11);
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})\.(\d{3})(\d)/,'$1.$2.$3');
+  v=v.replace(/\.(\d{3})\.(\d{3})(\d)/,(m,a,b,c)=>'.'+a+'.'+b+'-'+c);
+  inp.value=v;
+}
+function idade(dob){
+  if(!dob) return 'â';
+  const t=new Date(),b=new Date(dob);
+  let a=t.getFullYear()-b.getFullYear();
+  if(t.getMonth()<b.getMonth()||(t.getMonth()===b.getMonth()&&t.getDate()<b.getDate())) a--;
+  return a;
+}
+function imc(peso,alt){
+  if(!peso||!alt) return null;
+  const v=parseFloat(peso)/(parseFloat(alt)/100)**2;
+  return isNaN(v)?null:v.toFixed(1);
+}
+function classImc(v){
+  const n=parseFloat(v);
+  if(n<18.5) return 'Abaixo do peso';
+  if(n<25) return 'Normal';
+  if(n<30) return 'Sobrepeso';
+  if(n<35) return 'Obesidade Grau I';
+  if(n<40) return 'Obesidade Grau II';
+  return 'Obesidade Grau III';
+}
+function jornada(di){
+  if(!di) return 'â';
+  const d=Math.floor((new Date()-new Date(di))/86400000);
+  return d>=0?`Dia ${d+1}`:'â';
+}
+function fmtDt(iso){
+  if(!iso) return 'â';
+  return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+function fmtD(iso){
+  if(!iso) return 'â';
+  return new Date(iso).toLocaleDateString('pt-BR');
+}
+function bytes(b){
+  if(b<1024) return b+' B';
+  if(b<1048576) return (b/1024).toFixed(1)+' KB';
+  return (b/1048576).toFixed(1)+' MB';
+}
+function qBadge(s){
+  const m={'nao-enviado':['bg-gray','NÃ£o enviado'],'enviado':['bg-blue','Enviado'],
+    'respondido':['bg-yellow','Respondido'],'interpretado':['bg-green','Interpretado']};
+  const [c,l]=m[s]||['bg-gray',s];
+  return `<span class="badge ${c}">${l}</span>`;
+}
+function pendencias(p){
+  const r=[];
+  if(!p.nome) r.push('Cadastro incompleto â nome nÃ£o preenchido');
+  const qp=(p.questionarios||[]).filter(q=>q.status==='nao-enviado'||q.status==='enviado');
+  if(qp.length) r.push(`${qp.length} questionÃ¡rio(s) pendente(s)`);
+  if(!(p.exames||[]).length) r.push('Nenhum exame laboratorial anexado');
+  if(!(p.evolucoes||[]).length) r.push('Nenhuma evoluÃ§Ã£o registrada');
+  if(!p.pesoInicial) r.push('Peso inicial nÃ£o cadastrado');
+  return r;
+}
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.style.opacity='1';
+  setTimeout(()=>el.style.opacity='0',2600);
 }
 
-function updateBar(n){
-  const pct=Math.round(n/CHAPTERS.length*100);
-  document.getElementById('prog-fill').style.width=pct+'%';
-  document.getElementById('prog-pct').textContent=pct+'%';
+// ââ VIEWS âââââââââââââââââââââââââââââââââââââ
+
+// BUSCA
+function vSearch(ct){
+  ct.innerHTML=`
+  <div class="search-wrap">
+    <div class="search-box">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="font-size:34px;letter-spacing:-1px;font-weight:800;color:#0F172A;line-height:1;margin-bottom:8px">
+          <span style="font-weight:800">menos</span><span style="font-weight:400">peso</span><span style="color:#059669;font-weight:400">.</span>
+        </div>
+        <p style="color:var(--muted);font-size:13px;margin-top:2px">Sistema ClÃ­nico</p>
+      </div>
+      <input type="text" id="q" placeholder="CPF ou nome do paciente"
+        oninput="onQ(this)" onkeydown="onQK(event)" autocomplete="off"
+        style="width:100%;font-size:18px;padding:14px 18px;border-radius:10px;border:2px solid var(--border);text-align:center">
+      <div id="q-res" style="margin-top:10px"></div>
+      <div id="q-new" class="hidden" style="text-align:center;margin-top:14px">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:10px">CPF nÃ£o encontrado no sistema</p>
+        <button class="btn bp blg" onclick="novoP()">+ Cadastrar novo paciente</button>
+      </div>
+      <div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+        <p style="color:var(--muted);font-size:12px;margin-bottom:8px">Paciente sem CPF?</p>
+        <button class="btn bp" onclick="goNovoAgendamento()" style="font-size:13px">+ Novo Agendamento</button>
+      </div>
+    </div>
+  </div>`;
+  setTimeout(()=>document.getElementById('q')?.focus(),50);
 }
 
-loadProgress();
+function onQ(inp){
+  maskCPF(inp);
+  const q=inp.value.trim();
+  const res=document.getElementById('q-res');
+  const nw=document.getElementById('q-new');
+  if(q.length<3){res.innerHTML='';nw.classList.add('hidden');return;}
+  const found=DB.search(q);
+  if(found.length){
+    nw.classList.add('hidden');
+    res.innerHTML=found.map(p=>`
+      <div class="sr" onclick="abrirP('${p.cpf}')">
+        <div class="sr-name">${p.nome||'Sem nome'}${p.preRegistro?` <span class="badge bg-orange">Aguardando formulÃ¡rio</span>`:''}</div>
+        <div class="sr-info">${p.preRegistro?`WhatsApp: ${p.whatsapp||'â'}`:fmtCPF(p.cpf)+' Â· '+(p.programaContratado||'Programa nÃ£o definido')+' Â· '+jornada(p.dataInicio)}</div>
+      </div>`).join('');
+  } else {
+    res.innerHTML='';
+    nw.classList.toggle('hidden', DB.norm(q).length<11);
+  }
+}
+function onQK(e){
+  if(e.key!=='Enter') return;
+  const q=e.target.value.trim();
+  const found=DB.search(q);
+  if(found.length===1) abrirP(found[0].cpf);
+  else if(DB.norm(q).length===11) novoP();
+}
+function abrirP(cpf){ P=DB.get(cpf); go('dashboard'); }
+function novoP(){
+  const cpf=DB.norm(document.getElementById('q').value);
+  if(cpf.length!==11){toast('CPF deve ter 11 dÃ­gitos');return;}
+  P=DB.blank(cpf);
+  TL.add(P,'cadastro','Paciente cadastrado no sistema');
+  go('cadastro');
+}
+
+// PRÃ-CADASTRO (Novo Agendamento â sem CPF)
+function goNovoAgendamento(){
+  const overlay=document.createElement('div');
+  overlay.id='modal-agendamento';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  overlay.innerHTML=`
+    <div style="background:#fff;border-radius:12px;padding:28px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.18)">
+      <h3 style="margin:0 0 4px;font-size:17px;font-weight:700">Novo Agendamento</h3>
+      <p style="margin:0 0 20px;font-size:13px;color:var(--muted)">PrÃ©-cadastro sem CPF â link do formulÃ¡rio enviado via WhatsApp</p>
+      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">Nome *</label>
+      <input id="pre-nome" type="text" placeholder="Nome completo"
+        style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:14px;box-sizing:border-box">
+      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">WhatsApp *</label>
+      <input id="pre-wa" type="tel" placeholder="(11) 99999-9999"
+        style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:14px;box-sizing:border-box">
+      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">E-mail (opcional)</label>
+      <input id="pre-email" type="email" placeholder="email@exemplo.com"
+        style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:22px;box-sizing:border-box">
+      <div style="display:flex;gap:10px">
+        <button class="btn" onclick="document.getElementById('modal-agendamento').remove()"
+          style="flex:1;background:#f3f4f6;color:#374151">Cancelar</button>
+        <button class="btn bp blg" onclick="salvarPreCadastro()" style="flex:2">Salvar e Enviar Link</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  setTimeout(()=>document.getElementById('pre-nome')?.focus(),80);
+}
+
+function salvarPreCadastro(){
+  const nome=(document.getElementById('pre-nome')?.value||'').trim();
+  const wa=(document.getElementById('pre-wa')?.value||'').replace(/\D/g,'');
+  const email=(document.getElementById('pre-email')?.value||'').trim();
+  if(!nome){toast('Informe o nome do paciente');return;}
+  if(wa.length<10){toast('Informe um WhatsApp vÃ¡lido');return;}
+
+  const cpfTemp='PRE-'+wa;
+  // NÃ£o sobrescrever se jÃ¡ existir
+  if(DB.get(cpfTemp)){toast('JÃ¡ existe um prÃ©-cadastro para este WhatsApp');return;}
+
+  const p=DB.blank(cpfTemp);
+  p.nome=nome;
+  p.whatsapp=wa;
+  if(email) p.email=email;
+  p.preRegistro=true;
+  p.preRegistroEm=new Date().toISOString();
+
+  TL.add(p,'cadastro','PrÃ©-cadastro realizado. FormulÃ¡rio enviado via WhatsApp.');
+  DB.put(p);
+  SYNC.push(p);
+
+  document.getElementById('modal-agendamento')?.remove();
+  toast('PrÃ©-cadastro salvo!');
+
+  // Gerar mensagem WhatsApp com link do formulÃ¡rio
+  const primeiroNome=nome.split(' ')[0];
+  const qLink=`https://www.menospesosaudedigital.com.br/questionario.html?cpf=${encodeURIComponent(cpfTemp)}`;
+  const msg=`OlÃ¡, *${primeiroNome}*!\n\nSeja muito bem-vindo ao *Menos Peso*. Fico feliz em ter vocÃª por aqui.\n\nPara darmos inÃ­cio ao seu acompanhamento, preciso que vocÃª preencha a avaliaÃ§Ã£o inicial. SÃ£o apenas alguns minutos e vÃ£o me ajudar a personalizar o seu tratamento:\n\n*Clique aqui para preencher:*\n${qLink}\n\nQualquer dÃºvida, pode me chamar aqui.`;
+  const waNum=wa.startsWith('55')?wa:'55'+wa;
+  window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// DASHBOARD
+function vDash(ct){
+  const p=P;
+  const id=idade(p.dataNascimento);
+  const im0=imc(p.pesoInicial,p.altura), ima=imc(p.pesoAtual,p.altura);
+  const perdaAb=p.pesoInicial&&p.pesoAtual?(parseFloat(p.pesoInicial)-parseFloat(p.pesoAtual)).toFixed(1):null;
+  const perdaPc=perdaAb&&p.pesoInicial?((Math.abs(perdaAb)/parseFloat(p.pesoInicial))*100).toFixed(1):null;
+  const pends=pendencias(p);
+  const ult=p.evolucoes&&p.evolucoes.length?p.evolucoes[0]:null;
+
+  ct.innerHTML=`
+  ${!p.nome?`<div class="alert a-warn">â ï¸ Cadastro incompleto. <a href="#" onclick="go('cadastro')" style="color:inherit;font-weight:600">Preencher agora â</a></div>`:''}
+
+  <div class="card">
+    <div class="row sb" style="flex-wrap:wrap;gap:12px">
+      <div>
+        <div class="row" style="gap:10px;flex-wrap:wrap">
+          <h2 style="font-size:20px;font-weight:700">${p.nome||'Paciente sem nome'}</h2>
+          ${p.programaContratado?`<span class="badge bg-blue">${p.programaContratado}</span>`:''}
+        </div>
+        <div style="color:var(--muted);font-size:13px;margin-top:3px">
+          ${fmtCPF(p.cpf)} Â· ${id!=='â'?id+' anos':'Idade nÃ£o informada'} Â· ${p.sexoBiologico||'Sexo nÃ£o informado'}${p.genero?' Â· '+p.genero:''}${p.pronomes?` <span style="font-size:11px;color:var(--muted);font-style:italic">(${p.pronomes})</span>`:''}
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">
+          ${p.dataInicio?`InÃ­cio: ${fmtD(p.dataInicio)} Â· <strong>${jornada(p.dataInicio)}</strong>`:'Data de inÃ­cio nÃ£o definida'}
+        </div>
+      </div>
+      ${p.medicacaoAtual?`<div style="text-align:right">
+        <div style="font-size:11px;color:var(--muted)">MedicaÃ§Ã£o atual</div>
+        <div style="font-size:14px;font-weight:600">ð ${p.medicacaoAtual}${p.doseAtual?' â '+p.doseAtual:''}</div>
+      </div>`:''}
+    </div>
+  </div>
+
+  <div class="g4" style="margin-bottom:16px">
+    <div class="stat">
+      <div class="stat-l">Peso Inicial</div>
+      <div class="stat-v">${p.pesoInicial?p.pesoInicial+' kg':'â'}</div>
+      <div class="stat-s">${im0?'IMC '+im0+' Â· '+classImc(im0):'Altura nÃ£o informada'}</div>
+    </div>
+    <div class="stat ${parseFloat(perdaAb)>0?'green':''}">
+      <div class="stat-l">Peso Atual</div>
+      <div class="stat-v">${p.pesoAtual?p.pesoAtual+' kg':'â'}</div>
+      <div class="stat-s">${ima?'IMC '+ima+' Â· '+classImc(ima):''}</div>
+    </div>
+    <div class="stat ${parseFloat(perdaAb)>0?'green':''}">
+      <div class="stat-l">Perda Total</div>
+      <div class="stat-v">${perdaAb?(parseFloat(perdaAb)>0?'-':'+')+ Math.abs(perdaAb)+' kg':'â'}</div>
+      <div class="stat-s">${perdaPc?Math.abs(perdaPc)+'% do peso inicial':''}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-l">Jornada</div>
+      <div class="stat-v" style="font-size:16px">${jornada(p.dataInicio)}</div>
+      <div class="stat-s">${p.dataInicio?'Desde '+fmtD(p.dataInicio):'NÃ£o iniciada'}</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:16px;align-items:start">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">Resumo ClÃ­nico</div>
+      ${p.resumoClinico
+        ?`<div class="resumo-box">${p.resumoClinico}</div>`
+        :`<div class="muted">O resumo clÃ­nico Ã© gerado automaticamente a partir das evoluÃ§Ãµes.</div>`}
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">PendÃªncias <span class="nb" style="vertical-align:middle;margin-left:4px">${pends.length}</span></div>
+      ${pends.length
+        ?pends.map(p=>`<div class="pend-item"><div class="pend-dot"></div>${p}</div>`).join('')
+        :'<div class="muted">Sem pendÃªncias â</div>'}
+    </div>
+  </div>
+
+  ${ult?`
+  <div class="card">
+    <div class="row sb" style="margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0">Ãltima EvoluÃ§Ã£o</div>
+      <span style="font-size:12px;color:var(--muted)">${fmtDt(ult.data)}</span>
+    </div>
+    ${ult.resumo?`<p style="font-size:14px;line-height:1.6;margin-bottom:8px">${ult.resumo}</p>`:''}
+    ${ult.conduta?`<div style="padding:8px 12px;background:#f9fafb;border-radius:6px;font-size:13px"><strong>Conduta:</strong> ${ult.conduta}</div>`:''}
+    <div class="mt"><button class="btn bg bsm" onclick="go('evolucoes')">Ver todas as evoluÃ§Ãµes â</button></div>
+  </div>`:''}
+
+  ${p.questionarioRespondidoEm ? `
+  <div class="card">
+    <div class="row sb" style="margin-bottom:14px">
+      <div class="card-title" style="margin-bottom:0">ð AvaliaÃ§Ã£o Inicial do Paciente</div>
+      <span style="font-size:11px;color:var(--muted)">Respondido em ${fmtD(p.questionarioRespondidoEm)}</span>
+    </div>
+    <div class="g2" style="gap:12px">
+      ${p.queixaPrincipal?`
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px">Queixa principal</div>
+        <div style="font-size:13px;line-height:1.5">${p.queixaPrincipal}</div>
+      </div>`:''}
+      ${p.objetivoTratamento?`
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px">Objetivo</div>
+        <div style="font-size:13px;line-height:1.5">${p.objetivoTratamento}</div>
+      </div>`:''}
+    </div>
+    ${(p.hm&&(p.hm.doencas||p.hm.medicamentos||p.hm.alergias))?`
+    <hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
+    <div class="g3" style="gap:10px;font-size:12px">
+      ${p.hm.doencas?`<div><span style="color:var(--muted)">DoenÃ§as: </span><strong>${p.hm.doencas}</strong></div>`:''}
+      ${p.hm.medicamentos?`<div><span style="color:var(--muted)">Medicamentos: </span><strong>${p.hm.medicamentos}</strong></div>`:''}
+      ${p.hm.alergias?`<div><span style="color:var(--muted)">Alergias: </span><strong>${p.hm.alergias}</strong></div>`:''}
+    </div>`:''}
+    ${(p.hm&&(p.hm.tabagismo||p.hm.alcool||p.hm.atividadeFisica||p.hm.horasSono))?`
+    <hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
+    <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:12px">
+      ${p.hm.tabagismo?`<span class="badge bg-gray">ð¬ ${p.hm.tabagismo}</span>`:''}
+      ${p.hm.alcool?`<span class="badge bg-gray">ðº ${p.hm.alcool}</span>`:''}
+      ${p.hm.atividadeFisica?`<span class="badge bg-gray">ð ${p.hm.atividadeFisica}</span>`:''}
+      ${p.hm.horasSono?`<span class="badge bg-gray">ð´ ${p.hm.horasSono}</span>`:''}
+      ${p.hm.dietaEspecifica&&p.hm.dietaEspecifica!=='Nenhum'?`<span class="badge bg-gray">ð¥ ${p.hm.dietaEspecifica}</span>`:''}
+    </div>`:''}
+  </div>` : `
+  <div class="card" style="border-style:dashed">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--muted)">ð AvaliaÃ§Ã£o Inicial â nÃ£o respondida</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Envie o link do questionÃ¡rio ao paciente</div>
+      </div>
+      <button class="btn bg bsm" onclick="navigator.clipboard.writeText('https://www.menospesosaudedigital.com.br/questionario.html?cpf=${p.cpf}').then(()=>toast('Link copiado!'))">ð Copiar link</button>
+    </div>
+  </div>`}
+
+  <div class="card">
+    <div class="card-title">AÃ§Ãµes RÃ¡pidas</div>
+    <div class="row" style="flex-wrap:wrap;gap:8px">
+      <button class="btn bp" onclick="go('evolucoes-new')">ð Nova EvoluÃ§Ã£o</button>
+      <button class="btn bs" onclick="go('exames')">ð§ª Anexar Exame</button>
+      <button class="btn bs" onclick="go('questionarios')">ð QuestionÃ¡rios</button>
+      <button class="btn bs" onclick="go('mensagens')" style="background:#25D366;color:#fff;border-color:#25D366">ð¬ Mensagem WA</button>
+      <button class="btn bp" onclick="openMemed(this)">ð Receitar</button>
+      <button class="btn bg" onclick="go('cadastro')">ð¤ Editar Cadastro</button>
+    </div>
+  </div>`;
+}
+
+// CADASTRO
+function vCadastro(ct){
+  const p=P;
+  const qLink=`https://www.menospesosaudedigital.com.br/questionario.html?cpf=${p.cpf}`;
+  const qStatus=p.questionarioRespondidoEm;
+  ct.innerHTML=`
+  ${qStatus
+    ? `<div class="alert a-info">â QuestionÃ¡rio inicial respondido pelo paciente em ${fmtDt(qStatus)}.</div>`
+    : `<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#16a34a">ð QuestionÃ¡rio inicial</div>
+          <div style="font-size:12px;color:#15803d;margin-top:2px">Envie este link ao paciente para preencher antes da consulta</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn bs bsm" onclick="navigator.clipboard.writeText('${qLink}').then(()=>toast('Link copiado!'))">ð Copiar link</button>
+          <a href="${qLink}" target="_blank" class="btn bg bsm">ð Abrir questionÃ¡rio</a>
+        </div>
+      </div>`}
+  <div class="tabs">
+    <div class="tab active" onclick="sTab('tp',this)">Dados Pessoais</div>
+    <div class="tab" onclick="sTab('tc',this)">AvaliaÃ§Ã£o ClÃ­nica</div>
+    <div class="tab" onclick="sTab('tprog',this)">Programa</div>
+  </div>
+  <script>setTimeout(_initCadastroInputs,100)<\/script>
+
+  <!-- PESSOAL -->
+  <div id="tp">
+    <div class="card">
+      <div class="card-title">IdentificaÃ§Ã£o</div>
+      <div class="fr c3">
+        <div class="fg"><label>Nome completo *</label><input id="f-nome" value="${p.nome||''}" placeholder="Nome completo"></div>
+        <div class="fg"><label>CPF</label><input value="${fmtCPF(p.cpf)}" disabled></div>
+        <div class="fg"><label>Data de nascimento</label><input type="date" id="f-dob" value="${p.dataNascimento||''}"></div>
+      </div>
+      <div class="fr c3">
+        <div class="fg">
+          <label>Sexo biolÃ³gico <span style="font-weight:400;color:#9ca3af">(uso clÃ­nico)</span></label>
+          <select id="f-sexo">
+            <option value="">â</option>
+            <option ${p.sexoBiologico==='Masculino'?'selected':''}>Masculino</option>
+            <option ${p.sexoBiologico==='Feminino'?'selected':''}>Feminino</option>
+            <option ${p.sexoBiologico==='Intersexo'?'selected':''}>Intersexo</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Identidade de gÃªnero</label>
+          <select id="f-gen" onchange="document.getElementById('f-gen-outro').style.display=this.value==='Outro'?'block':'none'">
+            <option value="">â</option>
+            ${['Mulher cis','Homem cis','Mulher trans','Homem trans','NÃ£o-binÃ¡rio(a)','GÃªnero fluido','AgÃªnero','Prefiro nÃ£o informar','Outro']
+              .map(o=>`<option ${p.genero===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+          <input id="f-gen-outro" type="text" placeholder="Como prefere se identificar?" value="${!['Mulher cis','Homem cis','Mulher trans','Homem trans','NÃ£o-binÃ¡rio(a)','GÃªnero fluido','AgÃªnero','Prefiro nÃ£o informar','Outro',''].includes(p.genero)?p.genero:''}" style="margin-top:6px;display:${!['Mulher cis','Homem cis','Mulher trans','Homem trans','NÃ£o-binÃ¡rio(a)','GÃªnero fluido','AgÃªnero','Prefiro nÃ£o informar',''].includes(p.genero)&&p.genero?'block':'none'}">
+        </div>
+        <div class="fg"><label>Estado civil</label>
+          <select id="f-ecivil">
+            <option value="">â</option>
+            ${['Solteiro(a)','Casado(a)','UniÃ£o estÃ¡vel','Divorciado(a)','ViÃºvo(a)']
+              .map(o=>`<option ${p.estadoCivil===o?'selected':''}>${o}</option>`).join('')}
+          </select></div>
+      </div>
+      <div class="fr c2">
+        <div class="fg">
+          <label>Pronomes</label>
+          <select id="f-pronomes">
+            <option value="">â</option>
+            ${['Ela/Dela','Ele/Dele','Eles/Deles (neutro)','Prefiro nÃ£o informar']
+              .map(o=>`<option ${p.pronomes===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="fg"><label>ProfissÃ£o</label><input id="f-prof" value="${p.profissao||''}"></div>
+        <div class="fg"><label>E-mail</label><input type="email" id="f-email" value="${p.email||''}"></div>
+      </div>
+      <div class="fr c3">
+        <div class="fg"><label>Telefone / SMS</label><input type="tel" id="f-tel" value="${p.telefoneSms||''}"></div>
+        <div class="fg"><label>WhatsApp</label><input type="tel" id="f-wapp" value="${p.whatsapp||''}"></div>
+        <div class="fg"><label>Contato de emergÃªncia</label><input id="f-emerg" value="${p.contatoEmergencia||''}" placeholder="Nome â telefone"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">EndereÃ§o</div>
+      <div class="fr c2">
+        <div class="fg"><label>EndereÃ§o completo</label><input id="f-end" value="${p.endereco||''}"></div>
+        <div class="fg"><label>CEP</label><input id="f-cep" value="${p.cep||''}"></div>
+      </div>
+      <div class="fr c3">
+        <div class="fg" style="grid-column:span 2">
+          <label>Cidade</label>
+          <div class="cidade-wrap">
+            <input id="f-cid" value="${p.cidade||''}" placeholder="Digite para buscar..." autocomplete="off">
+          </div>
+        </div>
+        <div class="fg"><label>Estado (UF)</label><input id="f-uf" value="${p.estado||''}" maxlength="2" placeholder="SP" readonly style="background:#f9fafb"></div>
+      </div>
+    </div>
+    <div class="brow"><button class="btn bp" onclick="savePessoal()">ð¾ Salvar dados pessoais</button></div>
+  </div>
+
+  <!-- CLÃNICO -->
+  <div id="tc" class="hidden">
+    <div class="card">
+      <div class="card-title">Queixa e Objetivo</div>
+      <div class="fg"><label>Queixa principal</label><textarea id="f-queixa">${p.queixaPrincipal||''}</textarea></div>
+      <div class="fg"><label>Objetivo do tratamento</label><textarea id="f-obj">${p.objetivoTratamento||''}</textarea></div>
+    </div>
+    <div class="card">
+      <div class="card-title">HistÃ³ria MÃ©dica</div>
+      <div class="fr c2">
+        <div class="fg"><label>DoenÃ§as / comorbidades</label><textarea id="f-doe">${p.hm.doencas||''}</textarea></div>
+        <div class="fg"><label>Cirurgias anteriores</label><textarea id="f-cir">${p.hm.cirurgias||''}</textarea></div>
+      </div>
+      <div class="fr c2">
+        <div class="fg"><label>InternaÃ§Ãµes</label><textarea id="f-int" style="min-height:60px">${p.hm.internacoes||''}</textarea></div>
+        <div class="fg"><label>Alergias</label><textarea id="f-ale" style="min-height:60px">${p.hm.alergias||''}</textarea></div>
+      </div>
+      <div class="fr c2">
+        <div class="fg"><label>Medicamentos em uso</label><textarea id="f-med">${p.hm.medicamentos||''}</textarea></div>
+        <div class="fg"><label>Antecedentes familiares</label><textarea id="f-ant">${p.hm.antecedenteFamiliar||''}</textarea></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">HÃ¡bitos</div>
+      <div class="fr c2">
+        <div class="fg"><label>Tabagismo</label>
+          <select id="f-tab">
+            <option value="">â</option>
+            ${['Nunca fumou','Ex-tabagista','Fumante atual'].map(o=>`<option ${p.hm.tabagismo===o?'selected':''}>${o}</option>`).join('')}
+          </select></div>
+        <div class="fg"><label>Ãlcool</label>
+          <select id="f-alc">
+            <option value="">â</option>
+            ${['NÃ£o consome','Socialmente','Regularmente','Dependente'].map(o=>`<option ${p.hm.alcool===o?'selected':''}>${o}</option>`).join('')}
+          </select></div>
+      </div>
+      <div class="fr c2">
+        <div class="fg"><label>Cannabis</label>
+          <select id="f-can">
+            <option value="">â</option>
+            ${['NÃ£o','Eventualmente','Regularmente'].map(o=>`<option ${p.hm.cannabis===o?'selected':''}>${o}</option>`).join('')}
+          </select></div>
+        <div class="fg"><label>Outras drogas</label><input id="f-drog" value="${p.hm.outrasDrogas||''}"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">SaÃºde da Mulher</div>
+      <div class="fr c3">
+        <div class="fg"><label>GestaÃ§Ã£o atual</label>
+          <select id="f-gest"><option value="">NÃ£o</option><option value="Sim" ${p.hm.gestacao==='Sim'?'selected':''}>Sim</option></select></div>
+        <div class="fg"><label>Ãltima menstruaÃ§Ã£o</label><input type="date" id="f-mens" value="${p.hm.ultimaMenstruacao||''}"></div>
+        <div class="fg"><label>MÃ©todo contraceptivo</label><input id="f-contra" value="${p.hm.metodoContraceptivo||''}"></div>
+      </div>
+    </div>
+    <div class="brow"><button class="btn bp" onclick="saveClinico()">ð¾ Salvar avaliaÃ§Ã£o clÃ­nica</button></div>
+  </div>
+
+  <!-- PROGRAMA -->
+  <div id="tprog" class="hidden">
+    <div class="card">
+      <div class="card-title">Programa e Medidas</div>
+      <div class="fr c2">
+        <div class="fg"><label>Programa contratado</label>
+          <select id="f-prog">
+            <option value="">â</option>
+            ${['InÃ­cio Seguro','Acompanhamento Estendido']
+              .map(o=>`<option ${p.programaContratado===o?'selected':''}>${o}</option>`).join('')}
+          </select></div>
+        <div class="fg"><label>Data de inÃ­cio</label><input type="date" id="f-ini" value="${p.dataInicio||''}"></div>
+      </div>
+      <div class="fr c3">
+        <div class="fg"><label>Altura (cm)</label><input type="number" id="f-alt" value="${p.altura||''}" placeholder="170"></div>
+        <div class="fg"><label>Peso inicial (kg)</label><input type="number" id="f-pi" value="${p.pesoInicial||''}" step="0.1"></div>
+        <div class="fg"><label>Peso atual (kg)</label><input type="number" id="f-pa" value="${p.pesoAtual||''}" step="0.1"></div>
+      </div>
+      <div class="fr c2">
+        <div class="fg"><label>MedicaÃ§Ã£o atual</label><input id="f-meda" value="${p.medicacaoAtual||''}" placeholder="ex: Semaglutida"></div>
+        <div class="fg"><label>Dose atual</label><input id="f-dose" value="${p.doseAtual||''}" placeholder="ex: 0,5 mg/sem"></div>
+      </div>
+    </div>
+    <div class="brow"><button class="btn bp" onclick="saveProg()">ð¾ Salvar dados do programa</button></div>
+  </div>`;
+}
+
+function sTab(id, btn){
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['tp','tc','tprog'].forEach(x=>document.getElementById(x)?.classList.toggle('hidden',x!==id));
+  if(id==='tp') mountCidadeInput();
+}
+
+function mountCidadeInput(){
+  IBGE.mount('f-cid', (nome, uf, estado)=>{
+    const ufEl = document.getElementById('f-uf');
+    if(ufEl) ufEl.value = uf;
+  });
+}
+
+// Ativa autocomplete ao renderizar cadastro (chamado por vCadastro via setTimeout)
+function _initCadastroInputs(){ mountCidadeInput(); }
+
+function savePessoal(){
+  const p=P, wasMissing=!p.nome;
+  p.nome=v('f-nome'); p.dataNascimento=v('f-dob'); p.sexoBiologico=v('f-sexo');
+  // GÃªnero: se "Outro", usa o campo de texto livre
+  const genSel=v('f-gen');
+  p.genero = genSel==='Outro' ? (v('f-gen-outro')||'Outro') : genSel;
+  p.pronomes=v('f-pronomes'); p.estadoCivil=v('f-ecivil'); p.profissao=v('f-prof');
+  p.email=v('f-email'); p.telefoneSms=v('f-tel'); p.whatsapp=v('f-wapp');
+  p.contatoEmergencia=v('f-emerg'); p.endereco=v('f-end'); p.cidade=v('f-cid');
+  p.estado=v('f-uf'); p.cep=v('f-cep');
+  TL.add(p,'cadastro', wasMissing&&p.nome?`Cadastro preenchido â ${p.nome}`:'Dados pessoais atualizados');
+  P=p; refreshSb(); toast('Dados pessoais salvos!');
+}
+function saveClinico(){
+  const p=P;
+  p.queixaPrincipal=v('f-queixa'); p.objetivoTratamento=v('f-obj');
+  p.hm.doencas=v('f-doe'); p.hm.cirurgias=v('f-cir'); p.hm.internacoes=v('f-int');
+  p.hm.alergias=v('f-ale'); p.hm.medicamentos=v('f-med'); p.hm.antecedenteFamiliar=v('f-ant');
+  p.hm.tabagismo=v('f-tab'); p.hm.alcool=v('f-alc'); p.hm.cannabis=v('f-can');
+  p.hm.outrasDrogas=v('f-drog'); p.hm.gestacao=v('f-gest');
+  p.hm.ultimaMenstruacao=v('f-mens'); p.hm.metodoContraceptivo=v('f-contra');
+  TL.add(p,'cadastro','AvaliaÃ§Ã£o clÃ­nica atualizada');
+  P=p; toast('AvaliaÃ§Ã£o clÃ­nica salva!');
+}
+function saveProg(){
+  const p=P;
+  p.programaContratado=v('f-prog'); p.dataInicio=v('f-ini');
+  p.altura=v('f-alt'); p.pesoInicial=v('f-pi'); p.pesoAtual=v('f-pa');
+  p.medicacaoAtual=v('f-meda'); p.doseAtual=v('f-dose');
+  TL.add(p,'sistema',`Dados do programa atualizados â ${p.programaContratado||'sem programa'}`);
+  P=p; refreshSb(); toast('Dados do programa salvos!');
+}
+function v(id){ const el=document.getElementById(id); return el?el.value:''; }
+function refreshSb(){
+  const s=document.getElementById('sb-patient');
+  if(P) s.innerHTML=`<div class="pname">${P.nome||'Paciente sem nome'}</div><div class="pcpf">${fmtCPF(P.cpf)}</div>`;
+}
+
+// QUESTIONÃRIOS
+function vQs(ct){
+  const p=P;
+  ct.innerHTML=`
+  <div class="card">
+    <div class="sec-head">
+      <div class="sec-title">QuestionÃ¡rios (${p.questionarios.length})</div>
+      <button class="btn bg bsm" onclick="addQ()">+ Adicionar</button>
+    </div>
+    ${p.questionarios.map((q,i)=>`
+      <div class="qi">
+        <span>ð</span>
+        <div class="qi-name">${q.nome}</div>
+        ${qBadge(q.status)}
+        <select class="btn bs bsm" style="cursor:pointer" onchange="updQ(${i},this.value)">
+          <option value="nao-enviado" ${q.status==='nao-enviado'?'selected':''}>NÃ£o enviado</option>
+          <option value="enviado" ${q.status==='enviado'?'selected':''}>Enviado</option>
+          <option value="respondido" ${q.status==='respondido'?'selected':''}>Respondido</option>
+          <option value="interpretado" ${q.status==='interpretado'?'selected':''}>Interpretado</option>
+        </select>
+      </div>`).join('')}
+  </div>
+  <div class="alert a-info">â¹ï¸ Futuramente os questionÃ¡rios serÃ£o enviados via WhatsApp e respondidos pelo prÃ³prio paciente.</div>`;
+}
+function updQ(i,s){
+  const p=P, q=p.questionarios[i], old=q.status;
+  q.status=s;
+  if(s!==old && s!=='nao-enviado') TL.add(p,'questionario',`QuestionÃ¡rio "${q.nome}" marcado como ${s}`);
+  else DB.put(p);
+  toast('Status atualizado');
+}
+function addQ(){
+  const nome=prompt('Nome do questionÃ¡rio:');
+  if(!nome) return;
+  P.questionarios.push({id:Date.now()+'',nome,status:'nao-enviado'});
+  DB.put(P); vQs(document.getElementById('content'));
+}
+
+// EXAMES
+function vExames(ct){
+  const p=P;
+  const cats=[
+    {id:'laboratorial',ico:'ð§ª',label:'Laboratorial'},
+    {id:'bioimpedancia',ico:'âï¸',label:'BioimpedÃ¢ncia'},
+    {id:'imagem',ico:'ð©»',label:'Imagem'},
+    {id:'outro',ico:'ð',label:'Outros'},
+  ];
+  const exames=p.exames||[];
+  ct.innerHTML=`
+  <div class="card">
+    <div class="card-title">Categoria</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      ${cats.map(c=>`<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:var(--text)">
+        <input type="radio" name="cat" value="${c.id}" ${c.id==='laboratorial'?'checked':''}> ${c.ico} ${c.label}
+      </label>`).join('')}
+    </div>
+    <div id="dz" class="dropzone" onclick="document.getElementById('fi').click()"
+      ondragover="event.preventDefault();this.classList.add('dz-over')"
+      ondragleave="this.classList.remove('dz-over')"
+      ondrop="onDrop(event)">
+      <div class="dz-ico">ð¤</div>
+      <div class="dz-txt">Arraste arquivos aqui ou clique para selecionar<br>
+        <span style="font-size:12px">Exames, laudos, bioimpedÃ¢ncia, imagens</span></div>
+    </div>
+    <input type="file" id="fi" multiple class="hidden" onchange="onFiles(this.files)">
+  </div>
+
+  ${cats.map(c=>{
+    const list=exames.filter(e=>e.cat===c.id);
+    if(!list.length) return '';
+    return `<div class="card">
+      <div class="card-title">${c.ico} ${c.label} (${list.length})</div>
+      ${list.map(e=>`
+        <div class="fi">
+          <span style="font-size:18px">${c.ico}</span>
+          <div class="fi-name">${e.nome}</div>
+          <div class="fi-meta">${e.tam||''} Â· ${fmtD(e.data)}</div>
+          <button class="btn bs bsm" onclick="rmExame('${e.id}')">â</button>
+        </div>`).join('')}
+    </div>`;
+  }).join('')}
+  ${!exames.length?'<div class="muted" style="text-align:center;padding:20px">Nenhum exame anexado</div>':''}`;
+}
+function getCat(){ const r=document.querySelector('input[name="cat"]:checked'); return r?r.value:'laboratorial'; }
+function onDrop(e){
+  e.preventDefault();
+  document.getElementById('dz')?.classList.remove('dz-over');
+  onFiles(e.dataTransfer.files);
+}
+function onFiles(files){
+  if(!files||!files.length) return;
+  const p=P, cat=getCat();
+  if(!p.exames) p.exames=[];
+  const cico={laboratorial:'ð§ª',bioimpedancia:'âï¸',imagem:'ð©»',outro:'ð'};
+  Array.from(files).forEach(f=>{
+    const ex={id:Date.now()+Math.random().toString(36).slice(2),nome:f.name,cat,tam:bytes(f.size),tipo:f.type,data:new Date().toISOString()};
+    p.exames.push(ex);
+    TL.add(p,cat==='bioimpedancia'?'bioimpedancia':'exame',`Exame anexado: ${f.name}`);
+  });
+  P=p; toast(`${files.length} arquivo(s) adicionado(s)!`);
+  vExames(document.getElementById('content'));
+}
+function rmExame(id){
+  if(!confirm('Remover este arquivo?')) return;
+  P.exames=(P.exames||[]).filter(e=>e.id!==id);
+  DB.put(P); vExames(document.getElementById('content'));
+}
+
+// TIMELINE
+function vTL(ct){
+  const evs=P.timeline||[];
+  ct.innerHTML=`
+  <div class="card">
+    <div class="sec-head">
+      <div class="sec-title">Timeline</div>
+      <span class="muted">${evs.length} evento(s)</span>
+    </div>
+    ${!evs.length?'<div class="muted">Nenhum evento registrado</div>':''}
+    <div>
+      ${evs.map(e=>`
+        <div class="tl-item">
+          <div class="tl-dot">${TL.icons[e.tipo]||'â¢'}</div>
+          <div class="tl-body">
+            <div class="tl-title">${e.desc}</div>
+            <div class="tl-date">${fmtDt(e.data)}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// EVOLUÃÃES
+function vEvs(ct){
+  const evs=P.evolucoes||[];
+  ct.innerHTML=`
+  <div class="sec-head" style="margin-bottom:14px">
+    <div class="sec-title">EvoluÃ§Ãµes (${evs.length})</div>
+    <button class="btn bp" onclick="go('evolucoes-new')">+ Nova EvoluÃ§Ã£o</button>
+  </div>
+  ${!evs.length?'<div class="card muted">Nenhuma evoluÃ§Ã£o registrada</div>':''}
+  ${evs.map((e,i)=>`
+    <div class="ev-card">
+      <div class="ev-head" onclick="tgEv('eb${i}')">
+        <div class="row" style="gap:10px">
+          <strong>EvoluÃ§Ã£o ${evs.length-i}</strong>
+          <span class="muted">${fmtDt(e.data)}</span>
+          ${e.tipo?`<span class="badge bg-gray">${e.tipo}</span>`:''}
+          ${e.pesoAtd?`<span class="badge bg-blue">${e.pesoAtd} kg</span>`:''}
+        </div>
+        <span class="muted">â¼</span>
+      </div>
+      <div id="eb${i}" class="ev-body hidden">
+        ${evSec('Resumo',e.resumo)}
+        ${evSec('S â Subjetivo',e.s)}
+        ${evSec('O â Objetivo',e.o)}
+        ${evSec('A â AvaliaÃ§Ã£o',e.a)}
+        ${evSec('P â Plano',e.pl)}
+        ${evSec('Conduta',e.conduta)}
+        ${evSec('OrientaÃ§Ãµes',e.orient)}
+        ${evSec('Receitas',e.receitas)}
+        ${evSec('Pedidos',e.pedidos)}
+        ${evSec('PrÃ³ximos passos',e.prox)}
+      </div>
+    </div>`).join('')}`;
+}
+function evSec(t,c){ return c?`<div class="ev-sec"><div class="ev-sec-t">${t}</div><div class="ev-text">${c}</div></div>`:''; }
+function tgEv(id){ document.getElementById(id)?.classList.toggle('hidden'); }
+
+function vNovaEv(ct){
+  const p=P;
+  ct.innerHTML=`
+  <div class="card">
+    <div class="card-title">Nova EvoluÃ§Ã£o â ${p.nome||'Paciente'}</div>
+    <div class="fr c3" style="margin-bottom:14px">
+      <div class="fg"><label>Data / hora</label><input type="datetime-local" id="ev-dt" value="${new Date().toISOString().slice(0,16)}"></div>
+      <div class="fg"><label>Peso (kg)</label><input type="number" id="ev-peso" step="0.1" value="${p.pesoAtual||''}" placeholder="kg"></div>
+      <div class="fg"><label>Tipo</label>
+        <select id="ev-tipo">
+          <option>Consulta inicial</option>
+          <option>Retorno 30 dias</option>
+          <option>Retorno 60 dias</option>
+          <option>Retorno 90 dias</option>
+          <option>Retorno livre</option>
+          <option>IntercorrÃªncia</option>
+        </select></div>
+    </div>
+    <div class="fg"><label>Resumo do atendimento</label>
+      <textarea id="ev-res" rows="3" placeholder="SÃ­ntese do atendimento â aparece no dashboard..."></textarea></div>
+
+    <hr class="div">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">SOAP</div>
+    <div class="fg"><div class="soap-l">S â Subjetivo</div><textarea id="ev-s" rows="3" placeholder="Queixas e relato do paciente..."></textarea></div>
+    <div class="fg"><div class="soap-l">O â Objetivo</div><textarea id="ev-o" rows="3" placeholder="Peso, PA, FC, exames..."></textarea></div>
+    <div class="fg"><div class="soap-l">A â AvaliaÃ§Ã£o</div><textarea id="ev-a" rows="3" placeholder="InterpretaÃ§Ã£o clÃ­nica..."></textarea></div>
+    <div class="fg"><div class="soap-l">P â Plano</div><textarea id="ev-p" rows="3" placeholder="Plano terapÃªutico..."></textarea></div>
+
+    <hr class="div">
+    <div class="fr c2">
+      <div class="fg"><label>Conduta</label><textarea id="ev-cond" rows="3" placeholder="DecisÃµes tomadas..."></textarea></div>
+      <div class="fg"><label>OrientaÃ§Ãµes ao paciente</label><textarea id="ev-ori" rows="3" placeholder="O que foi orientado..."></textarea></div>
+    </div>
+    <div class="fr c2">
+      <div class="fg"><label>ð Receitas emitidas</label><textarea id="ev-rx" rows="2" placeholder="Medicamentos, dose, posologia..."></textarea></div>
+      <div class="fg"><label>ð Pedidos / encaminhamentos</label><textarea id="ev-ped" rows="2" placeholder="Exames solicitados..."></textarea></div>
+    </div>
+    <div class="fg"><label>PrÃ³ximos passos</label><textarea id="ev-prox" rows="2" placeholder="PrÃ³ximo retorno, metas..."></textarea></div>
+
+    <div class="row" style="gap:10px;margin-top:8px">
+      <button class="btn bp blg" onclick="saveEv()">ð¾ Salvar EvoluÃ§Ã£o</button>
+      <button class="btn bs" onclick="go('evolucoes')">Cancelar</button>
+    </div>
+  </div>`;
+}
+
+function saveEv(){
+  const p=P;
+  const peso=v('ev-peso');
+  const ev={
+    id:Date.now(),
+    data:v('ev-dt')||new Date().toISOString(),
+    tipo:v('ev-tipo'), pesoAtd:peso,
+    resumo:v('ev-res'), s:v('ev-s'), o:v('ev-o'), a:v('ev-a'), pl:v('ev-p'),
+    conduta:v('ev-cond'), orient:v('ev-ori'), receitas:v('ev-rx'),
+    pedidos:v('ev-ped'), prox:v('ev-prox'),
+  };
+  if(!p.evolucoes) p.evolucoes=[];
+  p.evolucoes.unshift(ev);
+  if(peso) p.pesoAtual=peso;
+  if(ev.resumo) p.resumoClinico=ev.resumo;
+  TL.add(p,'consulta',`EvoluÃ§Ã£o registrada â ${ev.tipo}${peso?' Â· '+peso+' kg':''}`);
+  if(ev.receitas) TL.add(p,'receita','Receita: '+ev.receitas.slice(0,80));
+  if(ev.pedidos) TL.add(p,'pedido','Pedido: '+ev.pedidos.slice(0,80));
+  P=p; toast('EvoluÃ§Ã£o salva!'); go('dashboard');
+}
+
+// ADESÃO
+function vAdesao(ct){
+  const p=P;
+  const qResp=(p.questionarios||[]).filter(q=>q.status==='respondido'||q.status==='interpretado').length;
+  const qTot=(p.questionarios||[]).length;
+  const nEx=(p.exames||[]).length;
+  const nBio=(p.exames||[]).filter(e=>e.cat==='bioimpedancia').length;
+  const nEv=(p.evolucoes||[]).length;
+
+  const itens=[
+    {l:'QuestionÃ¡rios respondidos', val:qResp, max:qTot||1, disp:`${qResp}/${qTot}`},
+    {l:'Exames realizados', val:Math.min(nEx,5), max:5, disp:`${nEx} exame(s)`},
+    {l:'BioimpedÃ¢ncias', val:Math.min(nBio,3), max:3, disp:`${nBio} registro(s)`},
+    {l:'EvoluÃ§Ãµes/consultas', val:Math.min(nEv,5), max:5, disp:`${nEv} consulta(s)`},
+    {l:'Peso cadastrado', val:p.pesoAtual?1:0, max:1, disp:p.pesoAtual?'Sim â':'Pendente'},
+    {l:'MedicaÃ§Ã£o cadastrada', val:p.medicacaoAtual?1:0, max:1, disp:p.medicacaoAtual||'NÃ£o cadastrada'},
+  ];
+
+  ct.innerHTML=`
+  <div class="alert a-info">â¹ï¸ Score de AdesÃ£o estruturado. O cÃ¡lculo automÃ¡tico serÃ¡ implementado em versÃ£o futura.</div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Indicadores</div>
+    <div class="ad-grid">
+      ${itens.map(it=>`
+        <div class="ad-item">
+          <div class="ad-l">${it.l}</div>
+          <div class="ad-bar"><div class="ad-fill" style="width:${Math.round((it.val/it.max)*100)}%"></div></div>
+          <div class="ad-v">${it.disp}</div>
+        </div>`).join('')}
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Campos Adicionais</div>
+    <div class="fr c2">
+      <div class="fg"><label>AdesÃ£o medicamentosa (% auto-referida)</label>
+        <input type="number" id="ad-m" min="0" max="100" value="${p.adesao?.medicamentosa||''}" placeholder="0â100"></div>
+      <div class="fg"><label>Comparecimento Ã s consultas (%)</label>
+        <input type="number" id="ad-c" min="0" max="100" value="${p.adesao?.comparecimento||''}" placeholder="0â100"></div>
+    </div>
+    <button class="btn bp" onclick="saveAdesao()">ð¾ Salvar</button>
+  </div>`;
+}
+function saveAdesao(){
+  if(!P.adesao) P.adesao={};
+  P.adesao.medicamentosa=v('ad-m'); P.adesao.comparecimento=v('ad-c');
+  DB.put(P); toast('Salvo!');
+}
+
+// RELATÃRIOS
+function vRelat(ct){
+  const p=P;
+  const cpf=p.cpf;
+  const rel=(tipo,label)=>`relatorio.html?cpf=${cpf}&tipo=${tipo}`;
+
+  ct.innerHTML=`
+  <div class="g2">
+    ${[
+      {ico:'ð',t:'Resumo Inicial',d:'AvaliaÃ§Ã£o inicial completa: histÃ³ria clÃ­nica, hÃ¡bitos, medidas e objetivo. Ideal para registrar o ponto de partida.',tipo:'inicial'},
+      {ico:'ð',t:'Resumo 60 Dias',d:'EvoluÃ§Ã£o do peso, tabela de consultas, questionÃ¡rios e medicaÃ§Ã£o atual. Comparativo de IMC.',tipo:'60dias'},
+      {ico:'ð',t:'Resumo Final',d:'Resultados totais do programa: antes Ã depois, perda total, resumo clÃ­nico e Ãºltima evoluÃ§Ã£o.',tipo:'final'},
+      {ico:'ð¯',t:'Score de AdesÃ£o',d:'RelatÃ³rio de adesÃ£o do paciente: questionÃ¡rios, exames, consultas, peso e medicaÃ§Ã£o.',tipo:'adesao'},
+    ].map(r=>`
+      <div class="card">
+        <div style="font-size:28px;margin-bottom:8px">${r.ico}</div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px">${r.t}</div>
+        <div class="muted" style="font-size:13px;margin-bottom:14px">${r.d}</div>
+        <div style="display:flex;gap:8px">
+          <a href="${rel(r.tipo)}" target="_blank" class="btn bp bsm">ð Visualizar</a>
+          <a href="${rel(r.tipo)}" target="_blank" class="btn bg bsm" onclick="setTimeout(()=>window.open('${rel(r.tipo)}').print(),800)">ð¨ï¸ PDF</a>
+        </div>
+      </div>`).join('')}
+  </div>
+
+  <div class="card" style="margin-top:4px">
+    <div class="card-title">Resumo rÃ¡pido do paciente</div>
+    <div class="g2" style="font-size:13px">
+      <div>
+        <div class="muted">Peso inicial â atual</div>
+        <strong>${p.pesoInicial||'â'} kg â ${p.pesoAtual||'â'} kg</strong>
+        ${p.pesoInicial&&p.pesoAtual?`<span class="badge bg-green" style="margin-left:8px">â${(parseFloat(p.pesoInicial)-parseFloat(p.pesoAtual)).toFixed(1)} kg</span>`:''}
+      </div>
+      <div>
+        <div class="muted">MedicaÃ§Ã£o</div>
+        <strong>${p.medicacaoAtual||'â'}${p.doseAtual?' â '+p.doseAtual:''}</strong>
+      </div>
+      <div>
+        <div class="muted">EvoluÃ§Ãµes registradas</div>
+        <strong>${(p.evolucoes||[]).length} consulta(s)</strong>
+      </div>
+      <div>
+        <div class="muted">Jornada</div>
+        <strong>${p.dataInicio?`${Math.floor((new Date()-new Date(p.dataInicio))/86400000)+1} dias`:'â'}</strong>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ââ MEMED PRESCRIÃÃO DIGITAL âââââââââââââââââââââââââââââââââââââ
+let _memedReady = false;
+
+// Credenciais Memed homologaÃ§Ã£o (substituir por produÃ§Ã£o quando disponÃ­vel)
+const _MEMED_CPF        = '01547182628';
+const _MEMED_API_KEY    = 'iJGiB4kjDGOLeDFPWMG3no9VnN7Abpqe3w1jEFm6olkhkZD6oSfSmYCm';
+const _MEMED_SECRET_KEY = 'Xe8M5GvBGCr4FStKfxXKisRo3SfYKI7KrTMkJpCAstzu2yXVN4av5nmL';
+const _MEMED_SCRIPT_URL = 'https://integrations.memed.com.br/modulos/plataforma.sinapse-prescricao/build/sinapse-prescricao.min.js';
+
+async function _getMemedToken() {
+  // 1. Tenta via Apps Script (backend seguro) se configurado
+  if (SYNC.isConfigured()) {
+    try {
+      const url = `${SYNC.url}?action=memed-token&key=${encodeURIComponent(SYNC.key)}`;
+      const r   = await fetch(url, { redirect: 'follow' });
+      const d   = await r.json();
+      if (d.ok && d.token) return d;
+    } catch(e) { console.warn('[Memed] Backend falhou, tentando direto:', e.message); }
+  }
+
+  // 2. Fallback: chama API Memed diretamente do browser (homologaÃ§Ã£o)
+  const base    = 'https://integrations.api.memed.com.br/v1/sinapse-prescricao/usuarios';
+  const qs      = `?api-key=${_MEMED_API_KEY}&secret-key=${_MEMED_SECRET_KEY}`;
+  const headers = { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/json' };
+
+  // Tenta buscar prescritor existente
+  try {
+    const r = await fetch(`${base}/${_MEMED_CPF}${qs}`, { headers });
+    const d = await r.json();
+    const token = d?.data?.attributes?.token;
+    if (token) return { ok: true, token, scriptUrl: _MEMED_SCRIPT_URL };
+  } catch(e) { console.warn('[Memed] GET direto falhou:', e.message); }
+
+  // Cadastra prescritor se nÃ£o encontrado
+  try {
+    const payload = JSON.stringify({ data: { type: 'usuarios', attributes: {
+      external_id: _MEMED_CPF, nome: 'Ailton', sobrenome: 'Vieira', cpf: _MEMED_CPF,
+      board: { board_code: 'CRM', board_number: '52628', board_state: 'MG' },
+      email: 'menospesosaudedigital@gmail.com', sexo: 'M', data_nascimento: '28/05/1987'
+    }}});
+    const r = await fetch(`${base}${qs}`, { method: 'POST', headers, body: payload });
+    const d = await r.json();
+    const token = d?.data?.attributes?.token;
+    if (token) return { ok: true, token, scriptUrl: _MEMED_SCRIPT_URL };
+    return { ok: false, error: JSON.stringify(d) };
+  } catch(e) { return { ok: false, error: e.message }; }
+}
+
+async function openMemed(btn) {
+  if (!P) { toast('Selecione um paciente primeiro'); return; }
+
+  const orig = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = 'Carregandoâ¦'; }
+
+  try {
+    const d = await _getMemedToken();
+    if (!d.ok) { toast('Erro Memed: ' + (d.error || 'token nÃ£o obtido')); return; }
+
+    // Se o mÃ³dulo jÃ¡ estÃ¡ carregado, sÃ³ abre e seta paciente
+    if (_memedReady && window.MdHub) {
+      await _memedSetPaciente();
+      MdHub.module.show('plataforma.prescricao');
+      return;
+    }
+
+    // Remove script anterior e carrega novo com o token atualizado
+    const old = document.getElementById('memed-script');
+    if (old) old.remove();
+    _memedReady = false;
+
+    const s = document.createElement('script');
+    s.id  = 'memed-script';
+    s.src = d.scriptUrl;
+    s.setAttribute('data-token', d.token);
+    s.setAttribute('data-color', '#059669');
+    document.head.appendChild(s);
+
+    // Aguarda o mÃ³dulo de prescriÃ§Ã£o inicializar
+    await new Promise((resolve) => {
+      const waitScript = () => {
+        if (window.MdSinapsePrescricao) {
+          MdSinapsePrescricao.event.add('core:moduleInit', async function(module) {
+            if (module.name === 'plataforma.prescricao') {
+              _memedReady = true;
+              await _memedSetPaciente();
+              MdHub.module.show('plataforma.prescricao');
+              MdSinapsePrescricao.event.add('core:prescricaoImpressa', _memedSalvarReceita);
+              resolve();
+            }
+          });
+        } else {
+          setTimeout(waitScript, 200);
+        }
+      };
+      waitScript();
+    });
+
+  } catch(e) {
+    console.error('[Memed]', e);
+    toast('Erro ao abrir prescriÃ§Ã£o: ' + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = orig; }
+  }
+}
+
+async function _memedSetPaciente() {
+  const p = P;
+  if (!p || !window.MdHub) return;
+
+  // Converte data nascimento de YYYY-MM-DD para DD/MM/YYYY
+  let dob = '';
+  if (p.dataNascimento) {
+    const pts = p.dataNascimento.split('-');
+    if (pts.length === 3) dob = `${pts[2]}/${pts[1]}/${pts[0]}`;
+  }
+
+  const dados = {
+    idExterno: p.cpf,
+    nome:      p.nome || '',
+    cpf:       p.cpf  || '',
+  };
+  if (dob)          dados.data_nascimento = dob;
+  if (p.sexo)       dados.sexo   = p.sexo === 'M' ? 'Masculino' : 'Feminino';
+  if (p.whatsapp)   dados.telefone = p.whatsapp.replace(/\D/g,'');
+  if (p.email)      dados.email   = p.email;
+  if (p.pesoAtual)  dados.peso    = parseFloat(p.pesoAtual);
+  if (p.alturaM)    dados.altura  = parseFloat(p.alturaM);
+
+  await MdHub.command.send('plataforma.prescricao', 'setPaciente', dados);
+}
+
+function _memedSalvarReceita(prescricao) {
+  if (!P) return;
+  const agora = new Date().toISOString();
+  P.receitas  = P.receitas  || [];
+  P.timeline  = P.timeline  || [];
+
+  P.receitas.push({
+    em:       agora,
+    descricao:'Receita emitida via Memed',
+    link:     prescricao?.link || '',
+    id:       prescricao?.id   || ''
+  });
+  P.timeline.push({
+    tipo:  'receita',
+    texto: 'Receita emitida via Memed',
+    em:    agora,
+    link:  prescricao?.link || ''
+  });
+
+  DB.put(P);
+  SYNC.push(P);
+  toast('Receita salva no prontuÃ¡rio');
+}
+
+// ââ MENSAGENS WHATSAPP ââââââââââââââââââââââââââââââââââââââââââââ
+function vMensagens(ct){
+  const p=P;
+  const nome=p.nome||(p.cpf?'Paciente':'â');
+  const primeiroNome=nome.split(' ')[0];
+  const fone=(p.whatsapp||p.telefoneSms||'').replace(/\D/g,'');
+  const foneBR=fone.startsWith('55')?fone:'55'+fone;
+  const pesoAtual=parseFloat(p.pesoAtual||0);
+  const pesoInicial=parseFloat(p.pesoInicial||0);
+  const pesoMeta=parseFloat(p.pesoMeta||0);
+  const perdaTotal=pesoInicial&&pesoAtual?Math.max(0,pesoInicial-pesoAtual).toFixed(1):null;
+  const faltaMeta=pesoMeta&&pesoAtual?Math.max(0,pesoAtual-pesoMeta).toFixed(1):null;
+  const qLink='https://www.menospesosaudedigital.com.br/questionario.html?cpf='+p.cpf;
+  const hoje=new Date().toLocaleDateString('pt-BR');
+
+  // PendÃªncias automÃ¡ticas
+  const pends=[];
+  if(!p.questionarioRespondidoEm) pends.push('ð AvaliaÃ§Ã£o inicial ainda nÃ£o preenchida');
+  const qPend=(p.questionarios||[]).filter(q=>q.status==='nao-enviado'||q.status==='aguardando').length;
+  if(qPend) pends.push(`ð ${qPend} questionÃ¡rio(s) pendente(s)`);
+  const semExame=(p.exames||[]).length===0;
+  if(semExame) pends.push('ð§ª Nenhum exame laboratorial anexado');
+
+  const OCASIOES=[
+    {id:'cadastro',   icon:'ð', label:'PÃ³s-cadastro',        sub:'Boas-vindas + link de avaliaÃ§Ã£o'},
+    {id:'avaliacao',  icon:'ð', label:'AvaliaÃ§Ã£o inicial',    sub:'Enviar link do questionÃ¡rio'},
+    {id:'consulta',   icon:'ð', label:'PÃ³s-consulta',         sub:'Resumo do atendimento'},
+    {id:'progresso',  icon:'ð', label:'Progresso mensal',     sub:'MÃ©tricas e evoluÃ§Ã£o do peso'},
+    {id:'pendencia',  icon:'â°', label:'PendÃªncia',            sub:'Cobrar exame, questionÃ¡rio etc.'},
+  ];
+
+  const templates={
+    cadastro:()=>`OlÃ¡, *${primeiroNome}*!\n\nSeja muito bem-vindo ao *Menos Peso*. Fico feliz em ter vocÃª por aqui.\n\nPara comeÃ§armos, preciso que vocÃª preencha a avaliaÃ§Ã£o inicial. SÃ£o apenas alguns minutos e vÃ£o me ajudar a personalizar o seu tratamento:\n\n*AvaliaÃ§Ã£o Inicial:*\n${qLink}\n\nQualquer dÃºvida, pode me chamar aqui.`,
+
+    avaliacao:()=>`OlÃ¡, *${primeiroNome}*!\n\nAntes da nossa consulta, preciso que vocÃª preencha a avaliaÃ§Ã£o inicial. Ela Ã© fundamental para eu entender melhor a sua saÃºde e personalizar o tratamento:\n\n*Clique aqui para preencher:*\n${qLink}\n\nPreencha com calma e sinceridade. Qualquer dÃºvida, estou aqui.`,
+
+    consulta:()=>{
+      const med=document.getElementById('wa-med')?.value||'â';
+      const ori=document.getElementById('wa-ori')?.value||'â';
+      const prox=document.getElementById('wa-prox')?.value||'em breve';
+      return `OlÃ¡, *${primeiroNome}*!\n\nSegue o resumo da nossa consulta de hoje (${hoje}):\n\n*MedicaÃ§Ã£o:* ${med}\n*OrientaÃ§Ãµes:*\n${ori}\n\n*PrÃ³xima consulta:* ${prox}\n\nQualquer dÃºvida ou intercorrÃªncia, pode me chamar aqui.`;
+    },
+
+    progresso:()=>{
+      const mes=document.getElementById('wa-mes')?.value||'?';
+      const motiv=document.getElementById('wa-motiv')?.value||'Continue assim. Cada passo conta.';
+      let txt=`OlÃ¡, *${primeiroNome}*!\n\nSegue o balanÃ§o do *${mes}Âº mÃªs* no programa:\n\n`;
+      if(pesoAtual) txt+=`*Peso atual:* ${pesoAtual} kg\n`;
+      if(perdaTotal) txt+=`*Perda total:* ${perdaTotal} kg\n`;
+      if(pesoMeta) txt+=`*Meta:* ${pesoMeta} kg${faltaMeta?' (faltam '+faltaMeta+' kg)':''}\n`;
+      txt+=`\n${motiv}\n\nEstamos juntos nessa jornada.`;
+      return txt;
+    },
+
+    pendencia:()=>{
+      const extra=document.getElementById('wa-pend-extra')?.value||'';
+      const prazo=document.getElementById('wa-prazo')?.value||'o mais breve possÃ­vel';
+      let lista=pends.map(p=>`â¢ ${p}`).join('\n');
+      if(extra) lista+=`\nâ¢ ${extra}`;
+      if(!lista) lista='â¢ Verificar pendÃªncias no sistema';
+      return `OlÃ¡, *${primeiroNome}*!\n\nTemos alguns itens que precisam da sua atenÃ§Ã£o para darmos continuidade ao tratamento:\n\n${lista}\n\nConsegue resolver atÃ© *${prazo}*?\n\nQualquer dÃºvida, Ã© sÃ³ me chamar.`;
+    },
+  };
+
+  function buildMsg(id){ try{ return templates[id]?.()??'' }catch(e){return ''} }
+
+  function render(selId){
+    const msg=buildMsg(selId);
+    const el=document.getElementById('wa-preview');
+    if(el) el.textContent=msg;
+    // atualiza links
+    const enc=encodeURIComponent(msg);
+    const wLink=fone?`https://wa.me/${foneBR}?text=${enc}`:`https://wa.me/?text=${enc}`;
+    const wBtn=document.getElementById('wa-open');
+    const cBtn=document.getElementById('wa-copy');
+    if(wBtn) wBtn.href=wLink;
+    if(cBtn) cBtn.onclick=()=>{ navigator.clipboard.writeText(msg).then(()=>toast('Mensagem copiada!')); };
+  }
+
+  ct.innerHTML=`
+  <div style="margin-bottom:16px">
+    ${!fone?`<div class="alert a-warn" style="margin-bottom:0">â ï¸ NÃºmero de WhatsApp nÃ£o cadastrado â <button onclick="go('cadastro')" class="btn bg bsm" style="display:inline-flex;padding:2px 8px">Cadastrar agora</button></div>`:''}
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px">
+    ${OCASIOES.map(o=>`
+    <div id="oc-${o.id}" onclick="selOc('${o.id}')" style="border:1.5px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:.15s;background:var(--card)">
+      <div style="font-size:24px;margin-bottom:6px">${o.icon}</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text)">${o.label}</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.3">${o.sub}</div>
+    </div>`).join('')}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <!-- CAMPOS DINÃMICOS -->
+    <div>
+      <div id="wa-fields">
+        <div style="color:var(--muted);font-size:13px;text-align:center;padding:40px 0">Selecione uma ocasiÃ£o acima</div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:12px;color:#15803d">
+        <b>Dados do paciente preenchidos automaticamente:</b><br>
+        Nome: ${nome}${pesoAtual?' Â· Peso: '+pesoAtual+' kg':''}${pesoMeta?' Â· Meta: '+pesoMeta+' kg':''}${perdaTotal?' Â· Perda: -'+perdaTotal+' kg':''}
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div>
+      <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Preview da mensagem</div>
+      <div style="background:#e8f5e9;border-radius:12px 12px 2px 12px;padding:14px 16px;font-size:13px;line-height:1.6;white-space:pre-wrap;min-height:200px;color:#1a1a1a;font-family:inherit;border:1px solid #c8e6c9" id="wa-preview">Selecione uma ocasiÃ£o para visualizar a mensagem...</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button id="wa-copy" class="btn bs" style="flex:1">ð Copiar texto</button>
+        <a id="wa-open" href="#" target="_blank" class="btn" style="flex:1;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:6px;font-size:13px;font-weight:500;text-decoration:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Abrir WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>`;
+
+  // CAMPOS por ocasiÃ£o
+  const fieldSets={
+    cadastro:`<div style="color:var(--muted);font-size:13px;padding:12px 0">â Mensagem gerada automaticamente com o link de avaliaÃ§Ã£o.<br><br>Revise o preview ao lado e envie!</div>`,
+    avaliacao:`<div style="color:var(--muted);font-size:13px;padding:12px 0">â Mensagem com o link do questionÃ¡rio gerada automaticamente.<br><br>Revise o preview ao lado e envie!</div>`,
+    consulta:`
+      <div class="fg"><label>ð MedicaÃ§Ã£o prescrita</label><input id="wa-med" placeholder="Ex: Semaglutida 0,5mg 1x/semana" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
+      <div class="fg"><label>ð OrientaÃ§Ãµes</label><textarea id="wa-ori" placeholder="Ex: Manter dieta com dÃ©ficit calÃ³rico, beber 2L de Ã¡gua..." oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;min-height:90px;resize:vertical"></textarea></div>
+      <div class="fg"><label>ð PrÃ³xima consulta</label><input id="wa-prox" placeholder="Ex: 15/07/2026 Ã s 14h" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>`,
+    progresso:`
+      <div class="fg"><label>ð MÃªs na jornada</label><input id="wa-mes" type="number" min="1" max="24" placeholder="Ex: 3" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
+      <div class="fg"><label>ð¬ Mensagem motivacional</label><textarea id="wa-motiv" placeholder="Ex: VocÃª estÃ¡ arrasando! Mais 2kg e chegamos na meta!" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;min-height:80px;resize:vertical">Continue assim! Cada passo conta na sua jornada. ðª</textarea></div>`,
+    pendencia:`
+      <div style="margin-bottom:12px">
+        <div style="font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px">PendÃªncias detectadas automaticamente:</div>
+        ${pends.length?pends.map(p=>`<div style="font-size:12px;background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:6px 10px;margin-bottom:4px">${p}</div>`).join(''):'<div style="font-size:12px;color:var(--muted)">Nenhuma pendÃªncia automÃ¡tica detectada.</div>'}
+      </div>
+      <div class="fg"><label>â PendÃªncia adicional (opcional)</label><input id="wa-pend-extra" placeholder="Ex: Enviar foto da balanÃ§a esta semana" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>
+      <div class="fg"><label>â° Prazo para resoluÃ§Ã£o</label><input id="wa-prazo" placeholder="Ex: sexta-feira (26/06)" oninput="reRender()" style="width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit"></div>`,
+  };
+
+  window._waTemplates=templates;
+  window._waOcSel=null;
+
+  window.selOc=function(id){
+    window._waOcSel=id;
+    document.querySelectorAll('[id^="oc-"]').forEach(el=>{
+      const isActive=el.id===`oc-${id}`;
+      el.style.borderColor=isActive?'#059669':'var(--border)';
+      el.style.background=isActive?'#D1FAE5':'var(--card)';
+    });
+    document.getElementById('wa-fields').innerHTML=fieldSets[id]||'';
+    render(id);
+  };
+
+  window.reRender=function(){
+    if(window._waOcSel) render(window._waOcSel);
+  };
+
+  // Copiar padrÃ£o
+  document.getElementById('wa-copy').onclick=()=>toast('Selecione uma ocasiÃ£o primeiro');
+}
+
+// CONFIGURAÃÃES
+function vConfig(ct){
+  const url = SYNC.url;
+  const key = SYNC.key;
+  const configured = SYNC.isConfigured();
+
+  ct.innerHTML=`
+  <div class="config-section">
+    <h3>Status da ConexÃ£o</h3>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#f9fafb;border-radius:7px;margin-bottom:12px">
+      <span class="sync-dot ${configured?'sync-ok':'sync-off'}" style="width:12px;height:12px"></span>
+      <span style="font-size:13px">${configured?'Google Sheets configurado':'NÃ£o configurado â dados salvos apenas localmente'}</span>
+    </div>
+    <button class="btn bp bsm" onclick="testConn()">ð Testar conexÃ£o</button>
+    <span id="ping-result" style="font-size:12px;margin-left:10px;color:var(--muted)"></span>
+  </div>
+
+  <div class="config-section">
+    <h3>Como Configurar</h3>
+    <div class="setup-step"><span class="step-num">1</span><div>Abra <a href="https://script.google.com" target="_blank" style="color:var(--accent)">script.google.com</a> â <strong>Novo projeto</strong></div></div>
+    <div class="setup-step"><span class="step-num">2</span><div>Cole o conteÃºdo do arquivo <code>apps-script.gs</code> no editor. Altere o valor de <code>SECRET_KEY</code> para uma senha sua.</div></div>
+    <div class="setup-step"><span class="step-num">3</span><div>Clique em <strong>Implantar â Nova implantaÃ§Ã£o â App da Web</strong><br>
+      Executar como: <strong>Eu</strong> Â· Quem tem acesso: <strong>Qualquer pessoa</strong></div></div>
+    <div class="setup-step"><span class="step-num">4</span><div>Copie a <strong>URL do app da Web</strong> gerada e cole abaixo</div></div>
+    <div class="setup-step"><span class="step-num">5</span><div>O sistema passarÃ¡ a salvar automaticamente no Google Sheets a cada alteraÃ§Ã£o</div></div>
+  </div>
+
+  <div class="config-section">
+    <h3>Credenciais</h3>
+    <div class="fg">
+      <label>URL do Apps Script (Web App URL)</label>
+      <input type="url" id="cfg-url" value="${url}" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
+    <div class="fg">
+      <label>Chave secreta (deve ser igual ao SECRET_KEY no apps-script.gs)</label>
+      <input type="text" id="cfg-key" value="${key}" placeholder="MENOSYS_2025">
+    </div>
+    <div class="row" style="gap:8px">
+      <button class="btn bp" onclick="saveConfig()">ð¾ Salvar configuraÃ§Ã£o</button>
+      ${configured?`<button class="btn bs" onclick="if(confirm('Remover configuraÃ§Ã£o do Sheets?')){SYNC.url='';SYNC.key='MENOSYS_2025';SYNC.setStatus('off');go('config')}">Remover</button>`:''}
+    </div>
+  </div>
+
+  <div class="config-section">
+    <h3>Dados Locais</h3>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
+      ${Object.keys(DB.all()).length} paciente(s) no cache local.
+    </div>
+    <div class="row" style="gap:8px;flex-wrap:wrap">
+      <button class="btn bg bsm" onclick="SYNC.pullAll()">â¬ï¸ Importar tudo do Sheets</button>
+      <button class="btn bs bsm" onclick="exportLocal()">ð¤ Exportar JSON local</button>
+      <button class="btn bs bsm" onclick="importLocal()">ð¥ Importar JSON</button>
+    </div>
+    <input type="file" id="import-file" accept=".json" class="hidden" onchange="onImport(this)">
+  </div>`;
+}
+
+function saveConfig(){
+  const url = v('cfg-url').trim();
+  const key = v('cfg-key').trim();
+  if(!url){ toast('URL obrigatÃ³ria'); return; }
+  SYNC.url = url;
+  SYNC.key = key || 'MENOSYS_2025';
+  toast('ConfiguraÃ§Ã£o salva! Testando conexÃ£oâ¦');
+  testConn();
+}
+
+async function testConn(){
+  const result = document.getElementById('ping-result');
+  if(result) result.textContent = 'Testandoâ¦';
+  if(!SYNC.isConfigured()){ if(result) result.textContent='URL nÃ£o configurada'; return; }
+  const ok = await SYNC.ping();
+  if(result) result.textContent = ok ? 'â ConexÃ£o OK!' : 'â Falha â verifique a URL e a chave';
+  SYNC.setStatus(ok?'ok':'err');
+  if(ok) toast('â ConexÃ£o com o Sheets estabelecida!');
+  else toast('â Falha na conexÃ£o â verifique URL e chave secreta');
+}
+
+function exportLocal(){
+  const data = DB.all();
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `menosys-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('Backup exportado!');
+}
+
+function importLocal(){ document.getElementById('import-file')?.click(); }
+
+function onImport(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      const count = Object.keys(data).length;
+      if(!confirm(`Importar ${count} paciente(s)? Dados existentes serÃ£o mesclados.`)) return;
+      const all = DB.all();
+      Object.assign(all, data);
+      DB.save(all);
+      toast(`${count} paciente(s) importado(s)!`);
+      go('config');
+    } catch { toast('Arquivo JSON invÃ¡lido'); }
+  };
+  reader.readAsText(file);
+}
+
+// ââ INIT ââââââââââââââââââââââââââââââââââââââ
+go('search');
+// Inicializa sync ao carregar
+setTimeout(()=>SYNC.init(), 500);
 </script>
 </body>
 </html>
