@@ -283,6 +283,11 @@ const DB = {
     // Sincroniza com Sheets de forma assíncrona (não bloqueia a UI)
     if(typeof SYNC!=='undefined') SYNC.push(p);
   },
+  remove(cpf){
+    const d=this.all();
+    delete d[this.norm(cpf)];
+    this.save(d);
+  },
   search(q){
     const all=Object.values(this.all()), n=this.norm(q), ql=q.toLowerCase();
     return all.filter(p=>
@@ -464,6 +469,20 @@ const SYNC = {
     } catch(e){
       console.error('[Sync] push failed:', e);
       this.setStatus('err', 'Falha na conexão');
+    }
+  },
+
+  // Remove um paciente do Sheets (fire-and-forget). Requer action 'delete' implementada no Apps Script.
+  async del(cpf){
+    if(!this.isConfigured()) return;
+    try {
+      await fetch(this.url, {
+        method:'POST', redirect:'follow',
+        headers:{'Content-Type':'text/plain'},
+        body: JSON.stringify({ key: this.key, action:'delete', cpf })
+      });
+    } catch(e){
+      console.error('[Sync] delete failed:', e);
     }
   },
 
@@ -723,6 +742,17 @@ function onQK(e){
   else if(DB.norm(q).length===11) novoP();
 }
 function abrirP(cpf){ P=DB.get(cpf); go('dashboard'); }
+function excluirPaciente(){
+  if(!P) return;
+  const nome=P.nome||'este paciente';
+  if(!confirm(`Excluir ${nome} (${fmtCPF(P.cpf)}) permanentemente? Essa ação não pode ser desfeita.`)) return;
+  if(!confirm('Tem certeza? Todos os dados clínicos deste paciente serão apagados.')) return;
+  DB.remove(P.cpf);
+  if(typeof SYNC!=='undefined' && SYNC.del) SYNC.del(P.cpf);
+  toast('Paciente excluído');
+  P=null;
+  go('search');
+}
 function novoP(){
   const cpf=DB.norm(document.getElementById('q').value);
   if(cpf.length!==11){toast('CPF deve ter 11 dígitos');return;}
@@ -823,6 +853,9 @@ function vDash(ct){
         <div style="font-size:11px;color:var(--muted)">Medicação atual</div>
         <div style="font-size:14px;font-weight:600">💊 ${p.medicacaoAtual}${p.doseAtual?' — '+p.doseAtual:''}</div>
       </div>`:''}
+    </div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);text-align:right">
+      <a href="#" onclick="excluirPaciente();return false" style="font-size:12px;color:var(--err);text-decoration:none">🗑️ Excluir paciente</a>
     </div>
   </div>
 
