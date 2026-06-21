@@ -284,10 +284,10 @@ const DB = {
     if(typeof SYNC!=='undefined') SYNC.push(p);
   },
   search(q){
-    const all=Object.values(this.all()), n=this.norm(q);
+    const all=Object.values(this.all()), n=this.norm(q), ql=q.toLowerCase();
     return all.filter(p=>
-      this.norm(p.cpf).startsWith(n)||
-      (p.nome||'').toLowerCase().includes(q.toLowerCase())
+      (n.length>0 && this.norm(p.cpf).startsWith(n))||
+      (p.nome||'').toLowerCase().includes(ql)
     );
   },
   blank(cpf){
@@ -697,7 +697,7 @@ function vSearch(ct){
 }
 
 function onQ(inp){
-  maskCPF(inp);
+  if(/^[\d.\-\s]*$/.test(inp.value)) maskCPF(inp);
   const q=inp.value.trim();
   const res=document.getElementById('q-res');
   const nw=document.getElementById('q-new');
