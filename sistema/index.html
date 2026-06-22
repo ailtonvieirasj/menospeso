@@ -579,7 +579,7 @@ const TL = {
 let P = null; // current patient
 let V = '';   // current view
 
-function go(view){
+function go(view, arg){
   V = view;
   const hasPt = !!P;
 
@@ -612,7 +612,7 @@ function go(view){
     questionarios:vQs,exames:vExames,timeline:vTL,
     evolucoes:vEvs,'evolucoes-new':vNovaEv,adesao:vAdesao,relatorios:vRelat,
     mensagens:vMensagens,config:vConfig};
-  (vs[view]||vSearch)(ct);
+  (vs[view]||vSearch)(ct, arg);
 }
 
 // ── HELPERS ───────────────────────────────────
@@ -1633,6 +1633,9 @@ function vEvs(ct){
         <span class="muted">▼</span>
       </div>
       <div id="eb${i}" class="ev-body hidden">
+        ${e.modeloLabel?`<div class="ev-sec"><div class="ev-sec-t">Modelo</div><div class="ev-text">${e.modeloLabel}</div></div>`:''}
+        ${e.checklist&&e.checklist.length?`<div class="ev-sec"><div class="ev-sec-t">Checklist</div><div class="ev-text">${e.checklist.map(c=>`${c.ok?'✅':'⬜'} ${c.label}`).join('<br>')}</div></div>`:''}
+        ${e.medicacao&&(e.medicacao.principio||e.medicacao.posologia)?`<div class="ev-sec"><div class="ev-sec-t">Medicação</div><div class="ev-text">${e.medicacao.principio||''}${e.medicacao.posologia?' — '+e.medicacao.posologia:''}</div></div>`:''}
         ${evSec('Resumo',e.resumo)}
         ${evSec('S — Subjetivo',e.s)}
         ${evSec('O — Objetivo',e.o)}
@@ -1649,24 +1652,95 @@ function vEvs(ct){
 function evSec(t,c){ return c?`<div class="ev-sec"><div class="ev-sec-t">${t}</div><div class="ev-text">${c}</div></div>`:''; }
 function tgEv(id){ document.getElementById(id)?.classList.toggle('hidden'); }
 
-function vNovaEv(ct){
+const EV_MODELOS={
+  'padrao':{label:'Modelo Padrão (livre)', tipoLegado:'Retorno livre', checklist:[]},
+  'inicial':{label:'Atendimento Inicial (Dia 0)', tipoLegado:'Consulta inicial', checklist:[
+    'Identidade confirmada (nome completo + data de nascimento)',
+    'Histórico de tentativas anteriores de perda de peso revisado',
+    'Comorbidades relevantes checadas (diabetes, hipertensão, dislipidemia, apneia, esteatose)',
+    'Contraindicação para GLP-1 descartada (histórico pessoal/familiar de carcinoma medular de tireoide, MEN2, pancreatite)',
+    'Medicações em uso revisadas (interações)',
+    'Exames laboratoriais disponíveis e revisados',
+    'Antropometria registrada (peso, altura, IMC, circunferência abdominal)',
+    'Meta de peso definida com o paciente',
+    'Opções de medicação apresentadas (A ou B) e informativo prévio reforçado',
+    'Orientações de aplicação reforçadas (ou direcionado ao Guia)',
+    'Paciente orientado sobre efeitos colaterais esperados',
+  ]},
+  '60d':{label:'Atendimento 60 dias', tipoLegado:'Retorno 60 dias', checklist:[
+    'Identidade confirmada',
+    'Evolução de peso comparada ao dia 0',
+    'Efeitos colaterais (gastrointestinais ou outros) investigados',
+    'Adesão à medicação confirmada (doses perdidas?)',
+    'Receitas mensais recebidas em dia, todos os meses (sem pendência)',
+    'Resultado das avaliações semanais revisado',
+    'Necessidade de ajuste de dose avaliada',
+    'Necessidade de novos exames avaliada',
+    'Orientação alimentar/atividade física reforçada com base nas respostas semanais',
+  ]},
+  '120d':{label:'Atendimento 120 dias', tipoLegado:'Retorno 90 dias', checklist:[
+    'Identidade confirmada',
+    'Evolução acumulada revisada (dia 0 → 60 → 120)',
+    'Roda da Vida comparativa revisada (semana 1 vs. semana 12)',
+    'Meta de peso reavaliada (mantém, ajusta, já atingiu)',
+    'Decisão entre continuar fase de perda ou iniciar transição pra manutenção',
+    'Necessidade de exames de reavaliação checada',
+    'Adesão e efeitos colaterais revisados',
+  ]},
+};
+
+function vNovaEv(ct, modeloSel){
   const p=P;
+  const modelo=modeloSel||'padrao';
+  const m=EV_MODELOS[modelo]||EV_MODELOS.padrao;
+  const temChecklist=m.checklist.length>0;
   ct.innerHTML=`
   <div class="card">
     <div class="card-title">Nova Evolução — ${p.nome||'Paciente'}</div>
+    <div class="fg" style="margin-bottom:14px">
+      <label>Modelo de atendimento</label>
+      <select id="ev-modelo" onchange="go('evolucoes-new', this.value)">
+        <option value="padrao" ${modelo==='padrao'?'selected':''}>Modelo Padrão (livre)</option>
+        <option value="inicial" ${modelo==='inicial'?'selected':''}>Atendimento Inicial (Dia 0)</option>
+        <option value="60d" ${modelo==='60d'?'selected':''}>Atendimento 60 dias</option>
+        <option value="120d" ${modelo==='120d'?'selected':''}>Atendimento 120 dias</option>
+      </select>
+    </div>
     <div class="fr c3" style="margin-bottom:14px">
       <div class="fg"><label>Data / hora</label><input type="datetime-local" id="ev-dt" value="${new Date().toISOString().slice(0,16)}"></div>
       <div class="fg"><label>Peso (kg)</label><input type="number" id="ev-peso" step="0.1" value="${p.pesoAtual||''}" placeholder="kg"></div>
       <div class="fg"><label>Tipo</label>
         <select id="ev-tipo">
-          <option>Consulta inicial</option>
+          <option ${m.tipoLegado==='Consulta inicial'?'selected':''}>Consulta inicial</option>
           <option>Retorno 30 dias</option>
-          <option>Retorno 60 dias</option>
-          <option>Retorno 90 dias</option>
-          <option>Retorno livre</option>
+          <option ${m.tipoLegado==='Retorno 60 dias'?'selected':''}>Retorno 60 dias</option>
+          <option ${m.tipoLegado==='Retorno 90 dias'?'selected':''}>Retorno 90 dias</option>
+          <option ${m.tipoLegado==='Retorno livre'?'selected':''}>Retorno livre</option>
           <option>Intercorrência</option>
         </select></div>
     </div>
+
+    ${temChecklist?`
+    <hr class="div">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">Checklist — ${m.label}</div>
+    <div class="fg" style="margin-bottom:14px">
+      ${m.checklist.map((item,i)=>`<label style="display:flex;align-items:flex-start;gap:8px;font-size:13.5px;padding:6px 0;border-bottom:1px solid var(--border)"><input type="checkbox" id="ev-chk-${i}" style="margin-top:3px"> <span>${item}</span></label>`).join('')}
+    </div>
+    <hr class="div">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">Medicação</div>
+    <div class="fr c2" style="margin-bottom:14px">
+      <div class="fg"><label>Princípio ativo</label>
+        <select id="ev-med-principio">
+          <option value="">Selecione...</option>
+          <option>Semaglutida</option>
+          <option>Tirzepatida</option>
+          <option>Liraglutida</option>
+          <option>Mantém</option>
+          <option>Outro</option>
+        </select></div>
+      <div class="fg"><label>Posologia</label><input type="text" id="ev-med-pos" placeholder="dose, frequência, escalonamento..."></div>
+    </div>`:''}
+
     <div class="fg"><label>Resumo do atendimento</label>
       <textarea id="ev-res" rows="3" placeholder="Síntese do atendimento — aparece no dashboard..."></textarea></div>
 
@@ -1689,22 +1763,31 @@ function vNovaEv(ct){
     <div class="fg"><label>Próximos passos</label><textarea id="ev-prox" rows="2" placeholder="Próximo retorno, metas..."></textarea></div>
 
     <div class="row" style="gap:10px;margin-top:8px">
-      <button class="btn bp blg" onclick="saveEv()">💾 Salvar Evolução</button>
+      <button class="btn bp blg" onclick="saveEv('${modelo}')">💾 Salvar Evolução</button>
       <button class="btn bs" onclick="go('evolucoes')">Cancelar</button>
     </div>
   </div>`;
 }
 
-function saveEv(){
+function saveEv(modelo){
   const p=P;
   const peso=v('ev-peso');
+  const m=EV_MODELOS[modelo||'padrao']||EV_MODELOS.padrao;
+  const checklist=m.checklist.map((item,i)=>({
+    label:item, ok:!!document.getElementById('ev-chk-'+i)?.checked
+  }));
+  const medicacao=m.checklist.length>0?{
+    principio:v('ev-med-principio')||'', posologia:v('ev-med-pos')||''
+  }:null;
   const ev={
     id:Date.now(),
     data:v('ev-dt')||new Date().toISOString(),
+    modelo:modelo||'padrao', modeloLabel:m.label,
     tipo:v('ev-tipo'), pesoAtd:peso,
     resumo:v('ev-res'), s:v('ev-s'), o:v('ev-o'), a:v('ev-a'), pl:v('ev-p'),
     conduta:v('ev-cond'), orient:v('ev-ori'), receitas:v('ev-rx'),
     pedidos:v('ev-ped'), prox:v('ev-prox'),
+    checklist:checklist.length?checklist:null, medicacao,
   };
   if(!p.evolucoes) p.evolucoes=[];
   p.evolucoes.unshift(ev);
