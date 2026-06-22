@@ -45,6 +45,7 @@ html,body{min-height:100vh;background:var(--bg);font-family:'Inter',system-ui,-a
 
 /* FIELDS */
 .fg{margin-bottom:18px}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 label.lbl{display:block;font-size:14px;font-weight:500;margin-bottom:6px}
 label.lbl span{color:var(--err);margin-left:2px}
 input[type=text],input[type=tel],input[type=email],input[type=date],input[type=number],textarea,select{
@@ -221,8 +222,37 @@ input::placeholder,textarea::placeholder{color:#b0bdb0}
       <div class="field-err" id="err-whats">Informe seu WhatsApp.</div>
     </div>
     <div class="fg">
+      <label class="lbl">Profissão <span>*</span></label>
+      <input type="text" id="profissao" placeholder="Ex: Professora, Autônomo, Aposentado..." autocomplete="off">
+      <div class="field-err" id="err-profissao">Informe sua profissão.</div>
+    </div>
+    <div class="fg">
+      <label class="lbl">CEP <span>*</span></label>
+      <input type="tel" id="cep" placeholder="00000-000" inputmode="numeric" maxlength="9" oninput="mCEP(this)" onblur="buscarCEP(this.value)">
+      <div id="cep-status" style="font-size:12px;color:var(--muted);margin-top:4px"></div>
+      <div class="field-err" id="err-cep">Informe um CEP válido com 8 dígitos.</div>
+    </div>
+    <div class="fg">
+      <label class="lbl">Endereço (rua/avenida)</label>
+      <input type="text" id="endereco-rua" placeholder="Preenchido automaticamente pelo CEP" autocomplete="off">
+    </div>
+    <div class="fr2">
+      <div class="fg">
+        <label class="lbl">Número</label>
+        <input type="text" id="numero" placeholder="Ex: 123" autocomplete="off">
+      </div>
+      <div class="fg">
+        <label class="lbl">Complemento</label>
+        <input type="text" id="complemento" placeholder="Apto, bloco..." autocomplete="off">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="lbl">Bairro</label>
+      <input type="text" id="bairro" placeholder="Preenchido automaticamente pelo CEP" autocomplete="off">
+    </div>
+    <div class="fg">
       <label class="lbl">Cidade</label>
-      <input type="text" id="cidade" placeholder="Sua cidade" autocomplete="off">
+      <input type="text" id="cidade" placeholder="Preenchido automaticamente pelo CEP" autocomplete="off">
     </div>
     <div class="fg">
       <label class="lbl">Estado (UF)</label>
@@ -757,6 +787,30 @@ input::placeholder,textarea::placeholder{color:#b0bdb0}
     <div id="resumo-final" style="margin-bottom:24px"></div>
 
     <div class="fg">
+      <label class="lbl">Você tem exames laboratoriais recentes (últimos 6 meses)?</label>
+      <div class="opt-group horiz">
+        <div class="opt"><input type="radio" name="tem-exame" id="tex1" value="Não" onchange="document.getElementById('fg-exame-envio').style.display='none'"><label for="tex1">Não tenho</label></div>
+        <div class="opt"><input type="radio" name="tem-exame" id="tex2" value="Sim" onchange="document.getElementById('fg-exame-envio').style.display='block'"><label for="tex2">Sim, tenho</label></div>
+      </div>
+    </div>
+    <div class="fg cond" id="fg-exame-envio" style="display:none;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:14px">
+      <label class="lbl">Quais exames você tem?</label>
+      <div class="check-group">
+        <div class="chk"><input type="checkbox" id="tex-c1" value="Hemograma/bioquímica geral"><label for="tex-c1">Hemograma / bioquímica geral</label></div>
+        <div class="chk"><input type="checkbox" id="tex-c2" value="Glicemia/HbA1c"><label for="tex-c2">Glicemia / Hemoglobina glicada</label></div>
+        <div class="chk"><input type="checkbox" id="tex-c3" value="Perfil lipídico (colesterol/triglicerídeos)"><label for="tex-c3">Colesterol / triglicerídeos</label></div>
+        <div class="chk"><input type="checkbox" id="tex-c4" value="Função tireoidiana (TSH/T4)"><label for="tex-c4">Função da tireoide</label></div>
+        <div class="chk"><input type="checkbox" id="tex-c5" value="Bioimpedância"><label for="tex-c5">Bioimpedância</label></div>
+        <div class="chk"><input type="checkbox" id="tex-c6" value="Outro"><label for="tex-c6">Outro</label></div>
+      </div>
+      <div style="margin-top:10px;font-size:13px;background:#fff;border-radius:8px;padding:10px 12px">
+        📲 Envie as fotos ou PDF dos seus exames pelo WhatsApp da equipe Menos Peso:
+        <a href="https://wa.me/5538998643977" target="_blank" style="color:var(--accent);font-weight:600">+55 38 99864-3977</a>
+        — assim já chegam pro médico antes da consulta.
+      </div>
+    </div>
+
+    <div class="fg">
       <label class="lbl">Quer adicionar alguma observação geral para o médico?</label>
       <div class="ta-wrap">
         <textarea id="obs-geral" placeholder="Algo que não foi perguntado mas que considera importante compartilhar..." maxlength="500" oninput="updCount(this,'gc')"></textarea>
@@ -872,6 +926,29 @@ function mCPF(inp){
   v=v.replace(/(\d{3})\.(\d{3})(\d)/,'$1.$2.$3');
   v=v.replace(/\.(\d{3})\.(\d{3})(\d)/,(m,a,b,c)=>'.'+a+'.'+b+'-'+c);
   inp.value=v;
+}
+function mCEP(inp){
+  let v=inp.value.replace(/\D/g,'').slice(0,8);
+  if(v.length>5) v=v.replace(/(\d{5})(\d)/,'$1-$2');
+  inp.value=v;
+}
+async function buscarCEP(raw){
+  const cep=String(raw).replace(/\D/g,'');
+  const statusEl=g('cep-status');
+  if(cep.length!==8){ if(statusEl) statusEl.textContent=''; return; }
+  if(statusEl) statusEl.textContent='Buscando endereço...';
+  try{
+    const r=await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const d=await r.json();
+    if(d.erro){ if(statusEl) statusEl.textContent='CEP não encontrado — preencha manualmente.'; return; }
+    if(g('endereco-rua') && !g('endereco-rua').value) g('endereco-rua').value=d.logradouro||'';
+    if(g('bairro') && !g('bairro').value) g('bairro').value=d.bairro||'';
+    if(g('cidade')) g('cidade').value=d.localidade||'';
+    if(g('estado-uf')) g('estado-uf').value=d.uf||'';
+    if(statusEl) statusEl.textContent=d.logradouro?'✓ Endereço encontrado.':'✓ CEP encontrado — confirme o endereço.';
+  }catch(e){
+    if(statusEl) statusEl.textContent='Não foi possível buscar o CEP agora — preencha manualmente.';
+  }
 }
 function updCount(el,cntId){
   document.getElementById(cntId).textContent=el.value.length+'/'+el.maxLength;
@@ -990,6 +1067,8 @@ function validate(step){
     if(!radio('sexo')){ setErr('err-sexo',true); ok=false; } else setErr('err-sexo',false);
     if(!val('email')||!val('email').includes('@')){ setErr('err-email',true); ok=false; } else setErr('err-email',false);
     if(!val('whats')){ setErr('err-whats',true); ok=false; } else setErr('err-whats',false);
+    if(!val('profissao')){ setErr('err-profissao',true); ok=false; } else setErr('err-profissao',false);
+    if(norm(val('cep')).length!==8){ setErr('err-cep',true); ok=false; } else setErr('err-cep',false);
   }
   if(step===2){
     if(!val('queixa')){ setErr('err-queixa',true); ok=false; } else setErr('err-queixa',false);
@@ -1021,6 +1100,8 @@ function buildResumo(){
       ${row('Álcool',radio('alcool'))}
       ${row('Atividade física',radio('ativo'))}
       ${row('Horas de sono',radio('h-sono'))}
+      ${row('Profissão',val('profissao'))}
+      ${row('Endereço',[val('endereco-rua'),val('numero'),val('bairro'),val('cidade'),val('estado-uf')].filter(Boolean).join(', '))}
     </div>`;
 }
 function row(l,v){ return v?`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:var(--muted);min-width:120px;flex-shrink:0">${l}</span><span>${v}</span></div>`:''; }
@@ -1040,6 +1121,12 @@ function coletarDados(){
     genero: val('genero')==='Outro' ? (val('genero-outro')||'Outro') : val('genero'),
     pronomes: val('pronomes'),
     email:val('email'), whatsapp:val('whats'),
+    profissao:val('profissao'),
+    cep:norm(val('cep')),
+    endereco:val('endereco-rua'),
+    numero:val('numero'),
+    complemento:val('complemento'),
+    bairro:val('bairro'),
     cidade:val('cidade'),
     estado: val('estado-uf'),
     estadoNome: val('estado-uf'),
@@ -1093,6 +1180,8 @@ function coletarDados(){
       metodoContraceptivo:radio('contraceptivo')||'',
     },
     obsGeral:val('obs-geral'),
+    temExamesRecentes: radio('tem-exame')||'',
+    examesAEnviar: radio('tem-exame')==='Sim' ? checksList('tex-c',[1,2,3,4,5,6]) : [],
     questionarioRespondidoEm:new Date().toISOString(),
   };
 }
@@ -1136,6 +1225,12 @@ function enviar(){
     p.sexoBiologico  = dados.sexoBiologico;
     p.email          = dados.email;
     p.whatsapp       = dados.whatsapp;
+    p.profissao      = dados.profissao;
+    if(dados.cep) p.cep = dados.cep;
+    if(dados.endereco) p.endereco = dados.endereco;
+    if(dados.numero) p.numero = dados.numero;
+    if(dados.complemento) p.complemento = dados.complemento;
+    if(dados.bairro) p.bairro = dados.bairro;
     if(dados.cidade) p.cidade = dados.cidade;
     if(dados.estado) p.estado = dados.estado;
     if(dados.estadoNome) p.estadoNome = dados.estadoNome;
@@ -1148,6 +1243,9 @@ function enviar(){
     p.obsGeral = dados.obsGeral;
     p.questionarioInicial = dados; // snapshot completo
     p.questionarioRespondidoEm = dados.questionarioRespondidoEm;
+    if(dados.temExamesRecentes==='Sim'){
+      p.examesPendentesEnvio = { tipos: dados.examesAEnviar, avisadoEm: new Date().toISOString(), recebido:false };
+    }
 
     // Atualizar status dos questionários já respondidos
     const qsRespondidos=['comp-ali','atv-fis','sono'];
@@ -1162,6 +1260,13 @@ function enviar(){
       desc:'Questionário inicial respondido pelo paciente',
       data:new Date().toISOString()
     });
+    if(dados.temExamesRecentes==='Sim'){
+      p.timeline.unshift({
+        id:Date.now()+2, tipo:'exame',
+        desc:`Paciente avisou que vai enviar exame(s) por WhatsApp: ${dados.examesAEnviar.join(', ')||'não especificado'}`,
+        data:new Date().toISOString()
+      });
+    }
     if(isNovo){
       p.timeline.push({id:Date.now()+1, tipo:'cadastro',
         desc:`Paciente cadastrado via questionário — ${dados.nome}`,
