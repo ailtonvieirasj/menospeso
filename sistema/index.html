@@ -1514,8 +1514,10 @@ function vExames(ct){
   ];
   const exames=p.exames||[];
   const resultados=p.examesResultados||[];
+  const pend=P.examesPendentesEnvio;
+  const avisoPendente = (pend && !pend.recebido) ? `<div class="card" style="background:#fffbeb;border:1.5px solid #fcd34d;margin-bottom:14px"><div class="card-title">⏳ Exame avisado pelo paciente — ainda não recebido</div><div style="font-size:14px;margin-bottom:8px">Tipos: ${pend.tipos.join(', ')||'não especificado'}</div><button class="btn" onclick="marcarExameRecebido()">✓ Marcar como recebido</button></div>` : '';
   ct.innerHTML=`
-  <div class="card">
+  ${avisoPendente}<div class="card">
     <div class="card-title">Categoria</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
       ${cats.map(c=>`<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:var(--text)">
@@ -1559,6 +1561,13 @@ function vExames(ct){
     </div>`;
   }).join('')}
   ${!exames.length?'<div class="muted" style="text-align:center;padding:20px">Nenhum exame anexado</div>':''}`;
+}
+function marcarExameRecebido(){
+  if(!P.examesPendentesEnvio) return;
+  P.examesPendentesEnvio.recebido = true;
+  DB.put(P);
+  vExames(document.getElementById('content'));
+  toast('Marcado como recebido');
 }
 function getCat(){ const r=document.querySelector('input[name="cat"]:checked'); return r?r.value:'laboratorial'; }
 function onDrop(e){
